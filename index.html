@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>길일 吉日</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+
+:root {
+
+--gold: #C9A84C;
+
+--gold-light: #E8C97A;
+
+--ink: #1A1208;
+
+--paper: #F5EFE0;
+
+--paper-dark: #EBE0C8;
+
+--muted: #7A6A4A;
+
+--white: #FDFAF3;
+
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { font-family: 'Noto Sans KR', sans-serif; }
+
+.screen { display: none; }
+
+.screen.active { display: block; }
+
+#s1.active {
+
+display: flex; flex-direction: column; align-items: center;
+
+justify-content: center; min-height: 100vh;
+
+background: var(--ink); padding: 60px 32px; text-align: center;
+
+}
+
+.app-icon {
+
+width: 80px; height: 80px; border: 1.5px solid var(--gold);
+
+border-radius: 22px; display: flex; align-items: center; justify-content: center;
+
+margin-bottom: 24px; font-family: 'Noto Serif KR', serif;
+
+font-size: 38px; color: var(--gold); font-weight: 900;
+
+}
+
+.brand-name { font-family: 'Noto Serif KR', serif; font-size: 40px; font-weight: 900; color: var(--gold); letter-spacing: 8px; margin-bottom: 8px; }
+
+.brand-sub { font-size: 12px; color: var(--muted); letter-spacing: 4px; margin-bottom: 48px; }
+
+.tagline { font-family: 'Noto Serif KR', serif; font-size: 16px; color: rgba(245,239,224,0.7); line-height: 2; margin-bottom: 56px; }
+
+.tagline strong { color: var(--gold-light); }
+
+.btn-primary { width: 100%; max-width: 320px; padding: 18px; background: var(--gold); border: none; border-radius: 16px; font-size: 16px; font-weight: 500; color: var(--ink); cursor: pointer; margin-bottom: 14px; font-family: 'Noto Sans KR', sans-serif; }
+
+.btn-ghost { width: 100%; max-width: 320px; padding: 16px; background: transparent; border: 1px solid rgba(201,168,76,0.3); border-radius: 16px; font-size: 14px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+
+#s2.active { display: block; background: var(--paper); min-height: 100vh; padding-bottom: 48px; }
+
+.header { padding: 60px 24px 20px; display: flex; align-items: center; gap: 12px; }
+
+.back-btn { width: 36px; height: 36px; background: rgba(0,0,0,0.06); border-radius: 10px; border: none; cursor: pointer; font-size: 18px; }
+
+.header-title { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 600; color: var(--ink); letter-spacing: 2px; }
+
+.step-ind { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+.form-body { padding: 8px 24px 32px; }
+
+.sec-label { font-size: 11px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin: 24px 0 10px; }
+
+.input-field { width: 100%; padding: 16px 18px; background: var(--white); border: 1.5px solid var(--paper-dark); border-radius: 14px; font-size: 15px; color: var(--ink); outline: none; font-family: 'Noto Sans KR', sans-serif; }
+
+.input-field:focus { border-color: var(--gold); }
+
+
+
+/* 양력/음력 탭 */
+
+.cal-type-row { display: flex; gap: 0; margin-bottom: 10px; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--paper-dark); }
+
+.cal-type-btn {
+
+flex: 1; padding: 12px; background: var(--white);
+
+border: none; font-size: 13px; color: var(--muted);
+
+cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+
+transition: all 0.2s;
+
+}
+
+.cal-type-btn.selected { background: var(--ink); color: var(--gold); font-weight: 500; }
+
+.lunar-notice {
+
+background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2);
+
+border-radius: 10px; padding: 10px 14px; font-size: 11px;
+
+color: var(--muted); line-height: 1.6; margin-top: 8px; display: none;
+
+}
+
+.lunar-notice.show { display: block; }
+
+
+
+.gender-row { display: flex; gap: 10px; }
+
+.gender-btn { flex: 1; padding: 14px; background: var(--white); border: 1.5px solid var(--paper-dark); border-radius: 14px; font-size: 14px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+
+.gender-btn.selected { background: var(--ink); border-color: var(--ink); color: var(--gold); }
+
+.surgery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.surgery-btn { padding: 14px 10px; background: var(--white); border: 1.5px solid var(--paper-dark); border-radius: 14px; font-size: 13px; color: var(--ink); cursor: pointer; text-align: center; font-family: 'Noto Sans KR', sans-serif; line-height: 1.6; }
+
+.surgery-btn .emoji { font-size: 20px; display: block; }
+
+.surgery-btn.selected { background: var(--ink); border-color: var(--gold); color: var(--gold); }
+
+.meds-section-title { font-size: 13px; font-weight: 500; color: var(--ink); margin: 16px 0 8px; }
+
+.badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
+
+.badge-stop { background: rgba(139,26,26,0.12); color: #C0392B; border: 1px solid rgba(139,26,26,0.25); }
+
+.badge-ok { background: rgba(46,125,50,0.12); color: #2E7D32; border: 1px solid rgba(46,125,50,0.25); }
+
+.meds-box { background: var(--white); border-radius: 14px; padding: 4px 18px; border: 1.5px solid var(--paper-dark); margin-bottom: 4px; }
+
+.meds-box.safe { border-color: rgba(46,125,50,0.3); }
+
+.med-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--paper-dark); gap: 12px; }
+
+.med-item:last-child { border-bottom: none; }
+
+.med-name { font-size: 13px; color: var(--ink); }
+
+.med-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.med-sub.danger { color: #C0392B; }
+
+.med-sub.safe-text { color: #2E7D32; }
+
+.toggle { width: 44px; height: 26px; background: var(--paper-dark); border-radius: 13px; position: relative; cursor: pointer; border: none; flex-shrink: 0; transition: background 0.3s; }
+
+.toggle.on { background: var(--gold); }
+
+.toggle::after { content: ''; position: absolute; width: 20px; height: 20px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: transform 0.3s; }
+
+.toggle.on::after { transform: translateX(18px); }
+
+.warn-notice { background: rgba(139,26,26,0.06); border: 1px solid rgba(139,26,26,0.2); border-radius: 12px; padding: 12px 16px; margin-top: 12px; font-size: 12px; color: #C0392B; line-height: 1.7; }
+
+.cta-wrap { padding: 0 24px; }
+
+#s3.active { display: block; background: var(--ink); min-height: 100vh; padding-bottom: 48px; }
+
+.result-header { padding: 60px 24px 20px; }
+
+.result-greeting { font-size: 12px; color: var(--muted); letter-spacing: 2px; margin-bottom: 8px; }
+
+.result-name { font-family: 'Noto Serif KR', serif; font-size: 22px; color: var(--paper); font-weight: 600; line-height: 1.5; }
+
+.result-name span { color: var(--gold); }
+
+.score-banner { margin: 0 24px 20px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.25); border-radius: 20px; padding: 18px; display: flex; align-items: center; gap: 16px; }
+
+.moon-circle { width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, var(--gold-light), #8B6914); flex-shrink: 0; }
+
+.banner-title { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 4px; }
+
+.banner-val { font-size: 14px; color: var(--paper); line-height: 1.6; }
+
+.dates-label { padding: 0 24px 12px; font-size: 11px; color: var(--muted); letter-spacing: 3px; }
+
+.date-card { margin: 0 24px 14px; background: rgba(245,239,224,0.04); border: 1px solid rgba(245,239,224,0.1); border-radius: 20px; padding: 20px; position: relative; }
+
+.date-card.best { background: rgba(201,168,76,0.12); border-color: rgba(201,168,76,0.35); }
+
+.best-badge { position: absolute; top: 14px; right: 16px; font-size: 10px; color: var(--gold); background: rgba(201,168,76,0.15); padding: 3px 8px; border-radius: 20px; border: 1px solid rgba(201,168,76,0.3); }
+
+.date-top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+
+.date-num { font-family: 'Noto Serif KR', serif; font-size: 26px; font-weight: 900; color: var(--gold); }
+
+.date-day { font-size: 13px; color: var(--paper); }
+
+.date-lunar { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.score-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+
+.score-tag { padding: 5px 10px; border-radius: 20px; font-size: 11px; background: rgba(245,239,224,0.07); color: rgba(245,239,224,0.6); border: 1px solid rgba(245,239,224,0.1); }
+
+.score-tag.good { background: rgba(201,168,76,0.12); color: var(--gold-light); border-color: rgba(201,168,76,0.2); }
+
+.score-tag.warn { background: rgba(139,26,26,0.15); color: #E07070; border-color: rgba(139,26,26,0.3); }
+
+.bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+
+.bar-track { height: 4px; background: rgba(245,239,224,0.08); border-radius: 2px; }
+
+.bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 2px; }
+
+.warn-box { margin: 0 24px 16px; background: rgba(139,26,26,0.12); border: 1px solid rgba(139,26,26,0.25); border-radius: 14px; padding: 14px 18px; display: flex; gap: 10px; }
+
+.warn-text { font-size: 12px; color: #E07070; line-height: 1.7; }
+
+.detail-box { margin: 0 24px 16px; background: rgba(245,239,224,0.03); border: 1px solid rgba(245,239,224,0.08); border-radius: 16px; overflow: hidden; }
+
+.detail-row { display: flex; align-items: center; padding: 14px 18px; border-bottom: 1px solid rgba(245,239,224,0.06); gap: 12px; }
+
+.detail-row:last-child { border-bottom: none; }
+
+.d-icon { font-size: 18px; width: 24px; text-align: center; }
+
+.d-key { font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-bottom: 2px; }
+
+.d-val { font-size: 13px; color: var(--paper); line-height: 1.5; }
+
+.result-cta { padding: 8px 24px 48px; }
+
+.share-row { display: flex; gap: 10px; }
+
+.btn-kakao { flex: 1; padding: 16px 10px; background: #FEE500; border: none; border-radius: 16px; font-size: 14px; font-weight: 500; color: #3A1D1D; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+.btn-copy { flex: 1; padding: 16px 10px; background: transparent; border: 1px solid rgba(201,168,76,0.35); border-radius: 16px; font-size: 14px; color: var(--gold); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+.btn-gold { width: 100%; padding: 18px; background: var(--gold); border: none; border-radius: 16px; font-size: 15px; font-weight: 500; color: var(--ink); cursor: pointer; margin-bottom: 12px; font-family: 'Noto Sans KR', sans-serif; }
+
+.toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(26,18,8,0.9); color: var(--gold-light); padding: 12px 24px; border-radius: 30px; font-size: 13px; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; z-index: 999; border: 1px solid rgba(201,168,76,0.3); }
+
+.toast.show { opacity: 1; }
+
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: flex-end; justify-content: center; }
+
+.modal-overlay.show { display: flex; }
+
+.modal-box { background: var(--paper); border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; }
+
+.modal-title { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+
+.modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+.cal-btn { width: 100%; padding: 16px; border: 1.5px solid var(--paper-dark); border-radius: 14px; font-size: 14px; color: var(--ink); background: var(--white); cursor: pointer; margin-bottom: 10px; font-family: 'Noto Sans KR', sans-serif; text-align: left; display: flex; align-items: center; gap: 12px; }
+
+.cal-icon { font-size: 22px; }
+
+.modal-close { width: 100%; padding: 14px; background: transparent; border: none; font-size: 14px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+
+</style>
+
+</head>
+
+<body>
+
+
+
+<!-- 1번 화면 -->
+
+<div class="screen active" id="s1">
+
+<div class="app-icon">吉</div>
+
+<div class="brand-name">길일</div>
+
+<div class="brand-sub">吉日 · Auspicious Day</div>
+
+<div class="tagline">
+
+수술 날짜, 아무 날이나 잡지 마세요.<br>
+
+<strong>사주 · 손 없는 날 · 달의 주기</strong>와<br>
+
+약물 반감기까지 고려한<br>
+
+당신만의 최적 날짜를 찾아드립니다.
+
+</div>
+
+<button class="btn-primary" onclick="goTo('s2')">시작하기</button>
+
+<button class="btn-ghost">이미 계정이 있어요</button>
+
+</div>
+
+
+
+<!-- 2번 화면 -->
+
+<div class="screen" id="s2">
+
+<div class="header">
+
+<button class="back-btn" onclick="goTo('s1')">←</button>
+
+<span class="header-title">정보 입력</span>
+
+<span class="step-ind">1 / 2</span>
+
+</div>
+
+<div class="form-body">
+
+
+
+<div class="sec-label">생년월일 유형</div>
+
+<div class="cal-type-row">
+
+<button class="cal-type-btn selected" id="btn-solar" onclick="selectCalType('solar')">양력 ☀️</button>
+
+<button class="cal-type-btn" id="btn-lunar" onclick="selectCalType('lunar')">음력 🌙</button>
+
+<button class="cal-type-btn" id="btn-lunar-leap" onclick="selectCalType('lunar-leap')">음력 윤달 🌙+</button>
+
+</div>
+
+<div class="lunar-notice" id="lunar-notice">
+
+🌙 음력 생년월일을 입력하시면 자동으로 양력으로 변환하여 사주를 계산합니다.
+
+</div>
+
+
+
+<div class="sec-label">생년월일</div>
+
+<input type="date" class="input-field" id="birthdate" value="1990-05-15">
+
+
+
+<div class="sec-label">성별</div>
+
+<div class="gender-row">
+
+<button class="gender-btn selected" onclick="selectGender(this)">여성 ♀</button>
+
+<button class="gender-btn" onclick="selectGender(this)">남성 ♂</button>
+
+</div>
+
+
+
+<div class="sec-label">수술 / 시술 종류</div>
+
+<div class="surgery-grid">
+
+<button class="surgery-btn selected" onclick="selectSurgery(this)"><span class="emoji">👁️</span>눈 수술</button>
+
+<button class="surgery-btn" onclick="selectSurgery(this)"><span class="emoji">👃</span>코 수술</button>
+
+<button class="surgery-btn" onclick="selectSurgery(this)"><span class="emoji">💉</span>보톡스 · 필러</button>
+
+<button class="surgery-btn" onclick="selectSurgery(this)"><span class="emoji">✨</span>지방흡입</button>
+
+<button class="surgery-btn" onclick="selectSurgery(this)"><span class="emoji">🦷</span>윤곽 수술</button>
+
+<button class="surgery-btn" onclick="selectSurgery(this)"><span class="emoji">🌿</span>피부 레이저</button>
+
+</div>
+
+
+
+<div class="sec-label">복용 중인 약물 / 영양제</div>
+
+<div class="meds-section-title">⛔ 수술 전 중단 필요 <span class="badge badge-stop">최소 1주일 전 중단</span></div>
+
+<div class="meds-box">
+
+<div class="med-item">
+
+<div><div class="med-name">아스피린 / 항응고제</div><div class="med-sub danger">출혈 위험 · 반드시 7일 전 중단</div></div>
+
+<button class="toggle" onclick="toggleMed(this)"></button>
+
+</div>
+
+<div class="med-item">
+
+<div><div class="med-name">비타민 C · E · D 등 비타민류</div><div class="med-sub danger">출혈 위험 · 7일 전 중단</div></div>
+
+<button class="toggle" onclick="toggleMed(this)"></button>
+
+</div>
+
+<div class="med-item">
+
+<div><div class="med-name">한약 / 홍삼 / 건강즙</div><div class="med-sub danger">혈관 확장 · 7일 전 중단</div></div>
+
+<button class="toggle" onclick="toggleMed(this)"></button>
+
+</div>
+
+<div class="med-item">
+
+<div><div class="med-name">오메가3 / 건강기능식품</div><div class="med-sub danger">출혈 위험 · 7일 전 중단</div></div>
+
+<button class="toggle" onclick="toggleMed(this)"></button>
+
+</div>
+
+<div class="med-item">
+
+<div><div class="med-name">다이어트 식품 / 보조제</div><div class="med-sub danger">성분 불명 · 7일 전 중단</div></div>
+
+<button class="toggle" onclick="toggleMed(this)"></button>
+
+</div>
+
+<div class="med-item">
+
+<div><div class="med-name">호르몬제 / 피임약</div><div class="med-sub danger">혈전 위험 · 담당의 상담 필요</div></div>
+
+<button class="toggle" onclick="toggleMed(this)"></button>
+
+</div>
+
+</div>
+
+<div class="warn-notice">⚠️ 위 약물은 수술 중 출혈을 증가시킬 수 있습니다.<br>복용 중이라면 <strong>수술 최소 7일 전</strong>부터 중단하세요.<br>반드시 담당 의사와 상담 후 결정하세요.</div>
+
+
+
+<div class="meds-section-title" style="margin-top:20px;">✅ 계속 복용 가능 <span class="badge badge-ok">수술 당일도 복용 OK</span></div>
+
+<div class="meds-box safe">
+
+<div class="med-item">
+
+<div><div class="med-name">혈압약</div><div class="med-sub safe-text">수술 당일 소량의 물과 함께 복용</div></div>
+
+<button class="toggle" onclick="toggleMed(this)"></button>
+
+</div>
+
+<div class="med-item">
+
+<div><div class="med-name">당뇨약 / 인슐린</div><div class="med-sub safe-text">담당의 지시에 따라 복용 유지</div></div>
+
+<button class="toggle" onclick="toggleMed(this)"></button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="cta-wrap">
+
+<button class="btn-primary" onclick="calculateGilil()">길일 찾기 →</button>
+
+</div>
+
+</div>
+
+
+
+<!-- 3번 화면 -->
+
+<div class="screen" id="s3">
+
+<div class="result-header">
+
+<button class="back-btn" style="background:rgba(245,239,224,0.08);color:var(--paper);margin-bottom:16px;" onclick="goTo('s2')">←</button>
+
+<div class="result-greeting" id="result-greeting">결과 분석 중...</div>
+
+<div class="result-name">최적의 수술 길일 <span>3일</span>을<br>찾았습니다</div>
+
+</div>
+
+<div class="score-banner">
+
+<div class="moon-circle"></div>
+
+<div>
+
+<div class="banner-title">이번 달 달의 상태</div>
+
+<div class="banner-val" id="moon-banner">계산 중...</div>
+
+</div>
+
+</div>
+
+<div class="dates-label">추천 길일 TOP 3</div>
+
+
+
+<div class="date-card best" id="card0">
+
+<div class="best-badge">최적</div>
+
+<div class="date-top">
+
+<div class="date-num" id="date0">-</div>
+
+<div><div class="date-day" id="day0">-</div><div class="date-lunar" id="lunar0">-</div></div>
+
+</div>
+
+<div class="score-row" id="tags0"></div>
+
+<div class="bar-label"><span>종합 점수</span><span id="score0" style="color:var(--gold)">-</span></div>
+
+<div class="bar-track"><div class="bar-fill" id="bar0" style="width:0%"></div></div>
+
+</div>
+
+
+
+<div class="date-card" id="card1">
+
+<div class="date-top">
+
+<div class="date-num" id="date1">-</div>
+
+<div><div class="date-day" id="day1">-</div><div class="date-lunar" id="lunar1">-</div></div>
+
+</div>
+
+<div class="score-row" id="tags1"></div>
+
+<div class="bar-label"><span>종합 점수</span><span id="score1" style="color:var(--gold)">-</span></div>
+
+<div class="bar-track"><div class="bar-fill" id="bar1" style="width:0%"></div></div>
+
+</div>
+
+
+
+<div class="date-card" id="card2">
+
+<div class="date-top">
+
+<div class="date-num" id="date2">-</div>
+
+<div><div class="date-day" id="day2">-</div><div class="date-lunar" id="lunar2">-</div></div>
+
+</div>
+
+<div class="score-row" id="tags2"></div>
+
+<div class="bar-label"><span>종합 점수</span><span id="score2" style="color:var(--gold)">-</span></div>
+
+<div class="bar-track"><div class="bar-fill" id="bar2" style="width:0%"></div></div>
+
+</div>
+
+
+
+<div class="warn-box">
+
+<div style="font-size:16px;flex-shrink:0">⚠️</div>
+
+<div class="warn-text">중단 필요 약물을 복용 중이시면 <strong>수술 7일 전부터</strong> 중단하세요.<br>혈압약·당뇨약은 <strong>수술 당일에도 복용</strong>하셔도 됩니다.<br>반드시 담당 의사와 최종 확인하세요.</div>
+
+</div>
+
+
+
+<div class="detail-box">
+
+<div class="detail-row">
+
+<div class="d-icon">🔯</div>
+
+<div><div class="d-key">사주 분석</div><div class="d-val" id="d-saju">-</div></div>
+
+</div>
+
+<div class="detail-row">
+
+<div class="d-icon">⭐</div>
+
+<div><div class="d-key">별자리</div><div class="d-val" id="d-zodiac">-</div></div>
+
+</div>
+
+<div class="detail-row">
+
+<div class="d-icon">🌙</div>
+
+<div><div class="d-key">음양력 길일</div><div class="d-val" id="d-lunar">-</div></div>
+
+</div>
+
+<div class="detail-row">
+
+<div class="d-icon">💊</div>
+
+<div><div class="d-key">약물 안내</div><div class="d-val">중단 필요 약물 7일 전 중단 시<br>수술일 기준 안전 범위 충족</div></div>
+
+</div>
+
+</div>
+
+
+
+<div class="result-cta">
+
+<button class="btn-gold" onclick="showCalModal()">📅 캘린더에 저장</button>
+
+<div class="share-row">
+
+<button class="btn-kakao" onclick="shareKakao()"><span>💬</span> 카카오톡 공유</button>
+
+<button class="btn-copy" onclick="copyLink()"><span>🔗</span> 링크 복사</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- 캘린더 팝업 -->
+
+<div class="modal-overlay" id="calModal" onclick="hideCalModal()">
+
+<div class="modal-box" onclick="event.stopPropagation()">
+
+<div class="modal-title">📅 캘린더에 저장</div>
+
+<div class="modal-sub">저장할 날짜를 선택하세요</div>
+
+<div id="cal-buttons"></div>
+
+<button class="modal-close" onclick="hideCalModal()">닫기</button>
+
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+
+<script>
+
+var top3Results = [];
+
+var calType = 'solar'; // 기본값: 양력
+
+
+
+function goTo(id) {
+
+var screens = document.querySelectorAll('.screen');
+
+for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+
+document.getElementById(id).classList.add('active');
+
+window.scrollTo(0, 0);
+
+}
+
+
+
+function selectCalType(type) {
+
+calType = type;
+
+document.getElementById('btn-solar').classList.remove('selected');
+
+document.getElementById('btn-lunar').classList.remove('selected');
+
+document.getElementById('btn-lunar-leap').classList.remove('selected');
+
+document.getElementById('btn-' + (type === 'lunar-leap' ? 'lunar-leap' : type)).classList.add('selected');
+
+var notice = document.getElementById('lunar-notice');
+
+if (type === 'solar') {
+
+notice.classList.remove('show');
+
+} else {
+
+notice.classList.add('show');
+
+notice.textContent = type === 'lunar-leap'
+
+? '🌙 음력 윤달 생년월일을 입력하시면 자동으로 양력으로 변환합니다.'
+
+: '🌙 음력 생년월일을 입력하시면 자동으로 양력으로 변환하여 사주를 계산합니다.';
+
+}
+
+}
+
+
+
+function selectGender(el) {
+
+var btns = el.closest('.gender-row').querySelectorAll('.gender-btn');
+
+for (var i = 0; i < btns.length; i++) btns[i].classList.remove('selected');
+
+el.classList.add('selected');
+
+}
+
+
+
+function selectSurgery(el) {
+
+var btns = el.closest('.surgery-grid').querySelectorAll('.surgery-btn');
+
+for (var i = 0; i < btns.length; i++) btns[i].classList.remove('selected');
+
+el.classList.add('selected');
+
+}
+
+
+
+function toggleMed(el) { el.classList.toggle('on'); }
+
+
+
+function showToast(msg) {
+
+var t = document.getElementById('toast');
+
+t.textContent = msg;
+
+t.classList.add('show');
+
+setTimeout(function() { t.classList.remove('show'); }, 2500);
+
+}
+
+
+
+// 음력 → 양력 변환 (근사값 계산)
+
+function lunarToSolar(year, month, day, isLeap) {
+
+// 음력 1개월 = 약 29.53일
+
+// 음력 1월 1일 기준점: 2000년 2월 5일 (양력)
+
+var baseDate = new Date(2000, 1, 5);
+
+var baseYear = 2000;
+
+var baseMonth = 1;
+
+
+
+// 연도 차이 계산 (1년 = 약 354일)
+
+var yearDiff = year - baseYear;
+
+var totalDays = yearDiff * 354;
+
+
+
+// 월 차이 계산
+
+var monthDiff = month - baseMonth;
+
+totalDays += monthDiff * 29.53;
+
+
+
+// 일 차이
+
+totalDays += (day - 1);
+
+
+
+// 윤달이면 약 29일 추가
+
+if (isLeap) totalDays += 29;
+
+
+
+var result = new Date(baseDate);
+
+result.setDate(result.getDate() + Math.round(totalDays));
+
+return result;
+
+}
+
+
+
+function getMoonPhase(date) {
+
+var known = new Date(2000, 0, 6);
+
+var diff = (date - known) / (1000 * 60 * 60 * 24);
+
+var cycle = 29.53058867;
+
+var phase = ((diff % cycle) + cycle) % cycle;
+
+if (phase < 3) return { name: '🌑 그믐', score: 5, good: true };
+
+if (phase < 7) return { name: '🌒 초승달', score: 4, good: true };
+
+if (phase < 10) return { name: '🌓 상현달', score: 2, good: false };
+
+if (phase < 14) return { name: '🌔 보름 전', score: 1, good: false };
+
+if (phase < 17) return { name: '🌕 보름달', score: 1, good: false };
+
+if (phase < 21) return { name: '🌖 보름 후', score: 3, good: true };
+
+if (phase < 25) return { name: '🌗 하현달', score: 3, good: true };
+
+return { name: '🌘 그믐 전', score: 5, good: true };
+
+}
+
+
+
+function getSaju(year) {
+
+var gan = ['경','신','임','계','갑','을','병','정','무','기'];
+
+var ji = ['신','유','술','해','자','축','인','묘','진','사','오','미'];
+
+return gan[year % 10] + ji[year % 12] + '년';
+
+}
+
+
+
+function getZodiac(month, day) {
+
+if ((month==3&&day>=21)||(month==4&&day<=19)) return { sign:'양자리 ♈', trait:'활동적 기운, 수술 후 회복 빠름' };
+
+if ((month==4&&day>=20)||(month==5&&day<=20)) return { sign:'황소자리 ♉', trait:'금성 지배, 미용 수술에 길함' };
+
+if ((month==5&&day>=21)||(month==6&&day<=20)) return { sign:'쌍둥이자리 ♊', trait:'수성 지배, 회복 기간 단축' };
+
+if ((month==6&&day>=21)||(month==7&&day<=22)) return { sign:'게자리 ♋', trait:'달 지배, 달의 주기 영향 큼' };
+
+if ((month==7&&day>=23)||(month==8&&day<=22)) return { sign:'사자자리 ♌', trait:'태양 지배, 에너지 충만' };
+
+if ((month==8&&day>=23)||(month==9&&day<=22)) return { sign:'처녀자리 ♍', trait:'수성 지배, 꼼꼼한 회복' };
+
+if ((month==9&&day>=23)||(month==10&&day<=22)) return { sign:'천칭자리 ♎', trait:'금성 지배, 미용에 최적' };
+
+if ((month==10&&day>=23)||(month==11&&day<=21)) return { sign:'전갈자리 ♏', trait:'명왕성 지배, 강한 회복력' };
+
+if ((month==11&&day>=22)||(month==12&&day<=21)) return { sign:'사수자리 ♐', trait:'목성 지배, 긍정적 회복' };
+
+if ((month==12&&day>=22)||(month==1&&day<=19)) return { sign:'염소자리 ♑', trait:'토성 지배, 신중한 회복' };
+
+if ((month==1&&day>=20)||(month==2&&day<=18)) return { sign:'물병자리 ♒', trait:'천왕성 지배, 독특한 회복' };
+
+return { sign:'물고기자리 ♓', trait:'해왕성 지배, 감수성 예민' };
+
+}
+
+
+
+function estimateLunarDay(date) {
+
+var known = new Date(2000, 0, 6);
+
+var diff = (date - known) / (1000 * 60 * 60 * 24);
+
+var cycle = 29.53058867;
+
+var phase = ((diff % cycle) + cycle) % cycle;
+
+return Math.floor(phase) + 1;
+
+}
+
+
+
+function isGoodLunarDay(lunarDay) {
+
+var goodDays = [1,2,3,4,11,12,13,14,21,22,23,24];
+
+for (var i = 0; i < goodDays.length; i++) {
+
+if (lunarDay === goodDays[i]) return true;
+
+}
+
+return false;
+
+}
+
+
+
+function calculateGilil() {
+
+var birthdateVal = document.getElementById('birthdate').value;
+
+if (!birthdateVal) { alert('생년월일을 입력해주세요!'); return; }
+
+
+
+var parts = birthdateVal.split('-');
+
+var inputYear = parseInt(parts[0]);
+
+var inputMonth = parseInt(parts[1]);
+
+var inputDay = parseInt(parts[2]);
+
+
+
+// 양력/음력 처리
+
+var solarDate;
+
+var calTypeLabel;
+
+if (calType === 'solar') {
+
+solarDate = new Date(inputYear, inputMonth - 1, inputDay);
+
+calTypeLabel = '양력';
+
+} else if (calType === 'lunar') {
+
+solarDate = lunarToSolar(inputYear, inputMonth, inputDay, false);
+
+calTypeLabel = '음력';
+
+} else {
+
+solarDate = lunarToSolar(inputYear, inputMonth, inputDay, true);
+
+calTypeLabel = '음력 윤달';
+
+}
+
+
+
+var birthYear = solarDate.getFullYear();
+
+var birthMonth = solarDate.getMonth() + 1;
+
+var birthDay = solarDate.getDate();
+
+
+
+var saju = getSaju(birthYear);
+
+var zodiac = getZodiac(birthMonth, birthDay);
+
+var surgeryBtn = document.querySelector('.surgery-btn.selected');
+
+var surgeryName = surgeryBtn ? surgeryBtn.textContent.trim() : '수술';
+
+
+
+var today = new Date();
+
+var candidates = [];
+
+var days = ['일','월','화','수','목','금','토'];
+
+
+
+for (var i = 7; i < 90; i++) {
+
+var date = new Date(today);
+
+date.setDate(today.getDate() + i);
+
+var m = date.getMonth() + 1;
+
+var d = date.getDate();
+
+var dow = date.getDay();
+
+var moon = getMoonPhase(date);
+
+var lunarDay = estimateLunarDay(date);
+
+var isGoodDay = isGoodLunarDay(lunarDay);
+
+var score = 0;
+
+score += moon.score * 12;
+
+if (isGoodDay) score += 25;
+
+if (dow >= 1 && dow <= 5) score += 8;
+
+if (dow === 5) score += 12;
+
+if (dow === 1) score -= 8;
+
+if (dow === 0 || dow === 6) score -= 15;
+
+candidates.push({ date: date, month: m, day: d, dayName: days[dow], moon: moon, lunarDay: lunarDay, isGoodDay: isGoodDay, score: score });
+
+}
+
+
+
+candidates.sort(function(a, b) { return b.score - a.score; });
+
+
+
+var top3 = [];
+
+for (var j = 0; j < candidates.length; j++) {
+
+if (top3.length >= 3) break;
+
+var c = candidates[j];
+
+var tooClose = false;
+
+for (var k = 0; k < top3.length; k++) {
+
+var diff2 = Math.abs(c.date - top3[k].date) / (1000 * 60 * 60 * 24);
+
+if (diff2 < 5) { tooClose = true; break; }
+
+}
+
+if (!tooClose) top3.push(c);
+
+}
+
+
+
+top3Results = top3;
+
+
+
+document.getElementById('result-greeting').textContent =
+
+inputYear + '년생 (' + calTypeLabel + ') · ' + saju + ' · ' + surgeryName;
+
+
+
+var todayMoon = getMoonPhase(today);
+
+document.getElementById('moon-banner').textContent =
+
+'현재 ' + todayMoon.name + ' 주간 · ' +
+
+(todayMoon.good ? '회복에 유리한 시기' : '보름 전후 — 붓기 주의');
+
+
+
+for (var n = 0; n < 3; n++) {
+
+var r = top3[n];
+
+var pct = Math.round(70 + (r.score / top3[0].score) * 30);
+
+document.getElementById('date' + n).textContent = r.month + '월 ' + r.day + '일';
+
+document.getElementById('day' + n).textContent = r.dayName + '요일';
+
+document.getElementById('lunar' + n).textContent = '음력 약 ' + r.lunarDay + '일' + (r.isGoodDay ? ' · 손 없는 날 🌟' : '');
+
+document.getElementById('score' + n).textContent = pct + '점';
+
+document.getElementById('bar' + n).style.width = pct + '%';
+
+var tags = '<div class="score-tag ' + (r.moon.good ? 'good' : 'warn') + '">' + r.moon.name + '</div>';
+
+if (r.isGoodDay) tags += '<div class="score-tag good">🌟 손 없는 날</div>';
+
+if (r.dayName === '금') tags += '<div class="score-tag good">💊 주말 회복</div>';
+
+document.getElementById('tags' + n).innerHTML = tags;
+
+}
+
+
+
+document.getElementById('d-saju').innerHTML =
+
+inputYear + '년생 (' + calTypeLabel + ') · ' + saju + '<br>개인 사주 기반 최적 날짜 계산 완료';
+
+document.getElementById('d-zodiac').innerHTML = zodiac.sign + '<br>' + zodiac.trait;
+
+document.getElementById('d-lunar').innerHTML =
+
+'손 없는 날 + 달의 주기 종합 분석<br>앞으로 90일 중 최적 3일 선별 완료';
+
+
+
+var calBtns = '';
+
+var medals = ['🥇','🥈','🥉'];
+
+for (var p = 0; p < top3.length; p++) {
+
+var r2 = top3[p];
+
+var pct2 = Math.round(70 + (r2.score / top3[0].score) * 30);
+
+var yy = r2.date.getFullYear();
+
+var mm = String(r2.date.getMonth()+1).padStart(2,'0');
+
+var dd = String(r2.date.getDate()).padStart(2,'0');
+
+calBtns += '<button class="cal-btn" onclick="saveToCalendar(\'' + yy+mm+dd + '\',\'' +
+
+r2.month + '월 ' + r2.day + '일 수술 길일 🌙\')">' +
+
+'<span class="cal-icon">' + medals[p] + '</span>' +
+
+'<div><strong>' + r2.month + '월 ' + r2.day + '일 (' + r2.dayName + ')</strong> · ' + pct2 + '점</div></button>';
+
+}
+
+document.getElementById('cal-buttons').innerHTML = calBtns;
+
+
+
+goTo('s3');
+
+}
+
+
+
+function shareKakao() {
+
+var text = '🌙 길일 앱이 추천하는 내 수술 길일!\n\n';
+
+var medals = ['🥇','🥈','🥉'];
+
+for (var i = 0; i < top3Results.length; i++) {
+
+var r = top3Results[i];
+
+var pct = Math.round(70 + (r.score / top3Results[0].score) * 30);
+
+text += medals[i] + ' ' + r.month + '월 ' + r.day + '일 (' + r.dayName + ') · ' + pct + '점\n';
+
+}
+
+text += '\n사주 + 음양력 + 달의 주기 + 약물 반감기까지 계산한 나만의 길일 🗓️';
+
+if (navigator.share) {
+
+navigator.share({ title: '🌙 나의 수술 길일', text: text, url: window.location.href })
+
+.then(function() { showToast('✅ 공유 완료!'); })
+
+.catch(function() { copyToClipboard(text); showToast('📋 카카오톡에 붙여넣기 하세요!'); });
+
+} else {
+
+copyToClipboard(text);
+
+showToast('📋 카카오톡에 붙여넣기 하세요!');
+
+}
+
+}
+
+
+
+function copyLink() {
+
+var text = '🌙 길일 앱 - 나의 수술 길일\n\n';
+
+var medals = ['🥇','🥈','🥉'];
+
+for (var i = 0; i < top3Results.length; i++) {
+
+var r = top3Results[i];
+
+var pct = Math.round(70 + (r.score / top3Results[0].score) * 30);
+
+text += medals[i] + ' ' + r.month + '월 ' + r.day + '일 · ' + pct + '점\n';
+
+}
+
+copyToClipboard(text);
+
+showToast('🔗 복사됐어요! 붙여넣기 하세요');
+
+}
+
+
+
+function copyToClipboard(text) {
+
+if (navigator.clipboard) {
+
+navigator.clipboard.writeText(text);
+
+} else {
+
+var el = document.createElement('textarea');
+
+el.value = text; document.body.appendChild(el);
+
+el.select(); document.execCommand('copy');
+
+document.body.removeChild(el);
+
+}
+
+}
+
+
+
+function showCalModal() { document.getElementById('calModal').classList.add('show'); }
+
+function hideCalModal() { document.getElementById('calModal').classList.remove('show'); }
+
+
+
+function saveToCalendar(dateStr, title) {
+
+var ics =
+
+'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\n' +
+
+'DTSTART:' + dateStr + '\r\nDTEND:' + dateStr + '\r\n' +
+
+'SUMMARY:' + title + '\r\n' +
+
+'DESCRIPTION:길일 앱 추천 수술 길일. 사주+음양력+달의주기+약물반감기 종합분석\r\n' +
+
+'END:VEVENT\r\nEND:VCALENDAR\r\n';
+
+var blob = new Blob([ics], { type: 'text/calendar' });
+
+var url = URL.createObjectURL(blob);
+
+var a = document.createElement('a');
+
+a.href = url; a.download = '길일_수술날짜.ics'; a.click();
+
+URL.revokeObjectURL(url);
+
+hideCalModal();
+
+showToast('📅 캘린더 파일 저장됐어요!');
+
+}
+
+</script>
+
+</body>
+
+</html> 
+
+
