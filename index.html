@@ -1129,6 +1129,19 @@ function isValidDate(y, m, d) {
   return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
 }
 
+function isValidMonthDay(month, day) {
+  if (!Number.isInteger(month) || !Number.isInteger(day)) return false;
+  if (month < 1 || month > 12) return false;
+  if (day < 1) return false;
+
+  var daysInMonth = [31,29,31,30,31,30,31,31,30,31,30,31];
+  return day <= daysInMonth[month - 1];
+}
+
+function toMonthDayValue(month, day) {
+  return month * 100 + day;
+}
+
 function clampScore(val) {
   return Math.max(0, Math.min(100, Math.round(val)));
 }
@@ -1260,23 +1273,21 @@ function getDayGanji(date) {
 }
 
 function getWesternSign(month, day) {
-  function md(m, d) {
-    return m * 100 + d;
-  }
+  if (!isValidMonthDay(month, day)) return null;
 
-  var value = md(month, day);
+  var md = toMonthDayValue(month, day);
 
-  for (var i = 0; i < WESTERN_SIGNS.length; i++) {
-    var s = WESTERN_SIGNS[i];
-    var start = md(s.start[0], s.start[1]);
-    var end = md(s.end[0], s.end[1]);
-
-    if (start <= end) {
-      if (value >= start && value <= end) return s;
-    } else {
-      if (value >= start || value <= end) return s;
-    }
-  }
+  if (md >= 120 && md <= 218) return WESTERN_SIGNS[1];
+  if (md >= 219 && md <= 320) return WESTERN_SIGNS[2];
+  if (md >= 321 && md <= 419) return WESTERN_SIGNS[3];
+  if (md >= 420 && md <= 520) return WESTERN_SIGNS[4];
+  if (md >= 521 && md <= 620) return WESTERN_SIGNS[5];
+  if (md >= 621 && md <= 722) return WESTERN_SIGNS[6];
+  if (md >= 723 && md <= 822) return WESTERN_SIGNS[7];
+  if (md >= 823 && md <= 922) return WESTERN_SIGNS[8];
+  if (md >= 923 && md <= 1022) return WESTERN_SIGNS[9];
+  if (md >= 1023 && md <= 1121) return WESTERN_SIGNS[10];
+  if (md >= 1122 && md <= 1221) return WESTERN_SIGNS[11];
 
   return WESTERN_SIGNS[0];
 }
@@ -1702,7 +1713,7 @@ function calculateGilil() {
     var birthYear = birth.date.getFullYear();
     var birthMonth = birth.date.getMonth() + 1;
     var birthDay = birth.date.getDate();
-    var signObj = getWesternSign(birthMonth, birthDay);
+    var signObj = getWesternSign(birthMonth, birthDay) || WESTERN_SIGNS[0];
     var ganji = getGanji(birthYear);
 
     var today = new Date();
