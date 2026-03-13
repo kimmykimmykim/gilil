@@ -743,9 +743,9 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--paper); }
     </div>
 
     <div class="algo-note">
-      이 버전은 <strong>설명 가능한 보수적 추천</strong>을 목표로 합니다.
-      성형은 <strong>약물 중단기간 · 회복 여유 · 가까운 일정 · 요일 · 달 주기</strong>를 우선하고,
-      손없는날과 황도는 카테고리에 따라 <strong>보조 점수</strong>로 반영합니다.
+      이 버전은 <strong>사주·별자리 중심 개인화 추천</strong>을 목표로 합니다.
+      생년월일이 다르면 결과가 다르게 나오도록 설계되었으며,
+      약물은 <strong>날짜 제거 필터</strong>로 작동합니다.
     </div>
 
     <div class="sub-form show" id="form-surgery">
@@ -761,7 +761,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--paper); }
 
       <div class="sec-label">복용 중인 약물 / 영양제</div>
 
-      <div class="meds-section-title">⛔ 수술 전 중단 필요 <span class="badge badge-stop">실제 날짜 필터 반영</span></div>
+      <div class="meds-section-title">⛔ 수술 전 중단 필요 <span class="badge badge-stop">날짜 제거 필터</span></div>
       <div class="meds-box">
         <div class="med-item">
           <div><div class="med-name">아스피린 / 항응고제</div><div class="med-sub danger">출혈 위험 · 기본 7일 전 중단</div></div>
@@ -848,7 +848,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--paper); }
         <input type="number" class="input-field" id="business-end-month" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
       </div>
       <label class="checkbox-wrap"><input type="checkbox" id="business-hwangdo" checked /> 황도 보조점수 반영</label>
-      <div class="info-banner">🏪 개업은 손없는날 + 주중 운영 적합성 + 출생 띠 충돌 회피를 중심으로 계산하고, 황도는 보조점수만 줍니다.</div>
+      <div class="info-banner">🏪 개업은 손없는날 + 황도 + 사주 충돌 회피 + 별자리를 중심으로 계산합니다.</div>
     </div>
 
     <div class="sub-form" id="form-moving">
@@ -864,7 +864,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--paper); }
         <input type="number" class="input-field" id="moving-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
         <input type="number" class="input-field" id="moving-end-month" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
       </div>
-      <div class="info-banner">🏠 이사는 손없는날 비중을 가장 크게 두고, 주말 혼잡 감점과 출생 띠 충돌 회피를 적용합니다.</div>
+      <div class="info-banner">🏠 이사는 손없는날을 가장 강하게 반영하고, 사주 충돌일을 강하게 회피합니다.</div>
     </div>
 
     <div class="sub-form" id="form-travel">
@@ -899,7 +899,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--paper); }
         <input type="number" class="input-field" id="love-end-month" placeholder="종료 월" value="10" min="1" max="12" inputmode="numeric" />
       </div>
       <label class="checkbox-wrap"><input type="checkbox" id="love-hwangdo" checked /> 황도 보조점수 반영</label>
-      <div class="info-banner">💍 결혼·선보기는 주말 선호, 손없는날, 별자리, 상대 출생년도 띠 조화를 보수적으로 반영합니다.</div>
+      <div class="info-banner">💍 결혼·선보기는 주말 선호, 손없는날, 별자리, 상대 출생년도 띠 조화를 반영합니다.</div>
     </div>
   </div>
 
@@ -1006,53 +1006,103 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--paper); }
 <div class="toast" id="toast"></div>
 
 <script>
+// ═══════════════════════════════════════════════════════
+// 길일 v8 — 개인화 엔진 완전 재설계
+// 핵심 원칙:
+//   1. 수술: 약물 기반 window 탐색 → 사주 충/삼형 제거 → 별자리/손없는날 강화
+//   2. 비수술: 최대 365일 탐색 (이사/결혼 먼 날짜 커버)
+//   3. 일요일 + 공휴일 제거 (수술), 토요일 = 정상 수술일
+//   4. 별자리 가중치 대폭 상향, 사주 합/충/삼형 모두 반영
+//   5. 개인 시드 tie-break → 같은 생년월일 아니면 다른 결과
+// ═══════════════════════════════════════════════════════
+
 var top3Results = [];
 var calType = 'solar';
 var currentCat = 'surgery';
 var latestAnalysis = null;
 
+// ────────────────────────────────────────────────
+// 한국 공휴일 (2026~2027)
+// ────────────────────────────────────────────────
+var KR_HOLIDAYS = {
+  '2026-01-01':1,'2026-01-28':1,'2026-01-29':1,'2026-01-30':1,
+  '2026-03-01':1,'2026-05-05':1,'2026-05-25':1,
+  '2026-06-06':1,'2026-08-15':1,
+  '2026-09-24':1,'2026-09-25':1,'2026-09-26':1,
+  '2026-10-03':1,'2026-10-09':1,'2026-12-25':1,
+  '2027-01-01':1,'2027-02-16':1,'2027-02-17':1,'2027-02-18':1,
+  '2027-03-01':1,'2027-05-05':1,'2027-05-13':1,
+  '2027-06-06':1,'2027-08-15':1,
+  '2027-10-04':1,'2027-10-05':1,'2027-10-06':1,
+  '2027-10-03':1,'2027-10-09':1,'2027-12-25':1
+};
+
+function isHoliday(date) {
+  var y = date.getFullYear();
+  var m = String(date.getMonth() + 1).padStart(2,'0');
+  var d = String(date.getDate()).padStart(2,'0');
+  return !!KR_HOLIDAYS[y + '-' + m + '-' + d];
+}
+
+// 수술 불가일: 일요일 또는 공휴일
+function isSurgeryClosedDay(date) {
+  return date.getDay() === 0 || isHoliday(date);
+}
+
+// ────────────────────────────────────────────────
+// 약물 규칙
+// ────────────────────────────────────────────────
 var MED_RULES = {
   aspirin:      { label: '아스피린/항응고제', stopDays: 7,  affects: ['all'], group: 'stop' },
-  vitaminE:     { label: '비타민E/오메가3', stopDays: 7,  affects: ['all'], group: 'stop' },
+  vitaminE:     { label: '비타민E/오메가3',  stopDays: 7,  affects: ['all'], group: 'stop' },
   herbal:       { label: '한약/홍삼/건강즙', stopDays: 7,  affects: ['all'], group: 'stop' },
-  diet:         { label: '다이어트 보조제', stopDays: 7,  affects: ['all'], group: 'stop' },
-  hormone:      { label: '호르몬제/피임약', stopDays: 10, affects: ['all'], group: 'stop' },
-  isotretinoin: { label: '이소트레티노인', stopDays: 30, affects: ['laser'], group: 'stop' },
-
-  bp:           { label: '혈압약', stopDays: 0, affects: ['all'], group: 'continue' },
-  diabetes:     { label: '당뇨약/인슐린', stopDays: 0, affects: ['all'], group: 'continue' },
-  thyroid:      { label: '갑상선호르몬제/신지로이드', stopDays: 0, affects: ['all'], group: 'continue' },
-
+  diet:         { label: '다이어트 보조제',  stopDays: 7,  affects: ['all'], group: 'stop' },
+  hormone:      { label: '호르몬제/피임약',  stopDays: 10, affects: ['all'], group: 'stop' },
+  isotretinoin: { label: '이소트레티노인',   stopDays: 30, affects: ['laser'], group: 'stop' },
+  bp:           { label: '혈압약',           stopDays: 0,  affects: ['all'], group: 'continue' },
+  diabetes:     { label: '당뇨약/인슐린',    stopDays: 0,  affects: ['all'], group: 'continue' },
+  thyroid:      { label: '갑상선호르몬제',   stopDays: 0,  affects: ['all'], group: 'continue' },
   immunosuppressant: { label: '면역억제제/류마티스 약', stopDays: 0, affects: ['all'], group: 'consult' },
-  steroid:           { label: '스테로이드 장기복용', stopDays: 0, affects: ['all'], group: 'consult' },
-  psych:             { label: '정신과약/수면제', stopDays: 0, affects: ['all'], group: 'consult' },
-  neuro:             { label: '간질약/신경과약', stopDays: 0, affects: ['all'], group: 'consult' },
-  otherRx:           { label: '기타 처방약', stopDays: 0, affects: ['all'], group: 'consult' }
+  steroid:           { label: '스테로이드 장기복용',   stopDays: 0, affects: ['all'], group: 'consult' },
+  psych:             { label: '정신과약/수면제',        stopDays: 0, affects: ['all'], group: 'consult' },
+  neuro:             { label: '간질약/신경과약',        stopDays: 0, affects: ['all'], group: 'consult' },
+  otherRx:           { label: '기타 처방약',            stopDays: 0, affects: ['all'], group: 'consult' }
 };
 
+// ────────────────────────────────────────────────
+// 가중치 — 개인화 축(별자리·사주) 대폭 상향
+// 달력 고정축(proximity·weekday) 대폭 하향
+// ────────────────────────────────────────────────
 var CAT_WEIGHTS = {
-  surgery:  { zodiac: 8, moon: 14, son: 2, hwangdo: 0, weekday: 18, conflict: 6, recovery: 18, consultPenalty: 8, proximity: 22 },
-  business: { son: 24, hwangdo: 10, weekday: 22, zodiac: 8, moon: 6, conflict: 12 },
-  moving:   { son: 32, hwangdo: 6,  weekday: 16, zodiac: 6, moon: 4, conflict: 14 },
-  travel:   { zodiac: 20, moon: 18, weekday: 22, son: 6, hwangdo: 0, conflict: 4 },
-  love:     { son: 18, hwangdo: 8,  weekday: 20, zodiac: 10, moon: 8, conflict: 8, partner: 16 }
+  //               별자리  달  손없는날  황도  요일  충돌  회복  상담감점  proximity
+  surgery:  { zodiac:20, moon:10, son:8, hwangdo:0, weekday:12, conflict:22, recovery:14, consultPenalty:8, proximity:14 },
+  business: { zodiac:16, moon:8,  son:28, hwangdo:10, weekday:12, conflict:20 },
+  moving:   { zodiac:12, moon:6,  son:34, hwangdo:8,  weekday:10, conflict:26 },
+  travel:   { zodiac:26, moon:16, son:8,  hwangdo:0,  weekday:18, conflict:8  },
+  love:     { zodiac:16, moon:8,  son:20, hwangdo:10, weekday:12, conflict:14, partner:20 }
 };
 
+// ────────────────────────────────────────────────
+// 별자리 (trait 범위 5~10 — 개인마다 다름)
+// ────────────────────────────────────────────────
 var WESTERN_SIGNS = [
-  { sign: '염소자리 ♑', start: [12,22], end: [1,19], traits: { surgery: 9, business: 6, moving: 6, travel: 5, love: 5 }, note: '신중하고 계획적인 성향' },
-  { sign: '물병자리 ♒', start: [1,20], end: [2,18], traits: { surgery: 6, business: 8, moving: 5, travel: 9, love: 4 }, note: '변화에 열린 성향' },
-  { sign: '물고기자리 ♓', start: [2,19], end: [3,20], traits: { surgery: 5, business: 4, moving: 5, travel: 7, love: 9 }, note: '감수성과 공감 능력' },
-  { sign: '양자리 ♈',   start: [3,21], end: [4,19], traits: { surgery: 7, business: 8, moving: 6, travel: 8, love: 6 }, note: '추진력과 행동력이 강함' },
-  { sign: '황소자리 ♉', start: [4,20], end: [5,20], traits: { surgery: 9, business: 7, moving: 7, travel: 4, love: 8 }, note: '안정과 미감을 중시' },
-  { sign: '쌍둥이자리 ♊', start: [5,21], end: [6,20], traits: { surgery: 6, business: 7, moving: 5, travel: 9, love: 6 }, note: '이동성과 적응력이 좋음' },
-  { sign: '게자리 ♋',   start: [6,21], end: [7,22], traits: { surgery: 5, business: 4, moving: 8, travel: 5, love: 9 }, note: '정서적 안정과 가정을 중시' },
-  { sign: '사자자리 ♌', start: [7,23], end: [8,22], traits: { surgery: 7, business: 9, moving: 5, travel: 8, love: 7 }, note: '존재감과 자신감이 강함' },
-  { sign: '처녀자리 ♍', start: [8,23], end: [9,22], traits: { surgery: 9, business: 7, moving: 8, travel: 4, love: 5 }, note: '정교함과 관리 능력이 좋음' },
-  { sign: '천칭자리 ♎', start: [9,23], end: [10,22], traits: { surgery: 10, business: 6, moving: 6, travel: 5, love: 10 }, note: '균형감과 미적 조화' },
-  { sign: '전갈자리 ♏', start: [10,23], end: [11,21], traits: { surgery: 7, business: 5, moving: 4, travel: 5, love: 8 }, note: '집중력과 결단력이 강함' },
-  { sign: '사수자리 ♐', start: [11,22], end: [12,21], traits: { surgery: 6, business: 7, moving: 6, travel: 10, love: 6 }, note: '확장성과 모험심이 강함' }
+  { sign:'염소자리 ♑', traits:{surgery:9, business:6, moving:6, travel:5, love:5}, note:'신중하고 계획적인 성향' },
+  { sign:'물병자리 ♒', traits:{surgery:6, business:8, moving:5, travel:9, love:4}, note:'변화에 열린 성향' },
+  { sign:'물고기자리 ♓',traits:{surgery:5, business:4, moving:5, travel:7, love:9}, note:'감수성과 공감 능력' },
+  { sign:'양자리 ♈',   traits:{surgery:7, business:8, moving:6, travel:8, love:6}, note:'추진력과 행동력이 강함' },
+  { sign:'황소자리 ♉', traits:{surgery:9, business:7, moving:7, travel:4, love:8}, note:'안정과 미감을 중시' },
+  { sign:'쌍둥이자리 ♊',traits:{surgery:6,business:7, moving:5, travel:9, love:6}, note:'이동성과 적응력이 좋음' },
+  { sign:'게자리 ♋',   traits:{surgery:5, business:4, moving:8, travel:5, love:9}, note:'정서적 안정과 가정을 중시' },
+  { sign:'사자자리 ♌', traits:{surgery:7, business:9, moving:5, travel:8, love:7}, note:'존재감과 자신감이 강함' },
+  { sign:'처녀자리 ♍', traits:{surgery:9, business:7, moving:8, travel:4, love:5}, note:'정교함과 관리 능력이 좋음' },
+  { sign:'천칭자리 ♎', traits:{surgery:10,business:6, moving:6, travel:5, love:10},note:'균형감과 미적 조화' },
+  { sign:'전갈자리 ♏', traits:{surgery:7, business:5, moving:4, travel:5, love:8}, note:'집중력과 결단력이 강함' },
+  { sign:'사수자리 ♐', traits:{surgery:6, business:7, moving:6, travel:10,love:6}, note:'확장성과 모험심이 강함' }
 ];
 
+// ────────────────────────────────────────────────
+// 음력 테이블
+// ────────────────────────────────────────────────
 var LUNAR_NEW_YEAR = {
   1990:[1990,1,27],1991:[1991,2,15],1992:[1992,2,4],1993:[1993,1,23],
   1994:[1994,2,10],1995:[1995,1,31],1996:[1996,2,19],1997:[1997,2,7],
@@ -1104,6 +1154,9 @@ var LUNAR_MONTHS = {
 var JIANCHU_NAMES = ['건','제','만','평','정','집','파','위','성','수','개','폐'];
 var HWANGDO_JIANCHU = [0,1,2,3,4,8,10];
 
+// ────────────────────────────────────────────────
+// 유틸
+// ────────────────────────────────────────────────
 function showToast(msg) {
   var t = document.getElementById('toast');
   t.textContent = msg;
@@ -1131,47 +1184,38 @@ function isValidDate(y, m, d) {
 
 function isValidMonthDay(month, day) {
   if (!Number.isInteger(month) || !Number.isInteger(day)) return false;
-  if (month < 1 || month > 12) return false;
-  if (day < 1) return false;
-
-  var daysInMonth = [31,29,31,30,31,30,31,31,30,31,30,31];
-  return day <= daysInMonth[month - 1];
+  if (month < 1 || month > 12 || day < 1) return false;
+  return day <= [31,29,31,30,31,30,31,31,30,31,30,31][month - 1];
 }
 
-function toMonthDayValue(month, day) {
-  return month * 100 + day;
-}
-
-function clampScore(val) {
-  return Math.max(0, Math.min(100, Math.round(val)));
-}
-
+function toMonthDayValue(m, d) { return m * 100 + d; }
+function clampScore(val) { return Math.max(0, Math.min(100, Math.round(val))); }
 function formatDate(date) {
-  return date.getFullYear() + '년 ' + (date.getMonth() + 1) + '월 ' + date.getDate() + '일';
+  return date.getFullYear() + '년 ' + (date.getMonth()+1) + '월 ' + date.getDate() + '일';
 }
 
+// ────────────────────────────────────────────────
+// 음력 변환
+// ────────────────────────────────────────────────
 function lunarToSolarApprox(y, m, d, leap) {
   var base = new Date(2000, 1, 5);
   var days = (y - 2000) * 354 + (m - 1) * 29.5306 + (d - 1);
   if (leap) days += 29;
-  var result = new Date(base);
-  result.setDate(result.getDate() + Math.round(days));
-  return result;
+  var r = new Date(base);
+  r.setDate(r.getDate() + Math.round(days));
+  return r;
 }
 
 function lunarToSolar(y, m, d, isLeap) {
   var ny = LUNAR_NEW_YEAR[y];
   var months = LUNAR_MONTHS[y];
   if (!ny || !months) return lunarToSolarApprox(y, m, d, isLeap);
-
-  var date = new Date(ny[0], ny[1] - 1, ny[2]);
+  var date = new Date(ny[0], ny[1]-1, ny[2]);
   var total = 0;
-  var monthIndex = Math.max(1, Math.min(m, months.length));
-
-  for (var i = 1; i < monthIndex; i++) total += months[i - 1] || 29;
-  if (isLeap && months.length === 13) total += months[monthIndex - 1] || 29;
+  var mi = Math.max(1, Math.min(m, months.length));
+  for (var i = 1; i < mi; i++) total += months[i-1] || 29;
+  if (isLeap && months.length === 13) total += months[mi-1] || 29;
   total += (d - 1);
-
   date.setDate(date.getDate() + total);
   return date;
 }
@@ -1184,80 +1228,72 @@ function estimateLunarDay(date) {
 
 function solarToLunar(date) {
   var year = date.getFullYear();
-  var lunarYear = year;
-  var ny = LUNAR_NEW_YEAR[lunarYear];
-
-  if (!ny) {
-    return { year: year, month: 1, day: estimateLunarDay(date), isLeap: false, approx: true };
-  }
-
-  var nyDate = new Date(ny[0], ny[1] - 1, ny[2]);
+  var lYear = year;
+  var ny = LUNAR_NEW_YEAR[lYear];
+  if (!ny) return { year:year, month:1, day:estimateLunarDay(date), isLeap:false, approx:true };
+  var nyDate = new Date(ny[0], ny[1]-1, ny[2]);
   if (date < nyDate) {
-    lunarYear = year - 1;
-    ny = LUNAR_NEW_YEAR[lunarYear];
-    if (!ny) return { year: year, month: 1, day: estimateLunarDay(date), isLeap: false, approx: true };
-    nyDate = new Date(ny[0], ny[1] - 1, ny[2]);
+    lYear = year - 1;
+    ny = LUNAR_NEW_YEAR[lYear];
+    if (!ny) return { year:year, month:1, day:estimateLunarDay(date), isLeap:false, approx:true };
+    nyDate = new Date(ny[0], ny[1]-1, ny[2]);
   }
-
-  var months = LUNAR_MONTHS[lunarYear];
-  if (!months) return { year: lunarYear, month: 1, day: estimateLunarDay(date), isLeap: false, approx: true };
-
+  var months = LUNAR_MONTHS[lYear];
+  if (!months) return { year:lYear, month:1, day:estimateLunarDay(date), isLeap:false, approx:true };
   var diff = Math.floor((date - nyDate) / 86400000);
   for (var i = 0; i < months.length; i++) {
-    if (diff < months[i]) {
-      return { year: lunarYear, month: Math.min(i + 1, 12), day: diff + 1, isLeap: false, approx: false };
-    }
+    if (diff < months[i]) return { year:lYear, month:Math.min(i+1,12), day:diff+1, isLeap:false, approx:false };
     diff -= months[i];
   }
-
-  return { year: lunarYear, month: 12, day: 30, isLeap: false, approx: false };
+  return { year:lYear, month:12, day:30, isLeap:false, approx:false };
 }
 
+// ────────────────────────────────────────────────
+// 달 / 손없는날 / 황도
+// ────────────────────────────────────────────────
 function getMoonPhase(date) {
   var known = new Date(2000, 0, 6, 18, 14, 0);
   var diff = (date - known) / 86400000;
   var phase = ((diff % 29.53058867) + 29.53058867) % 29.53058867;
-
-  if (phase < 1.5)  return { name: '🌑 삭 직후', bucket: 'new', score: 10, note: '새 출발 상징' };
-  if (phase < 6.5)  return { name: '🌒 초승', bucket: 'waxing', score: 9, note: '회복·성장 흐름' };
-  if (phase < 10.5) return { name: '🌓 상현', bucket: 'half', score: 7, note: '균형적 진행' };
-  if (phase < 13.5) return { name: '🌔 차오름', bucket: 'growing', score: 5, note: '에너지 상승기' };
-  if (phase < 16.5) return { name: '🌕 보름', bucket: 'full', score: 2, note: '붓기·과민 리스크' };
-  if (phase < 20.5) return { name: '🌖 기우는 달', bucket: 'waning', score: 8, note: '정리와 안정 흐름' };
-  if (phase < 24.5) return { name: '🌗 하현', bucket: 'lastquarter', score: 8, note: '안정적 회복 구간' };
-  return { name: '🌘 그믐 전', bucket: 'dark', score: 9, note: '정리·마무리 흐름' };
+  if (phase < 1.5)  return { name:'🌑 삭 직후',   bucket:'new',         score:10 };
+  if (phase < 6.5)  return { name:'🌒 초승',       bucket:'waxing',      score:9  };
+  if (phase < 10.5) return { name:'🌓 상현',       bucket:'half',        score:7  };
+  if (phase < 13.5) return { name:'🌔 차오름',     bucket:'growing',     score:5  };
+  if (phase < 16.5) return { name:'🌕 보름',       bucket:'full',        score:2  };
+  if (phase < 20.5) return { name:'🌖 기우는 달',  bucket:'waning',      score:8  };
+  if (phase < 24.5) return { name:'🌗 하현',       bucket:'lastquarter', score:8  };
+  return              { name:'🌘 그믐 전',    bucket:'dark',        score:9  };
 }
 
 function isSonEobsneunNal(lunarDay) {
-  return [9, 10, 19, 20, 29, 30].indexOf(lunarDay) >= 0;
+  return [9,10,19,20,29,30].indexOf(lunarDay) >= 0;
 }
 
-function getMonthZhi(solarDate) {
-  var m = solarDate.getMonth() + 1;
-  var monthZhiBase = [2,3,4,5,6,7,8,9,10,11,0,1];
-  return monthZhiBase[m - 1];
+function getMonthZhi(d) {
+  return [2,3,4,5,6,7,8,9,10,11,0,1][d.getMonth()];
 }
 
-function getDayZhi(solarDate) {
-  var base = new Date(2000, 0, 1);
-  var diff = Math.floor((solarDate - base) / 86400000);
+function getDayZhi(d) {
+  var base = new Date(2000,0,1);
+  var diff = Math.floor((d - base) / 86400000);
   return ((diff % 12) + 12) % 12;
 }
 
-function getJianchuIndex(solarDate) {
-  var mz = getMonthZhi(solarDate);
-  var dz = getDayZhi(solarDate);
-  return ((dz - mz) % 12 + 12) % 12;
+function getJianchuIndex(d) {
+  return ((getDayZhi(d) - getMonthZhi(d)) % 12 + 12) % 12;
 }
 
-function isPseudoHwangdoDay(date) {
-  return HWANGDO_JIANCHU.indexOf(getJianchuIndex(date)) >= 0;
+function isPseudoHwangdoDay(d) {
+  return HWANGDO_JIANCHU.indexOf(getJianchuIndex(d)) >= 0;
 }
 
-function getJianchuName(date) {
-  return JIANCHU_NAMES[getJianchuIndex(date)];
+function getJianchuName(d) {
+  return JIANCHU_NAMES[getJianchuIndex(d)];
 }
 
+// ────────────────────────────────────────────────
+// 간지
+// ────────────────────────────────────────────────
 function getGanji(year) {
   var gan = ['경','신','임','계','갑','을','병','정','무','기'];
   var ji  = ['신','유','술','해','자','축','인','묘','진','사','오','미'];
@@ -1265,18 +1301,19 @@ function getGanji(year) {
 }
 
 function getDayGanji(date) {
-  var base = new Date(2000, 0, 1);
+  var base = new Date(2000,0,1);
   var diff = Math.floor((date - base) / 86400000);
   var gan = ['갑','을','병','정','무','기','경','신','임','계'];
   var ji  = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
-  return gan[((diff % 10) + 10) % 10] + ji[((diff % 12) + 12) % 12] + '일';
+  return gan[((diff%10)+10)%10] + ji[((diff%12)+12)%12] + '일';
 }
 
+// ────────────────────────────────────────────────
+// 별자리
+// ────────────────────────────────────────────────
 function getWesternSign(month, day) {
   if (!isValidMonthDay(month, day)) return null;
-
   var md = toMonthDayValue(month, day);
-
   if (md >= 120 && md <= 218) return WESTERN_SIGNS[1];
   if (md >= 219 && md <= 320) return WESTERN_SIGNS[2];
   if (md >= 321 && md <= 419) return WESTERN_SIGNS[3];
@@ -1288,408 +1325,328 @@ function getWesternSign(month, day) {
   if (md >= 923 && md <= 1022) return WESTERN_SIGNS[9];
   if (md >= 1023 && md <= 1121) return WESTERN_SIGNS[10];
   if (md >= 1122 && md <= 1221) return WESTERN_SIGNS[11];
-
   return WESTERN_SIGNS[0];
 }
 
-function getZodiacIndexFromYear(year) {
-  return year % 12;
+// ────────────────────────────────────────────────
+// 사주 — 충(冲)·삼형(三刑)·육합(六合)
+// 연지(年支) 기반
+// ────────────────────────────────────────────────
+function getBirthZhi(year) {
+  return ((year - 1900) % 12 + 12) % 12;
 }
 
-function getConflictDay(date, birthYear) {
-  var birthJi = getZodiacIndexFromYear(birthYear);
-  var dayJi = getDayZhi(date);
-  var opposite = (birthJi + 6) % 12;
-  return dayJi === opposite;
+// 충: 6칸 차이
+function isConflictDay(date, birthYear) {
+  var bz = getBirthZhi(birthYear);
+  var dz = getDayZhi(date);
+  return Math.abs(bz - dz) === 6 || Math.abs(bz - dz) === (12 - 6);
 }
 
-function getPartnerCompatibilityScore(userYear, partnerYear) {
-  if (!partnerYear) return { score: 0, note: '상대 생년 미입력' };
-
-  var a = userYear % 12;
-  var b = partnerYear % 12;
-  var diff = Math.abs(a - b) % 12;
-
-  if (diff === 4 || diff === 8) return { score: 10, note: '띠 조화 양호' };
-  if (diff === 0) return { score: 8, note: '같은 띠 · 무난' };
-  if (diff === 6) return { score: -5, note: '띠 충돌 감점' };
-  return { score: 4, note: '보통 수준' };
-}
-
-function selectCat(cat) {
-  currentCat = cat;
-  ['cat-surgery', 'cat-business', 'cat-moving', 'cat-travel', 'cat-love'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.classList.remove('selected');
-  });
-  var target = document.getElementById('cat-' + cat);
-  if (target) target.classList.add('selected');
-}
-
-function goTo(id) {
-  document.querySelectorAll('.screen').forEach(function(s) {
-    s.classList.remove('active');
-  });
-
-  var target = document.getElementById(id);
-  if (target) target.classList.add('active');
-
-  window.scrollTo(0, 0);
-
-  if (id === 's2') {
-    var titles = {
-      surgery: '성형 · 시술 정보',
-      business: '개업 정보',
-      moving: '이사 정보',
-      travel: '여행 정보',
-      love: '결혼 · 선보기 정보'
-    };
-
-    document.getElementById('s2-title').textContent = titles[currentCat] || '정보 입력';
-
-    ['surgery', 'business', 'moving', 'travel', 'love'].forEach(function(form) {
-      var el = document.getElementById('form-' + form);
-      if (!el) return;
-      if (form === currentCat) el.classList.add('show');
-      else el.classList.remove('show');
-    });
+// 삼형: 자-묘, 인-사-신, 축-술-미
+var SANGHYUNG = [[0,3],[2,5,8],[1,10,6]];
+function isSanghyungDay(date, birthYear) {
+  var bz = getBirthZhi(birthYear);
+  var dz = getDayZhi(date);
+  for (var i = 0; i < SANGHYUNG.length; i++) {
+    var g = SANGHYUNG[i];
+    if (g.indexOf(bz) >= 0 && g.indexOf(dz) >= 0 && bz !== dz) return true;
   }
+  return false;
 }
 
-function selectCalType(type) {
-  calType = type;
-  ['solar', 'lunar', 'lunar-leap'].forEach(function(t) {
-    var btn = document.getElementById('btn-' + t);
-    if (btn) btn.classList.remove('selected');
-  });
-  document.getElementById('btn-' + type).classList.add('selected');
-
-  var notice = document.getElementById('lunar-notice');
-  if (type === 'solar') notice.classList.remove('show');
-  else notice.classList.add('show');
+// 육합: 자축·인해·묘술·진유·사신·오미
+var YUKHAP = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
+function isHapDay(date, birthYear) {
+  var bz = getBirthZhi(birthYear);
+  var dz = getDayZhi(date);
+  for (var i = 0; i < YUKHAP.length; i++) {
+    var p = YUKHAP[i];
+    if ((p[0]===bz&&p[1]===dz)||(p[1]===bz&&p[0]===dz)) return true;
+  }
+  return false;
 }
 
-function selectGender(el) {
-  el.closest('.gender-row').querySelectorAll('.gender-btn').forEach(function(btn) {
-    btn.classList.remove('selected');
-  });
-  el.classList.add('selected');
+// ────────────────────────────────────────────────
+// 개인 시드 — 같은 점수일 때 사람마다 다른 순서
+// ────────────────────────────────────────────────
+function getPersonalSeed(birthYear, birthMonth, birthDay) {
+  return (birthYear * 31 + birthMonth * 7 + birthDay) % 97;
 }
 
-function selectSurgery(el) {
-  el.closest('.surgery-grid').querySelectorAll('.surgery-btn').forEach(function(btn) {
-    btn.classList.remove('selected');
-  });
-  el.classList.add('selected');
+// ────────────────────────────────────────────────
+// 궁합
+// ────────────────────────────────────────────────
+function getPartnerScore(userYear, partnerYear) {
+  if (!partnerYear) return { score:0, note:'상대 생년 미입력' };
+  var a = getBirthZhi(userYear);
+  var b = getBirthZhi(partnerYear);
+  var diff = Math.abs(a - b) % 12;
+  if (diff === 4 || diff === 8) return { score:10, note:'삼합 궁합 최상' };
+  if (diff === 0) return { score:7,  note:'같은 띠 · 무난' };
+  if (diff === 6) return { score:-8, note:'충 · 궁합 불리' };
+  if (diff === 3 || diff === 9) return { score:3, note:'보통 수준' };
+  return { score:5, note:'무난한 궁합' };
 }
 
-function selectOption(el) {
-  el.closest('.option-grid').querySelectorAll('.option-btn').forEach(function(btn) {
-    btn.classList.remove('selected');
-  });
-  el.classList.add('selected');
+// ────────────────────────────────────────────────
+// 수술 탐색 window — 약물 유무에 따라 개인별로 다름
+// ────────────────────────────────────────────────
+function getSurgeryWindow(today, earliestSafeDate, stopMeds) {
+  var hasStop = !!(stopMeds && stopMeds.length);
+  if (hasStop) {
+    var s = new Date(earliestSafeDate);
+    var e = new Date(earliestSafeDate);
+    e.setDate(e.getDate() + 35);
+    return { start:s, end:e };
+  }
+  var s2 = new Date(today);
+  s2.setDate(s2.getDate() + 3);
+  var e2 = new Date(today);
+  e2.setDate(e2.getDate() + 45);
+  return { start:s2, end:e2 };
 }
 
-function toggleMed(el) {
-  el.classList.toggle('on');
-}
-
-function getSelectedSurgeryType() {
-  var el = document.querySelector('#form-surgery .surgery-btn.selected');
-  return el ? el.dataset.surgery : 'eye';
-}
-
-function getSelectedOption(formId) {
-  var el = document.querySelector('#' + formId + ' .option-btn.selected');
-  return el ? el.dataset.option : '';
-}
-
-function getSelectedMeds() {
-  var meds = [];
-  document.querySelectorAll('.med-toggle.on').forEach(function(el) {
-    var key = el.dataset.med;
-    if (MED_RULES[key]) meds.push({ key: key, rule: MED_RULES[key] });
-  });
-  return meds;
-}
-
+// ────────────────────────────────────────────────
+// 약물 안전일
+// ────────────────────────────────────────────────
 function getEarliestSafeDate(category, selectedSurgery, meds, today) {
   if (category !== 'surgery') return new Date(today);
-
   var maxDays = 0;
   meds.forEach(function(item) {
     if (item.rule.group !== 'stop') return;
-    var applies = item.rule.affects.indexOf('all') >= 0 || item.rule.affects.indexOf(selectedSurgery) >= 0;
-    if (applies && item.rule.stopDays > maxDays) maxDays = item.rule.stopDays;
+    var ok = item.rule.affects.indexOf('all') >= 0 || item.rule.affects.indexOf(selectedSurgery) >= 0;
+    if (ok && item.rule.stopDays > maxDays) maxDays = item.rule.stopDays;
   });
-
-  var safeDate = new Date(today);
-  safeDate.setDate(safeDate.getDate() + maxDays);
-  return safeDate;
+  var d = new Date(today);
+  d.setDate(d.getDate() + maxDays);
+  return d;
 }
 
-function getMonthRange(category) {
-  var map = {
-    surgery: null,
-    business: ['business-start-month', 'business-end-month'],
-    moving: ['moving-start-month', 'moving-end-month'],
-    travel: ['travel-start-month', 'travel-end-month'],
-    love: ['love-start-month', 'love-end-month']
-  };
-
-  if (!map[category]) return { start: 1, end: 12 };
-
-  var start = parseInt(document.getElementById(map[category][0]).value, 10) || 1;
-  var end = parseInt(document.getElementById(map[category][1]).value, 10) || 12;
-
-  start = Math.max(1, Math.min(12, start));
-  end = Math.max(1, Math.min(12, end));
-
-  if (start > end) {
-    var tmp = start;
-    start = end;
-    end = tmp;
-  }
-
-  return { start: start, end: end };
-}
-
-function getBirthDate() {
-  var y = parseInt(document.getElementById('birthyear').value, 10);
-  var m = parseInt(document.getElementById('birthmonth').value, 10);
-  var d = parseInt(document.getElementById('birthday').value, 10);
-
-  if (!y || !m || !d) throw new Error('생년월일을 입력해주세요.');
-  if (!isValidDate(y, m, d)) throw new Error('올바른 날짜를 입력해주세요.');
-
-  if (calType === 'solar') {
-    return { originalType: '양력', date: new Date(y, m - 1, d), approx: false };
-  }
-  if (calType === 'lunar') {
-    return { originalType: '음력', date: lunarToSolar(y, m, d, false), approx: (!LUNAR_NEW_YEAR[y] || !LUNAR_MONTHS[y]) };
-  }
-  return { originalType: '음력 윤달', date: lunarToSolar(y, m, d, true), approx: (!LUNAR_NEW_YEAR[y] || !LUNAR_MONTHS[y]) };
-}
-
+// ────────────────────────────────────────────────
+// 요일 점수
+// ────────────────────────────────────────────────
 function getWeekdayScore(cat, dow) {
   if (cat === 'surgery') {
-    if (dow === 5) return { score: 10, tag: '💤 금요일 수술 후 회복 여유' };
-    if (dow >= 1 && dow <= 4) return { score: 7, tag: '🗓️ 평일 일정 안정' };
-    if (dow === 6) return { score: -8, tag: '⚠️ 토요일 응급 대응 한계' };
-    if (dow === 0) return { score: -10, tag: '⚠️ 일요일 비선호' };
+    // 토요일 = 정상 수술일 (성형외과 토요일 운영)
+    if (dow === 2) return { score:10, tag:'🗓️ 화요일 수술 최적' };
+    if (dow === 3) return { score:9,  tag:'🗓️ 수요일 안정적' };
+    if (dow === 5) return { score:9,  tag:'💤 금요일 주말 회복' };
+    if (dow === 4) return { score:8,  tag:'🗓️ 목요일 무난' };
+    if (dow === 6) return { score:7,  tag:'🏥 토요일 수술 가능' };
+    if (dow === 1) return { score:6,  tag:'🗓️ 월요일 가능' };
+    return { score:-99, tag:'' }; // 일요일 (isSurgeryClosedDay로 이미 제거됨)
   }
-
   if (cat === 'business') {
-    if (dow === 2 || dow === 4) return { score: 10, tag: '🏪 화·목 개업 흐름' };
-    if (dow >= 1 && dow <= 5) return { score: 6, tag: '📈 주중 운영 시작' };
-    return { score: -4, tag: '⚠️ 주말 개업 약한 감점' };
+    if (dow === 2 || dow === 4) return { score:10, tag:'🏪 화·목 개업 최적' };
+    if (dow >= 1 && dow <= 5)   return { score:6,  tag:'📈 주중 운영 시작' };
+    return { score:-4, tag:'⚠️ 주말 개업 약한 감점' };
   }
-
   if (cat === 'moving') {
-    if (dow === 3 || dow === 4) return { score: 8, tag: '🚚 중주간 이동 선호' };
-    if (dow === 6) return { score: -6, tag: '⚠️ 토요일 혼잡' };
-    if (dow === 0) return { score: -3, tag: '⚠️ 일요일 조정 필요' };
-    return { score: 4, tag: '📦 무난한 일정' };
+    if (dow === 3 || dow === 4) return { score:8, tag:'🚚 중주간 이동 선호' };
+    if (dow === 6) return { score:-6, tag:'⚠️ 토요일 혼잡' };
+    if (dow === 0) return { score:-3, tag:'⚠️ 일요일 조정 필요' };
+    return { score:4, tag:'📦 무난한 일정' };
   }
-
   if (cat === 'travel') {
-    if (dow === 5 || dow === 6) return { score: 10, tag: '✈️ 금·토 출발 선호' };
-    if (dow === 1) return { score: -4, tag: '⚠️ 월요일 피로 감점' };
-    return { score: 5, tag: '🧳 무난한 출발' };
+    if (dow === 5 || dow === 6) return { score:10, tag:'✈️ 금·토 출발 선호' };
+    if (dow === 1) return { score:-4, tag:'⚠️ 월요일 피로 감점' };
+    return { score:5, tag:'🧳 무난한 출발' };
   }
-
   if (cat === 'love') {
-    if (dow === 6 || dow === 0) return { score: 10, tag: '💍 주말 일정 선호' };
-    if (dow === 5) return { score: 7, tag: '🌹 금요일 분위기' };
-    return { score: 3, tag: '☕ 평일 일정 가능' };
+    if (dow === 6 || dow === 0) return { score:10, tag:'💍 주말 일정 선호' };
+    if (dow === 5) return { score:7,  tag:'🌹 금요일 분위기' };
+    return { score:3, tag:'☕ 평일 일정 가능' };
   }
-
-  return { score: 0, tag: '' };
+  return { score:0, tag:'' };
 }
 
-function getRecoveryScoreForSurgery(surgeryType, date) {
+// ────────────────────────────────────────────────
+// 회복 점수 (수술 전용)
+// ────────────────────────────────────────────────
+function getRecoveryScore(surgeryType, date) {
   var dow = date.getDay();
-
   if (surgeryType === 'eye' || surgeryType === 'nose' || surgeryType === 'contour') {
-    if (dow === 5) return { score: 10, note: '주말 회복 여유 큼' };
-    if (dow >= 1 && dow <= 4) return { score: 6, note: '평일 수술 가능' };
-    return { score: -6, note: '회복 관리 비선호' };
+    if (dow === 5) return { score:10, note:'주말 회복 여유 큼' };
+    if (dow >= 1 && dow <= 4) return { score:7, note:'평일 수술 가능' };
+    if (dow === 6) return { score:5, note:'토요일 수술 가능' };
+    return { score:-6, note:'회복 관리 비선호' };
   }
-
   if (surgeryType === 'filler' || surgeryType === 'laser') {
-    if (dow >= 1 && dow <= 5) return { score: 7, note: '짧은 회복 일정에 무난' };
-    return { score: 2, note: '가능하나 우선순위 낮음' };
+    if (dow >= 1 && dow <= 6) return { score:7, note:'짧은 회복에 무난' };
+    return { score:2, note:'가능하나 우선순위 낮음' };
   }
-
   if (surgeryType === 'liposuction') {
-    if (dow === 4 || dow === 5) return { score: 9, note: '압박복·회복 관리 유리' };
-    if (dow >= 1 && dow <= 3) return { score: 6, note: '무난한 회복 일정' };
-    return { score: -5, note: '회복 동선 비선호' };
+    if (dow === 4 || dow === 5) return { score:9, note:'압박복·회복 관리 유리' };
+    if (dow === 6) return { score:6, note:'토요일 수술 가능' };
+    if (dow >= 1 && dow <= 3) return { score:6, note:'무난한 회복 일정' };
+    return { score:-5, note:'회복 동선 비선호' };
   }
-
-  return { score: 5, note: '기본 회복 점수' };
+  return { score:5, note:'기본 회복 점수' };
 }
 
-function getProximityScoreForSurgery(date, earliestSafeDate) {
-  var daysFromSafe = Math.floor((date - earliestSafeDate) / 86400000);
-
-  if (daysFromSafe <= 7)  return { score: 10, note: '너무 멀지 않은 일정' };
-  if (daysFromSafe <= 14) return { score: 9, note: '가까운 일정' };
-  if (daysFromSafe <= 21) return { score: 8, note: '무난한 일정' };
-  if (daysFromSafe <= 30) return { score: 6, note: '조금 여유 있는 일정' };
-  if (daysFromSafe <= 45) return { score: 3, note: '다소 먼 일정' };
-  if (daysFromSafe <= 60) return { score: 0, note: '상당히 먼 일정' };
-  if (daysFromSafe <= 90) return { score: -4, note: '너무 먼 일정' };
-  return { score: -8, note: '지나치게 먼 일정' };
+// ────────────────────────────────────────────────
+// proximity (window 내 앞쪽 선호)
+// ────────────────────────────────────────────────
+function getProximityScore(date, windowStart) {
+  var days = Math.floor((date - windowStart) / 86400000);
+  if (days <= 5)  return { score:10, note:'안전일 직후 가까운 일정' };
+  if (days <= 10) return { score:9,  note:'가까운 일정' };
+  if (days <= 18) return { score:7,  note:'무난한 일정' };
+  if (days <= 25) return { score:4,  note:'조금 여유 있는 일정' };
+  return           { score:1,  note:'범위 후반 일정' };
 }
 
+// ────────────────────────────────────────────────
+// 날짜 점수 계산 (3단계 구조)
+// ────────────────────────────────────────────────
 function scoreDate(date, context) {
   var cat = context.category;
-  var weights = CAT_WEIGHTS[cat];
+  var w = CAT_WEIGHTS[cat];
   var moon = getMoonPhase(date);
   var lunar = solarToLunar(date);
   var lunarDay = lunar.day || estimateLunarDay(date);
   var son = isSonEobsneunNal(lunarDay);
   var hwangdo = isPseudoHwangdoDay(date);
   var jianchuName = getJianchuName(date);
-  var conflict = getConflictDay(date, context.birthYear);
-  var dowScore = getWeekdayScore(cat, date.getDay());
-  var zodiacValue = context.signObj.traits[cat] || 5;
+  var dow = date.getDay();
+
+  // 사주 판정
+  var conflict  = isConflictDay(date, context.birthYear);
+  var sanghyung = isSanghyungDay(date, context.birthYear);
+  var hap       = isHapDay(date, context.birthYear);
+
+  var dowScore  = getWeekdayScore(cat, dow);
+  var zodiacVal = context.signObj.traits[cat] || 5;
   var partnerScore = cat === 'love'
-    ? getPartnerCompatibilityScore(context.birthYear, context.partnerYear)
-    : { score: 0, note: '' };
+    ? getPartnerScore(context.birthYear, context.partnerYear)
+    : { score:0, note:'' };
 
   var score = 0;
   var tags = [];
   var reasons = [];
 
+  // ── STAGE 1: 수술 전용 ──
   if (cat === 'surgery') {
-    var recovery = getRecoveryScoreForSurgery(context.selectedSurgery, date);
-    score += recovery.score * (weights.recovery / 10);
-    reasons.push('회복 동선 반영');
+    var rec = getRecoveryScore(context.selectedSurgery, date);
+    score += rec.score * (w.recovery / 10);
+    reasons.push('회복 동선');
+    if (rec.score >= 7) tags.push({ text:'🛌 ' + rec.note, good:true });
+    else if (rec.score < 0) tags.push({ text:'⚠️ ' + rec.note, good:false });
 
-    if (recovery.score >= 7) {
-      tags.push({ text: '🛌 ' + recovery.note, good: true });
-    } else if (recovery.score < 0) {
-      tags.push({ text: '⚠️ ' + recovery.note, good: false });
-    }
-
-    var proximity = getProximityScoreForSurgery(date, context.earliestSafeDate);
-    score += proximity.score * (weights.proximity / 10);
-    reasons.push('가까운 일정 우선 반영');
-
-    if (proximity.score >= 8) {
-      tags.push({ text: '⏱️ ' + proximity.note, good: true });
-    } else if (proximity.score < 0) {
-      tags.push({ text: '⚠️ ' + proximity.note, good: false });
-    }
-
-    if (context.stopMeds && context.stopMeds.length) {
-      tags.push({ text: '💊 약물 중단기간 반영', good: true });
-      reasons.push('약물 필터 반영');
-    }
+    var prox = getProximityScore(date, context.surgeryWindow.start);
+    score += prox.score * (w.proximity / 10);
+    reasons.push('안전일 기준 일정');
+    if (prox.score >= 7) tags.push({ text:'⏱️ ' + prox.note, good:true });
 
     if (context.consultMeds && context.consultMeds.length) {
-      score -= (weights.consultPenalty || 8);
-      tags.push({ text: '🩺 상담 우선 약물 있음', good: false });
-      reasons.push('상담 우선 약물 감점');
+      score -= w.consultPenalty;
+      tags.push({ text:'🩺 상담 우선 약물 있음', good:false });
+    }
+
+    // 보름 붓기 페널티
+    if ((context.selectedSurgery === 'eye' || context.selectedSurgery === 'nose' || context.selectedSurgery === 'contour') && moon.bucket === 'full') {
+      score -= 10;
+      tags.push({ text:'⚠️ 보름 붓기 주의', good:false });
+    }
+    // 레이저 진정 가점
+    if (context.selectedSurgery === 'laser' && (moon.bucket === 'waning' || moon.bucket === 'dark')) {
+      score += 5;
+      tags.push({ text:'✨ 시술 후 진정 흐름', good:true });
     }
   }
 
-  score += moon.score * (weights.moon / 10);
-  reasons.push('달 주기 반영');
-  tags.push({ text: moon.name, good: moon.score >= 7 });
+  // ── STAGE 2: 개인화 (별자리 + 사주) ──
+  // 별자리 — 가중치 최대화 (개인마다 다름)
+  score += zodiacVal * (w.zodiac / 10);
+  reasons.push('별자리 성향');
+  if (zodiacVal >= 8) tags.push({ text:'⭐ ' + context.signObj.sign + ' 강점일', good:true });
+  else if (zodiacVal >= 6) tags.push({ text:'⭐ ' + context.signObj.sign, good:true });
 
-  if (son && (cat === 'business' || cat === 'moving' || cat === 'love')) {
-    score += weights.son;
-    reasons.push('손없는날 가점');
-    tags.push({ text: '🌟 손없는날', good: true });
-  } else if (son && cat === 'travel') {
-    score += weights.son * 0.6;
-    reasons.push('손없는날 약한 가점');
-    tags.push({ text: '🌟 손없는날', good: true });
-  } else if (son && cat === 'surgery') {
-    score += weights.son * 0.1;
-    reasons.push('손없는날 미약 반영');
+  // 사주 충(冲) — 강한 회피
+  if (conflict) {
+    score -= w.conflict;
+    reasons.push('사주 충 강감점');
+    tags.push({ text:'⚠️ 사주 충(冲)일', good:false });
+  }
+  // 삼형(三刑) — 중간 감점
+  if (sanghyung && !conflict) {
+    score -= Math.round(w.conflict * 0.55);
+    reasons.push('삼형 감점');
+    tags.push({ text:'⚠️ 삼형(三刑)일', good:false });
+  }
+  // 육합(六合) — 가점
+  if (hap) {
+    score += Math.round(w.conflict * 0.45);
+    reasons.push('육합 가점');
+    tags.push({ text:'✨ 육합(六合)일', good:true });
   }
 
+  // ── STAGE 3: 달력 공통 ──
+  score += moon.score * (w.moon / 10);
+  reasons.push('달 주기');
+  tags.push({ text:moon.name, good:moon.score >= 7 });
+
+  // 손없는날
+  if (son) {
+    var sonMult = { surgery:0.25, business:1, moving:1, travel:0.6, love:1 };
+    score += w.son * (sonMult[cat] || 0.5);
+    reasons.push('손없는날');
+    tags.push({ text:'🌟 손없는날', good:true });
+  }
+
+  // 황도
   var useHwangdo =
     cat === 'moving' ||
     (cat === 'business' && document.getElementById('business-hwangdo').checked) ||
     (cat === 'love' && document.getElementById('love-hwangdo').checked);
-
-  if (hwangdo && useHwangdo) {
-    score += weights.hwangdo;
-    reasons.push('황도 보조점수');
-    tags.push({ text: '🧿 황도 ' + jianchuName + '일', good: true });
+  if (hwangdo && useHwangdo && w.hwangdo > 0) {
+    score += w.hwangdo;
+    reasons.push('황도');
+    tags.push({ text:'🧿 황도 ' + jianchuName + '일', good:true });
   }
 
-  score += zodiacValue * (weights.zodiac / 10);
-  reasons.push('별자리 성향 점수');
-  if (zodiacValue >= 8) tags.push({ text: '⭐ 별자리 강점', good: true });
+  // 요일
+  score += dowScore.score * (w.weekday / 10);
+  reasons.push('요일');
+  if (dowScore.tag) tags.push({ text:dowScore.tag, good:dowScore.score >= 0 });
 
-  score += dowScore.score * (weights.weekday / 10);
-  reasons.push('요일 가중치');
-  if (dowScore.tag) tags.push({ text: dowScore.tag, good: dowScore.score >= 0 });
-
-  if (conflict) {
-    score -= (weights.conflict || 0);
-    reasons.push('띠 충돌 감점');
-    tags.push({ text: '⚠️ 출생 띠 충돌일', good: false });
-  }
-
+  // 궁합
   if (cat === 'love' && context.partnerYear) {
-    score += partnerScore.score * (weights.partner / 10);
-    reasons.push('상대 생년 궁합 보정');
+    score += partnerScore.score * (w.partner / 10);
+    reasons.push('궁합');
     tags.push({
       text: partnerScore.score >= 0 ? '💑 ' + partnerScore.note : '⚠️ ' + partnerScore.note,
       good: partnerScore.score >= 0
     });
   }
 
+  // 카테고리 세부 보정
   if (cat === 'surgery') {
-    var surgeryType = context.selectedSurgery;
-
-    if ((surgeryType === 'eye' || surgeryType === 'nose' || surgeryType === 'contour') && moon.bucket === 'full') {
-      score -= 8;
-      tags.push({ text: '⚠️ 보름 전후 붓기 주의', good: false });
-    }
-
-    if (surgeryType === 'laser' && (moon.bucket === 'waning' || moon.bucket === 'dark')) {
-      score += 4;
-      tags.push({ text: '✨ 시술 후 진정 흐름', good: true });
-    }
-
-    if (surgeryType === 'filler' && date.getDay() === 5) {
-      score += 2;
-    }
+    if (context.selectedSurgery === 'filler' && dow === 5) score += 2;
   }
-
   if (cat === 'travel') {
-    var travelOption = context.selectedOption;
-    if (travelOption === 'overseas' && (date.getDay() === 5 || date.getDay() === 6)) score += 4;
-    if (travelOption === 'family' && son) score += 3;
-    if (travelOption === 'honeymoon' && (date.getDay() === 5 || date.getDay() === 6)) score += 3;
+    if (context.selectedOption === 'overseas' && (dow === 5 || dow === 6)) score += 3;
+    if (context.selectedOption === 'family' && son) score += 3;
+    if (context.selectedOption === 'honeymoon' && (dow === 5 || dow === 6)) score += 3;
   }
-
   if (cat === 'business') {
-    var businessType = context.selectedOption;
-    if (businessType === 'beauty' && context.signObj.sign.indexOf('천칭') >= 0) score += 3;
-    if (businessType === 'food' && (date.getDay() === 4 || date.getDay() === 5)) score += 2;
-    if (businessType === 'it' && (date.getDay() === 2 || date.getDay() === 3)) score += 2;
+    if (context.selectedOption === 'beauty' && context.signObj.sign.indexOf('천칭') >= 0) score += 3;
+    if (context.selectedOption === 'food' && (dow === 4 || dow === 5)) score += 2;
+    if (context.selectedOption === 'it' && (dow === 2 || dow === 3)) score += 2;
   }
-
   if (cat === 'moving') {
-    var movingType = context.selectedOption;
-    if (movingType === 'newhome' && son) score += 4;
-    if (movingType === 'office' && (date.getDay() >= 1 && date.getDay() <= 4)) score += 2;
+    if (context.selectedOption === 'newhome' && son) score += 5;
+    if (context.selectedOption === 'office' && dow >= 1 && dow <= 4) score += 2;
+  }
+  if (cat === 'love') {
+    if ((context.selectedOption === 'wedding' || context.selectedOption === 'proposal') && (dow === 6 || dow === 0)) score += 4;
+    if (context.selectedOption === 'meeting' && dow === 5) score += 2;
   }
 
-  if (cat === 'love') {
-    var loveType = context.selectedOption;
-    if ((loveType === 'wedding' || loveType === 'proposal') && (date.getDay() === 6 || date.getDay() === 0)) score += 4;
-    if (loveType === 'meeting' && date.getDay() === 5) score += 2;
-  }
+  // 개인 시드 tie-break (사람마다 동점 시 다른 날짜 우선)
+  var seed = context.personalSeed;
+  score += ((date.getDate() * 13 + seed) % 7) * 0.007;
 
   return {
     rawScore: score,
@@ -1702,32 +1659,40 @@ function scoreDate(date, context) {
     jianchuName: jianchuName,
     dayGanji: getDayGanji(date),
     conflict: conflict,
+    sanghyung: sanghyung,
+    hap: hap,
     tags: tags.slice(0, 6),
     reasons: reasons
   };
 }
 
+// ────────────────────────────────────────────────
+// 메인 계산
+// ────────────────────────────────────────────────
 function calculateGilil() {
   try {
     var birth = getBirthDate();
-    var birthYear = birth.date.getFullYear();
+    var birthYear  = birth.date.getFullYear();
     var birthMonth = birth.date.getMonth() + 1;
-    var birthDay = birth.date.getDate();
-    var signObj = getWesternSign(birthMonth, birthDay) || WESTERN_SIGNS[0];
-    var ganji = getGanji(birthYear);
+    var birthDay   = birth.date.getDate();
+    var signObj    = getWesternSign(birthMonth, birthDay) || WESTERN_SIGNS[0];
+    var ganji      = getGanji(birthYear);
+    var personalSeed = getPersonalSeed(birthYear, birthMonth, birthDay);
 
     var today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setHours(0,0,0,0);
 
     var range = getMonthRange(currentCat);
     var selectedSurgery = getSelectedSurgeryType();
-    var selectedOption = getSelectedOption('form-' + currentCat);
-    var meds = getSelectedMeds();
-    var stopMeds = meds.filter(function(m) { return m.rule.group === 'stop'; });
-    var continueMeds = meds.filter(function(m) { return m.rule.group === 'continue'; });
+    var selectedOption  = getSelectedOption('form-' + currentCat);
+    var meds        = getSelectedMeds();
+    var stopMeds    = meds.filter(function(m) { return m.rule.group === 'stop'; });
+    var continueMeds= meds.filter(function(m) { return m.rule.group === 'continue'; });
     var consultMeds = meds.filter(function(m) { return m.rule.group === 'consult'; });
 
     var earliestSafeDate = getEarliestSafeDate(currentCat, selectedSurgery, meds, today);
+    var surgeryWindow    = getSurgeryWindow(today, earliestSafeDate, stopMeds);
+
     var partnerYear = currentCat === 'love'
       ? parseInt(document.getElementById('partner-year').value, 10) || null
       : null;
@@ -1735,6 +1700,8 @@ function calculateGilil() {
     var context = {
       category: currentCat,
       birthYear: birthYear,
+      birthMonth: birthMonth,
+      birthDay: birthDay,
       signObj: signObj,
       selectedSurgery: selectedSurgery,
       selectedOption: selectedOption,
@@ -1742,22 +1709,33 @@ function calculateGilil() {
       stopMeds: stopMeds,
       continueMeds: continueMeds,
       consultMeds: consultMeds,
-      earliestSafeDate: earliestSafeDate
+      earliestSafeDate: earliestSafeDate,
+      surgeryWindow: surgeryWindow,
+      personalSeed: personalSeed
     };
 
     var candidates = [];
+    // 수술: 개인별 window 탐색
+    // 비수술: 최대 365일 (이사·결혼·개업 먼 날짜 커버)
+    var maxDays = currentCat === 'surgery' ? 0 : 365;
 
-    for (var i = 3; i <= 180; i++) {
+    for (var i = 0; i <= Math.max(180, maxDays); i++) {
       var date = new Date(today);
       date.setDate(today.getDate() + i);
-      date.setHours(0, 0, 0, 0);
+      date.setHours(0,0,0,0);
 
       var month = date.getMonth() + 1;
-      if (currentCat !== 'surgery' && (month < range.start || month > range.end)) continue;
-      if (currentCat === 'surgery' && date < earliestSafeDate) continue;
+
+      // ── 1단계: 제거 필터 ──
+      if (currentCat === 'surgery') {
+        if (date < surgeryWindow.start || date > surgeryWindow.end) continue;
+        if (isSurgeryClosedDay(date)) continue;   // 일요일·공휴일 제거
+        if (isConflictDay(date, birthYear)) continue; // 충일 제거
+      } else {
+        if (month < range.start || month > range.end) continue;
+      }
 
       var scored = scoreDate(date, context);
-
       candidates.push({
         date: date,
         month: month,
@@ -1777,36 +1755,55 @@ function calculateGilil() {
       });
     }
 
+    // 수술 후보 부족 시 범위 자동 연장
+    if (currentCat === 'surgery' && candidates.length < 10) {
+      var extEnd = new Date(surgeryWindow.end);
+      extEnd.setDate(extEnd.getDate() + 35);
+      var d2 = new Date(surgeryWindow.end);
+      while (d2 <= extEnd) {
+        d2.setDate(d2.getDate() + 1);
+        var dd = new Date(d2);
+        dd.setHours(0,0,0,0);
+        if (!isSurgeryClosedDay(dd) && !isConflictDay(dd, birthYear)) {
+          var sc2 = scoreDate(dd, context);
+          candidates.push({
+            date: dd,
+            month: dd.getMonth()+1,
+            day: dd.getDate(),
+            dayName: ['일','월','화','수','목','금','토'][dd.getDay()],
+            lunar: sc2.lunar, lunarDay: sc2.lunarDay,
+            isSon: sc2.isSon, isHwangdo: sc2.isHwangdo,
+            jianchuName: sc2.jianchuName, dayGanji: sc2.dayGanji,
+            score: sc2.score, rawScore: sc2.rawScore,
+            moon: sc2.moon, tags: sc2.tags, reasons: sc2.reasons
+          });
+        }
+      }
+    }
+
     candidates.sort(function(a, b) {
       if (b.rawScore !== a.rawScore) return b.rawScore - a.rawScore;
       return a.date - b.date;
     });
 
+    // 너무 붙은 날짜 제거 (5일 간격)
     var top3 = [];
     for (var j = 0; j < candidates.length; j++) {
       if (top3.length >= 3) break;
-
       var cand = candidates[j];
-      var tooClose = top3.some(function(existing) {
-        return Math.abs(cand.date - existing.date) / 86400000 < 5;
+      var tooClose = top3.some(function(ex) {
+        return Math.abs(cand.date - ex.date) / 86400000 < 5;
       });
-
       if (!tooClose) top3.push(cand);
     }
 
     if (top3.length < 3) throw new Error('추천 날짜를 충분히 찾지 못했습니다. 기간을 넓혀주세요.');
 
-    var maxScore = top3[0].rawScore;
-    var minScore = top3[top3.length - 1].rawScore;
-
+    // 바 시각화: 1등 = 100%, 나머지 상대 비율 (차이가 보이도록)
+    var maxRaw = top3[0].rawScore;
     top3Results = top3.map(function(item) {
-      var displayScore;
-      if (maxScore === minScore) {
-        displayScore = 92;
-      } else {
-        displayScore = 78 + ((item.rawScore - minScore) / (maxScore - minScore)) * 20;
-      }
-      item.score = clampScore(displayScore);
+      var barWidth = Math.max(40, Math.round((item.rawScore / maxRaw) * 100));
+      item.score = barWidth;
       return item;
     });
 
@@ -1821,6 +1818,7 @@ function calculateGilil() {
       continueMeds: continueMeds,
       consultMeds: consultMeds,
       earliestSafeDate: earliestSafeDate,
+      surgeryWindow: surgeryWindow,
       selectedSurgery: selectedSurgery,
       selectedOption: selectedOption,
       partnerYear: partnerYear
@@ -1833,31 +1831,29 @@ function calculateGilil() {
   }
 }
 
+// ────────────────────────────────────────────────
+// 결과 렌더링
+// ────────────────────────────────────────────────
 function renderResults() {
   if (!top3Results.length || !latestAnalysis) return;
 
   var catLabelMap = {
-    surgery: '성형 · 시술',
-    business: '개업',
-    moving: '이사',
-    travel: '여행',
-    love: '결혼 · 선보기'
+    surgery:'성형 · 시술', business:'개업', moving:'이사', travel:'여행', love:'결혼 · 선보기'
   };
   var catLabel = catLabelMap[currentCat] || '';
 
   var greet = latestAnalysis.birthYear + '년생 · ' + latestAnalysis.birthType + ' 입력 · ' + latestAnalysis.ganji;
   if (latestAnalysis.birthApprox) greet += ' · 음력 근사 포함';
   document.getElementById('result-greeting').textContent = greet;
-
   document.getElementById('result-title').innerHTML =
     '최적의 <span>' + catLabel + ' 길일</span> 3일을<br />찾았습니다';
 
   var bannerText = {
-    surgery: '약물 중단 기간 + 상담 우선 약물 여부 + 회복 여유 + 가까운 일정 + 요일 + 달 주기를 중심으로 추천',
-    business: '손없는날 + 주중 운영 적합성 + 띠 충돌 회피 중심',
-    moving: '손없는날 비중 우선 + 주말 혼잡 감점 + 띠 충돌 회피',
-    travel: '별자리 성향 + 출발 요일 + 달 흐름 반영',
-    love: '주말 선호 + 손없는날 + 별자리 + 상대 생년 보정'
+    surgery:  '약물 필터 → 충·삼형 제거 → 별자리·손없는날·달 주기 중심 개인화 추천',
+    business: '손없는날 최우선 + 황도 + 사주 충돌 회피 + 별자리 개인화',
+    moving:   '손없는날 최우선 + 사주 충돌 강회피 + 별자리 반영',
+    travel:   '별자리 성향 + 달 흐름 + 사주 합 반영 + 출발 요일',
+    love:     '주말 선호 + 손없는날 + 별자리 + 궁합 보정'
   };
   document.getElementById('moon-banner').textContent = bannerText[currentCat] || '';
 
@@ -1866,14 +1862,11 @@ function renderResults() {
     document.getElementById('date' + i).textContent = r.month + '월 ' + r.day + '일';
     document.getElementById('day' + i).textContent = r.dayName + '요일';
 
-    var lunarText =
-      '음력 ' + r.lunar.year + '년 ' + r.lunar.month + '월 ' + r.lunar.day + '일 · ' + r.dayGanji;
-
+    var lunarText = '음력 ' + r.lunar.year + '년 ' + r.lunar.month + '월 ' + r.lunar.day + '일 · ' + r.dayGanji;
     if (r.isSon) lunarText += ' <span class="inline-badge badge-son">손없는날</span>';
     if (r.isHwangdo && (currentCat === 'business' || currentCat === 'moving' || currentCat === 'love')) {
       lunarText += ' <span class="inline-badge badge-hwangdo">황도 ' + r.jianchuName + '</span>';
     }
-
     document.getElementById('lunar' + i).innerHTML = lunarText;
     document.getElementById('score' + i).textContent = r.score + '점';
     document.getElementById('bar' + i).style.width = r.score + '%';
@@ -1889,14 +1882,14 @@ function renderResults() {
   document.getElementById('d-zodiac').innerHTML =
     latestAnalysis.signObj.sign + '<br>' + latestAnalysis.signObj.note;
   document.getElementById('d-lunar').innerHTML =
-    '손없는날은 음력 일자 기준 반영<br>황도는 건제12신 기반의 보조점수만 사용';
+    '손없는날 음력 일자 기준 반영<br>황도 건제12신 기반 보조점수';
   document.getElementById('d-ganji').innerHTML =
-    latestAnalysis.ganji + '<br>연간지와 날짜 충돌 여부를 약한 감점으로 반영';
+    latestAnalysis.ganji + '<br>충(冲) 강회피 · 삼형(三刑) 감점 · 육합(六合) 가점';
 
-  var medsWarnBox = document.getElementById('meds-warn-box');
+  var medsWarnBox  = document.getElementById('meds-warn-box');
   var consultWarnBox = document.getElementById('consult-warn-box');
-  var medsRow = document.getElementById('d-meds-row');
-  var consultRow = document.getElementById('d-consult-row');
+  var medsRow      = document.getElementById('d-meds-row');
+  var consultRow   = document.getElementById('d-consult-row');
 
   if (currentCat === 'surgery') {
     medsWarnBox.style.display = 'flex';
@@ -1907,27 +1900,26 @@ function renderResults() {
     if (latestAnalysis.stopMeds.length) {
       var stopLabels = latestAnalysis.stopMeds.map(function(m) { return m.rule.label; }).join(', ');
       document.getElementById('meds-warning-text').innerHTML =
-        stopLabels + ' 선택으로 인해 <strong>' + formatDate(latestAnalysis.earliestSafeDate) + '</strong> 이후 날짜만 추천했습니다.';
+        stopLabels + ' 선택 → <strong>' + formatDate(latestAnalysis.earliestSafeDate) + '</strong> 이후 ' +
+        formatDate(latestAnalysis.surgeryWindow.end) + '까지 범위에서 추천';
       document.getElementById('d-meds').innerHTML =
-        '중단 필요 약물 반영 완료<br>가장 긴 중단 기간 기준으로 너무 이른 날짜 제외';
+        '약물 중단기간 반영<br>안전일 ~ 안전일+35일 범위로 후보 제한';
     } else {
       document.getElementById('meds-warning-text').innerHTML =
-        '중단 필요 약물 선택이 없어 약물 필터 감점 없이 추천했습니다.';
+        '중단 필요 약물 없음 · 오늘+3일 ~ 오늘+45일 범위에서 추천';
       document.getElementById('d-meds').innerHTML =
-        '중단 필요 약물 미선택<br>기본 안전 범위 내 날짜 탐색';
+        '중단 약물 미선택<br>오늘+3~45일 범위 탐색';
     }
 
     if (latestAnalysis.consultMeds.length) {
-      var consultLabels = latestAnalysis.consultMeds.map(function(m) { return m.rule.label; }).join(', ');
+      var cLabels = latestAnalysis.consultMeds.map(function(m) { return m.rule.label; }).join(', ');
       document.getElementById('consult-warning-text').innerHTML =
-        consultLabels + '<br><strong>이 약물은 자동 추천보다 담당의 상담이 우선</strong>입니다.';
+        cLabels + '<br><strong>담당의 상담 후 날짜 확정 권장</strong>';
       document.getElementById('d-consult').innerHTML =
-        consultLabels + '<br>자동 추천 신뢰도를 낮춰 반영 · 임의 중단/유지 판단 금지';
+        cLabels + '<br>자동 추천 신뢰도 낮춤 · 임의 판단 금지';
     } else {
-      document.getElementById('consult-warning-text').innerHTML =
-        '상담 우선 약물 선택 없음';
-      document.getElementById('d-consult').innerHTML =
-        '상담 우선 약물 미선택';
+      document.getElementById('consult-warning-text').innerHTML = '상담 우선 약물 선택 없음';
+      document.getElementById('d-consult').innerHTML = '상담 우선 약물 미선택';
     }
   } else {
     medsWarnBox.style.display = 'none';
@@ -1937,53 +1929,145 @@ function renderResults() {
   }
 
   var calButtons = '';
-  var medals = ['🥇', '🥈', '🥉'];
-
+  var medals = ['🥇','🥈','🥉'];
   top3Results.forEach(function(r, idx) {
     var y = r.date.getFullYear();
-    var m = String(r.date.getMonth() + 1).padStart(2, '0');
-    var d = String(r.date.getDate()).padStart(2, '0');
+    var m = String(r.date.getMonth()+1).padStart(2,'0');
+    var d = String(r.date.getDate()).padStart(2,'0');
     var dateStr = y + m + d;
     var title = r.month + '월 ' + r.day + '일 ' + catLabel + ' 길일';
-
     calButtons +=
-      '<button class="cal-btn" type="button" onclick="saveToCalendar(\'' + dateStr + '\', \'' + title + '\')">' +
+      '<button class="cal-btn" type="button" onclick="saveToCalendar(\'' + dateStr + '\',\'' + title + '\')">' +
       '<span class="cal-icon">' + medals[idx] + '</span>' +
       '<div><strong>' + r.month + '월 ' + r.day + '일 (' + r.dayName + ')</strong> · ' + r.score + '점</div>' +
       '</button>';
   });
-
   document.getElementById('cal-buttons').innerHTML = calButtons;
 }
 
-function shareKakao() {
-  if (!top3Results.length) {
-    showToast('먼저 길일을 계산해주세요');
-    return;
+// ────────────────────────────────────────────────
+// UI 헬퍼
+// ────────────────────────────────────────────────
+function selectCat(cat) {
+  currentCat = cat;
+  ['cat-surgery','cat-business','cat-moving','cat-travel','cat-love'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('selected');
+  });
+  var t = document.getElementById('cat-' + cat);
+  if (t) t.classList.add('selected');
+}
+
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  var t = document.getElementById(id);
+  if (t) t.classList.add('active');
+  window.scrollTo(0,0);
+  if (id === 's2') {
+    var titles = { surgery:'성형 · 시술 정보', business:'개업 정보', moving:'이사 정보', travel:'여행 정보', love:'결혼 · 선보기 정보' };
+    document.getElementById('s2-title').textContent = titles[currentCat] || '정보 입력';
+    ['surgery','business','moving','travel','love'].forEach(function(form) {
+      var el = document.getElementById('form-' + form);
+      if (!el) return;
+      if (form === currentCat) el.classList.add('show');
+      else el.classList.remove('show');
+    });
   }
+}
 
-  var medals = ['🥇', '🥈', '🥉'];
+function selectCalType(type) {
+  calType = type;
+  ['solar','lunar','lunar-leap'].forEach(function(t) {
+    var btn = document.getElementById('btn-' + t);
+    if (btn) btn.classList.remove('selected');
+  });
+  document.getElementById('btn-' + type).classList.add('selected');
+  var notice = document.getElementById('lunar-notice');
+  if (type === 'solar') notice.classList.remove('show');
+  else notice.classList.add('show');
+}
+
+function selectGender(el) {
+  el.closest('.gender-row').querySelectorAll('.gender-btn').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function selectSurgery(el) {
+  el.closest('.surgery-grid').querySelectorAll('.surgery-btn').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function selectOption(el) {
+  el.closest('.option-grid').querySelectorAll('.option-btn').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function toggleMed(el) { el.classList.toggle('on'); }
+
+function getSelectedSurgeryType() {
+  var el = document.querySelector('#form-surgery .surgery-btn.selected');
+  return el ? el.dataset.surgery : 'eye';
+}
+
+function getSelectedOption(formId) {
+  var el = document.querySelector('#' + formId + ' .option-btn.selected');
+  return el ? el.dataset.option : '';
+}
+
+function getSelectedMeds() {
+  var meds = [];
+  document.querySelectorAll('.med-toggle.on').forEach(function(el) {
+    var key = el.dataset.med;
+    if (MED_RULES[key]) meds.push({ key:key, rule:MED_RULES[key] });
+  });
+  return meds;
+}
+
+function getMonthRange(category) {
+  var map = {
+    surgery: null,
+    business: ['business-start-month','business-end-month'],
+    moving:   ['moving-start-month','moving-end-month'],
+    travel:   ['travel-start-month','travel-end-month'],
+    love:     ['love-start-month','love-end-month']
+  };
+  if (!map[category]) return { start:1, end:12 };
+  var start = parseInt(document.getElementById(map[category][0]).value, 10) || 1;
+  var end   = parseInt(document.getElementById(map[category][1]).value, 10) || 12;
+  start = Math.max(1, Math.min(12, start));
+  end   = Math.max(1, Math.min(12, end));
+  if (start > end) { var tmp = start; start = end; end = tmp; }
+  return { start:start, end:end };
+}
+
+function getBirthDate() {
+  var y = parseInt(document.getElementById('birthyear').value, 10);
+  var m = parseInt(document.getElementById('birthmonth').value, 10);
+  var d = parseInt(document.getElementById('birthday').value, 10);
+  if (!y || !m || !d) throw new Error('생년월일을 입력해주세요.');
+  if (!isValidDate(y, m, d)) throw new Error('올바른 날짜를 입력해주세요.');
+  if (calType === 'solar') return { originalType:'양력', date:new Date(y, m-1, d), approx:false };
+  if (calType === 'lunar') return { originalType:'음력', date:lunarToSolar(y, m, d, false), approx:(!LUNAR_NEW_YEAR[y]||!LUNAR_MONTHS[y]) };
+  return { originalType:'음력 윤달', date:lunarToSolar(y, m, d, true), approx:(!LUNAR_NEW_YEAR[y]||!LUNAR_MONTHS[y]) };
+}
+
+// ────────────────────────────────────────────────
+// 공유 / 캘린더
+// ────────────────────────────────────────────────
+function shareKakao() {
+  if (!top3Results.length) { showToast('먼저 길일을 계산해주세요'); return; }
+  var medals = ['🥇','🥈','🥉'];
   var text = '🌙 길일 앱 추천 결과\n\n';
-
   top3Results.forEach(function(r, i) {
     text += medals[i] + ' ' + r.month + '월 ' + r.day + '일 (' + r.dayName + ') · ' + r.score + '점\n';
   });
-
   if (currentCat === 'surgery' && latestAnalysis.consultMeds.length) {
-    text += '\n※ 상담 우선 약물 있음: 자동 추천보다 병원 확인 우선';
+    text += '\n※ 상담 우선 약물 있음: 병원 확인 우선';
   }
-
-  text += '\n기준: 카테고리별 일정 적합성 + 달 주기 + 손없는날 + 요일 가중치';
-
+  text += '\n기준: 사주 · 별자리 · 손없는날 · 달 주기 · 약물 필터';
   if (navigator.share) {
-    navigator.share({
-      title: '길일 추천',
-      text: text,
-      url: window.location.href
-    }).catch(function() {
-      copyToClipboard(text);
-      showToast('복사했어요! 붙여넣기 하세요');
-    });
+    navigator.share({ title:'길일 추천', text:text, url:window.location.href })
+      .catch(function() { copyToClipboard(text); showToast('복사했어요! 붙여넣기 하세요'); });
   } else {
     copyToClipboard(text);
     showToast('복사했어요! 붙여넣기 하세요');
@@ -1991,89 +2075,58 @@ function shareKakao() {
 }
 
 function copyLink() {
-  if (!top3Results.length) {
-    showToast('먼저 길일을 계산해주세요');
-    return;
-  }
-
+  if (!top3Results.length) { showToast('먼저 길일을 계산해주세요'); return; }
   var text = '길일 추천\n' + top3Results.map(function(r, idx) {
-    return ['🥇', '🥈', '🥉'][idx] + ' ' + r.month + '월 ' + r.day + '일 ' + r.score + '점';
+    return ['🥇','🥈','🥉'][idx] + ' ' + r.month + '월 ' + r.day + '일 ' + r.score + '점';
   }).join('\n');
-
   copyToClipboard(text);
   showToast('복사됐어요');
 }
 
-function showCalModal() {
-  document.getElementById('calModal').classList.add('show');
-}
-
-function hideCalModal() {
-  document.getElementById('calModal').classList.remove('show');
-}
+function showCalModal() { document.getElementById('calModal').classList.add('show'); }
+function hideCalModal() { document.getElementById('calModal').classList.remove('show'); }
 
 function saveToCalendar(dateStr, title) {
-  var year = parseInt(dateStr.slice(0, 4), 10);
-  var month = parseInt(dateStr.slice(4, 6), 10);
-  var day = parseInt(dateStr.slice(6, 8), 10);
-
-  var endDate = new Date(year, month - 1, day);
+  var year  = parseInt(dateStr.slice(0,4), 10);
+  var month = parseInt(dateStr.slice(4,6), 10);
+  var day   = parseInt(dateStr.slice(6,8), 10);
+  var endDate = new Date(year, month-1, day);
   endDate.setDate(endDate.getDate() + 1);
-
-  var endStr =
-    endDate.getFullYear() +
-    String(endDate.getMonth() + 1).padStart(2, '0') +
-    String(endDate.getDate()).padStart(2, '0');
-
+  var endStr = endDate.getFullYear() + String(endDate.getMonth()+1).padStart(2,'0') + String(endDate.getDate()).padStart(2,'0');
   var ics =
-    'BEGIN:VCALENDAR\r\n' +
-    'VERSION:2.0\r\n' +
-    'BEGIN:VEVENT\r\n' +
+    'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\n' +
     'DTSTART;VALUE=DATE:' + dateStr + '\r\n' +
     'DTEND;VALUE=DATE:' + endStr + '\r\n' +
     'SUMMARY:' + title + '\r\n' +
     'DESCRIPTION:길일 앱 추천 일정\r\n' +
-    'END:VEVENT\r\n' +
-    'END:VCALENDAR\r\n';
-
-  var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    'END:VEVENT\r\nEND:VCALENDAR\r\n';
+  var blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
-
-  a.href = url;
-  a.download = '길일_추천.ics';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-
+  a.href = url; a.download = '길일_추천.ics';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
   hideCalModal();
   showToast('캘린더 파일 저장 완료');
 }
 
+// ────────────────────────────────────────────────
+// 입력 자동이동
+// ────────────────────────────────────────────────
 function setupBirthInputAutoMove() {
   var y = document.getElementById('birthyear');
   var m = document.getElementById('birthmonth');
   var d = document.getElementById('birthday');
-
   y.addEventListener('input', function() {
-    y.value = y.value.replace(/\D/g, '').slice(0, 4);
-    if (y.value.length >= 4) {
-      m.focus();
-      m.select();
-    }
+    y.value = y.value.replace(/\D/g,'').slice(0,4);
+    if (y.value.length >= 4) { m.focus(); m.select(); }
   });
-
   m.addEventListener('input', function() {
-    m.value = m.value.replace(/\D/g, '').slice(0, 2);
-    if (m.value.length >= 2) {
-      d.focus();
-      d.select();
-    }
+    m.value = m.value.replace(/\D/g,'').slice(0,2);
+    if (m.value.length >= 2) { d.focus(); d.select(); }
   });
-
   d.addEventListener('input', function() {
-    d.value = d.value.replace(/\D/g, '').slice(0, 2);
+    d.value = d.value.replace(/\D/g,'').slice(0,2);
     if (d.value.length >= 2) d.blur();
   });
 }
@@ -2081,9 +2134,8 @@ function setupBirthInputAutoMove() {
 function setupMonthInputLimit(id) {
   var el = document.getElementById(id);
   if (!el) return;
-
   el.addEventListener('input', function() {
-    el.value = el.value.replace(/\D/g, '').slice(0, 2);
+    el.value = el.value.replace(/\D/g,'').slice(0,2);
     var num = parseInt(el.value, 10);
     if (!isNaN(num)) {
       if (num < 1) el.value = '1';
@@ -2095,31 +2147,20 @@ function setupMonthInputLimit(id) {
 function setupYearInputLimit(id, maxLen) {
   var el = document.getElementById(id);
   if (!el) return;
-
   el.addEventListener('input', function() {
-    el.value = el.value.replace(/\D/g, '').slice(0, maxLen || 4);
+    el.value = el.value.replace(/\D/g,'').slice(0, maxLen || 4);
   });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
   var startBtn = document.getElementById('startBtn');
-  if (startBtn) {
-    startBtn.addEventListener('click', function() {
-      goTo('s2');
-    });
-  }
-
+  if (startBtn) startBtn.addEventListener('click', function() { goTo('s2'); });
   setupBirthInputAutoMove();
-
-  [
-    'business-start-month', 'business-end-month',
-    'moving-start-month', 'moving-end-month',
-    'travel-start-month', 'travel-end-month',
-    'love-start-month', 'love-end-month'
-  ].forEach(setupMonthInputLimit);
-
+  ['business-start-month','business-end-month',
+   'moving-start-month','moving-end-month',
+   'travel-start-month','travel-end-month',
+   'love-start-month','love-end-month'].forEach(setupMonthInputLimit);
   setupYearInputLimit('partner-year', 4);
-
   goTo('s1');
 });
 </script>
