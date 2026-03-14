@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>길일 吉日</title>
+<script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.7/lib/solarlunar.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+KR:wght@400;600;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
 :root {
@@ -969,7 +970,7 @@ body {
       <button class="cal-type-btn" id="btn-lunar" onclick="selectCalType('lunar')" type="button">음력 🌙</button>
       <button class="cal-type-btn" id="btn-lunar-leap" onclick="selectCalType('lunar-leap')" type="button">음력 윤달 🌙+</button>
     </div>
-    <div class="lunar-notice" id="lunar-notice">지원 연도 안에서는 제한적 테이블 기반 변환, 그 외에는 근사 변환으로 처리합니다. 정식 역법 엔진은 아닙니다.</div>
+    <div class="lunar-notice" id="lunar-notice">solarlunar.js 기반 음력 변환 · 1900~2100년 지원</div>
 
     <div class="sec-label">생년월일</div>
     <div class="birth-row">
@@ -1165,7 +1166,7 @@ body {
 
   <div class="cta-wrap" style="padding:0 24px;">
     <button class="btn-primary" onclick="calculateGilil()" type="button">길일 찾기 →</button>
-    <div class="small-note">정식 역법 라이브러리가 없는 오프라인 버전이므로, 음력·황도는 보조판단으로만 보는 것이 안전합니다.</div>
+    <div class="small-note">사주·별자리·음력(solarlunar) 기반 길일 추천 · 참고용으로 활용하세요.</div>
   </div>
 </div>
 
@@ -1488,7 +1489,28 @@ function estimateLunarDay(date) {
 }
 
 function solarToLunar(date) {
-  var year = date.getFullYear();
+  var y = date.getFullYear();
+  var m = date.getMonth() + 1;
+  var d = date.getDate();
+  // solarlunar.js 라이브러리 활용
+  if (typeof solarlunar !== 'undefined' && solarlunar.solar2lunar) {
+    try {
+      var r = solarlunar.solar2lunar(y, m, d);
+      return {
+        year:  r.lYear,
+        month: r.lMonth,
+        day:   r.lDay,
+        isLeap: r.isLeap || false,
+        approx: false,
+        gzDay:  r.gzDay  || '',
+        gzMonth: r.gzMonth || '',
+        gzYear: r.gzYear || '',
+        term:   r.term   || ''
+      };
+    } catch(e) {}
+  }
+  // fallback: 기존 테이블 방식
+  var year = y;
   var lYear = year;
   var ny = LUNAR_NEW_YEAR[lYear];
   if (!ny) return { year:year, month:1, day:estimateLunarDay(date), isLeap:false, approx:true };
@@ -1562,6 +1584,15 @@ function getGanji(year) {
 }
 
 function getDayGanji(date) {
+  var y = date.getFullYear();
+  var m = date.getMonth() + 1;
+  var d = date.getDate();
+  if (typeof solarlunar !== 'undefined' && solarlunar.solar2lunar) {
+    try {
+      var r = solarlunar.solar2lunar(y, m, d);
+      if (r && r.gzDay) return r.gzDay + '일';
+    } catch(e) {}
+  }
   var base = new Date(2000,0,1);
   var diff = Math.floor((date - base) / 86400000);
   var gan = ['갑','을','병','정','무','기','경','신','임','계'];
@@ -2193,6 +2224,7 @@ function renderResults() {
     document.getElementById('day' + i).textContent = r.dayName + '요일';
 
     var lunarText = '음력 ' + r.lunar.year + '년 ' + r.lunar.month + '월 ' + r.lunar.day + '일 · ' + r.dayGanji;
+    if (r.lunar.term) lunarText += ' · 🌿 ' + r.lunar.term;
     if (r.isSon) lunarText += ' <span class="inline-badge badge-son">손없는날</span>';
     if (r.isHwangdo && (currentCat === 'business' || currentCat === 'moving' || currentCat === 'love' || currentCat === 'invest' || currentCat === 'surgery')) {
       lunarText += ' <span class="inline-badge badge-hwangdo">황도 ' + r.jianchuName + '</span>';
