@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>개인정보처리방침 — 길일 吉日</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: #FFF8F5;
+  color: #2A1A1A;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 60px;
+}
+
+/* 헤더 */
+.header {
+  background: #FFFFFF;
+  border-bottom: 1px solid rgba(232,0,111,0.12);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  background: linear-gradient(160deg, #F472A8, #E8006F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+.header-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2A1A1A;
+  letter-spacing: 2px;
+}
+.header-sub {
+  font-size: 11px;
+  color: rgba(42,26,26,0.45);
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+.back-btn {
+  margin-left: auto;
+  background: rgba(232,0,111,0.08);
+  border: 1px solid rgba(232,0,111,0.20);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: #C0005A;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* 본문 */
+.content {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.page-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #2A1A1A;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+.page-date {
+  font-size: 12px;
+  color: rgba(42,26,26,0.40);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+
+/* 섹션 */
+.section {
+  background: #FFFFFF;
+  border: 1px solid rgba(232,0,111,0.10);
+  border-radius: 16px;
+  padding: 22px 20px;
+  margin-bottom: 12px;
+}
+.section-num {
+  font-size: 10px;
+  color: #E8006F;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.section-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2A1A1A;
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+.section-body {
+  font-size: 13px;
+  color: rgba(42,26,26,0.70);
+  line-height: 1.85;
+}
+.section-body strong {
+  color: #2A1A1A;
+  font-weight: 500;
+}
+.section-body ul {
+  padding-left: 16px;
+  margin-top: 8px;
+}
+.section-body ul li {
+  margin-bottom: 6px;
+}
+
+/* 강조 박스 */
+.highlight-box {
+  background: rgba(232,0,111,0.06);
+  border: 1px solid rgba(232,0,111,0.18);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #C0005A;
+  line-height: 1.75;
+}
+
+/* 연락처 */
+.contact-box {
+  background: linear-gradient(135deg, rgba(232,0,111,0.07), rgba(244,114,168,0.05));
+  border: 1px solid rgba(232,0,111,0.16);
+  border-radius: 16px;
+  padding: 22px 20px;
+  margin-top: 24px;
+  text-align: center;
+}
+.contact-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2A1A1A;
+  margin-bottom: 8px;
+}
+.contact-text {
+  font-size: 12px;
+  color: rgba(42,26,26,0.55);
+  line-height: 1.75;
+}
+
+/* 푸터 */
+.footer {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(232,0,111,0.10);
+}
+.footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  background: linear-gradient(160deg, #F472A8, #E8006F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.footer-text {
+  font-size: 11px;
+  color: rgba(42,26,26,0.35);
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">吉</div>
+  <div>
+    <div class="header-title">길  일</div>
+    <div class="header-sub">Auspicious Day</div>
+  </div>
+  <a class="back-btn" href="index.html">← 앱으로 돌아가기</a>
+</div>
+
+<div class="content">
+
+  <h1 class="page-title">개인정보처리방침</h1>
+  <p class="page-date">최종 업데이트: 2026년 3월 · Privacy Policy</p>
+
+  <div class="section">
+    <div class="section-num">Article 01</div>
+    <div class="section-title">수집하는 개인정보</div>
+    <div class="section-body">
+      길일 앱은 서비스 제공을 위해 다음 정보를 처리합니다.
+      <ul>
+        <li><strong>생년월일</strong> — 사주·별자리 계산을 위해 입력받습니다</li>
+        <li><strong>성별</strong> — 맞춤 추천을 위해 선택적으로 입력받습니다</li>
+        <li><strong>약물 정보</strong> — 성형·시술 카테고리에서 선택적으로 입력받습니다</li>
+      </ul>
+      <div class="highlight-box">
+        ✅ 입력하신 모든 정보는 <strong>기기 내에서만 처리</strong>되며, 외부 서버에 전송되거나 저장되지 않습니다.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-num">Article 02</div>
+    <div class="section-title">개인정보 이용 목적</div>
+    <div class="section-body">
+      수집한 정보는 아래 목적으로만 사용됩니다.
+      <ul>
+        <li>사주·별자리·손없는날·황도 기반 길일 계산</li>
+        <li>약물 복용 여부에 따른 안전 날짜 필터링</li>
+        <li>개인 맞춤 길일 추천 결과 생성</li>
+      </ul>
+      위 목적 외의 용도로는 사용하지 않습니다.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-num">Article 03</div>
+    <div class="section-title">개인정보 보유 및 파기</div>
+    <div class="section-body">
+      길일 앱은 입력된 정보를 서버에 저장하지 않습니다.<br><br>
+      앱 내 입력 데이터는 <strong>세션 종료 시 자동 삭제</strong>되며, 이용 동의 여부만 기기 내 로컬 저장소(localStorage)에 보관됩니다. 앱 삭제 시 모든 데이터가 완전히 삭제됩니다.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-num">Article 04</div>
+    <div class="section-title">제3자 제공 및 위탁</div>
+    <div class="section-body">
+      길일 앱은 이용자의 개인정보를 <strong>제3자에게 제공하거나 위탁하지 않습니다.</strong><br><br>
+      단, 다음 외부 라이브러리를 사용합니다.
+      <ul>
+        <li><strong>solarlunar.js</strong> — 음력 변환 계산 (로컬 실행, 데이터 전송 없음)</li>
+        <li><strong>html2canvas</strong> — 길일 카드 이미지 생성 (로컬 실행, 데이터 전송 없음)</li>
+        <li><strong>Google Fonts</strong> — 폰트 로드 (Google 서버에 요청 발생)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-num">Article 05</div>
+    <div class="section-title">서비스 이용 주의사항</div>
+    <div class="section-body">
+      <ul>
+        <li>본 앱은 <strong>동양 역학·별자리 기반 참고 정보</strong>를 제공하며, 실제 결과를 보장하지 않습니다.</li>
+        <li>성형·출산 카테고리의 날짜 추천은 <strong>의료적 진단이나 조언이 아닙니다.</strong> 실제 수술 및 출산 일정은 반드시 담당 의료진과 협의하세요.</li>
+        <li>투자 카테고리의 추천은 <strong>재무 조언이 아니며,</strong> 투자 손익에 대한 책임을 지지 않습니다.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-num">Article 06</div>
+    <div class="section-title">이용자 권리</div>
+    <div class="section-body">
+      이용자는 언제든지 다음 권리를 행사할 수 있습니다.
+      <ul>
+        <li>앱 내 입력 정보 삭제 (페이지 새로고침 또는 앱 재시작)</li>
+        <li>이용 동의 철회 (브라우저 사이트 데이터 삭제)</li>
+        <li>개인정보 처리 관련 문의 및 이의 제기</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-num">Article 07</div>
+    <div class="section-title">아동 개인정보 보호</div>
+    <div class="section-body">
+      길일 앱은 만 14세 미만 아동의 개인정보를 의도적으로 수집하지 않습니다. 만 14세 미만 이용자는 보호자의 동의 하에 서비스를 이용해 주세요.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-num">Article 08</div>
+    <div class="section-title">방침 변경 안내</div>
+    <div class="section-body">
+      본 개인정보처리방침은 법령 및 서비스 변경에 따라 업데이트될 수 있습니다. 변경 시 앱 내 공지 또는 본 페이지를 통해 안내드립니다.
+    </div>
+  </div>
+
+  <div class="contact-box">
+    <div class="contact-title">개인정보 관련 문의</div>
+    <div class="contact-text">
+      서비스 운영 및 개인정보 처리에 관한 문의는<br>
+      아래 채널을 통해 접수해 주세요.<br><br>
+      <strong>길일 앱 운영팀</strong><br>
+      Instagram: @gilil_app
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-logo">吉</div>
+    <div class="footer-text">
+      길일 吉日 · Auspicious Day<br>
+      © 2026 길일 앱. All rights reserved.<br>
+      본 방침은 한국어를 기준으로 합니다.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
