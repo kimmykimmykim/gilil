@@ -19,6 +19,12 @@
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
@@ -29,7 +35,7 @@
       "url": "/gilil/?cat=surgery",
       "icons": [
         {
-          "src": "icons/icon-96.png",
+          "src": "icon-192.png",
           "sizes": "96x96"
         }
       ]
@@ -41,19 +47,10 @@
       "url": "/gilil/?cat=moving",
       "icons": [
         {
-          "src": "icons/icon-96.png",
+          "src": "icon-192.png",
           "sizes": "96x96"
         }
       ]
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshots/screen1.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "길일 앱 메인 화면"
     }
   ]
 }
