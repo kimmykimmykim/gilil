@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.gilil.app",
+        "sha256_cert_fingerprints": ["0C:FD:B1:F2:E0:02:EA:96:52:68:83:B2:64:A4:C6:CA:63:04:0F:70:46:79:89:4D:5A:6F:15:5E:AC:20:C1:77"]
+      }
+    }]
