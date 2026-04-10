@@ -1597,6 +1597,18 @@ body {
 </head>
 <body>
 
+<!-- ── 언어 전환 UI ── -->
+<div id="lang-switcher" style="position:fixed;top:12px;right:12px;z-index:9999;display:flex;gap:4px;background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:20px;padding:4px 8px;">
+  <button class="lang-btn active" data-lang="ko" onclick="applyI18n('ko')" type="button" style="background:none;border:none;cursor:pointer;font-size:18px;padding:2px;opacity:0.5;transition:opacity 0.2s;" title="한국어">🇰🇷</button>
+  <button class="lang-btn" data-lang="en" onclick="applyI18n('en')" type="button" style="background:none;border:none;cursor:pointer;font-size:18px;padding:2px;opacity:0.5;transition:opacity 0.2s;" title="English">🇺🇸</button>
+  <button class="lang-btn" data-lang="ja" onclick="applyI18n('ja')" type="button" style="background:none;border:none;cursor:pointer;font-size:18px;padding:2px;opacity:0.5;transition:opacity 0.2s;" title="日本語">🇯🇵</button>
+  <button class="lang-btn" data-lang="zh" onclick="applyI18n('zh')" type="button" style="background:none;border:none;cursor:pointer;font-size:18px;padding:2px;opacity:0.5;transition:opacity 0.2s;" title="中文">🇨🇳</button>
+  <button class="lang-btn" data-lang="vi" onclick="applyI18n('vi')" type="button" style="background:none;border:none;cursor:pointer;font-size:18px;padding:2px;opacity:0.5;transition:opacity 0.2s;" title="Tiếng Việt">🇻🇳</button>
+</div>
+<style>
+  #lang-switcher .lang-btn.active { opacity: 1 !important; }
+</style>
+
 <!-- ── 스플래시 화면 (새로 추가) ── -->
 <div class="screen active" id="s-splash">
   <div id="splash-bg"></div>
@@ -1607,7 +1619,7 @@ body {
   </div>
   <div class="splash-tap-bar" onclick="startSplash()">
     <span class="tap-icon">✨</span>
-    <span class="tap-label">tap to begin</span>
+    <span class="tap-label" data-i18n="tapToBegin">tap to begin</span>
     <span class="tap-arrow">›</span>
   </div>
 </div>
@@ -1622,26 +1634,26 @@ body {
       <p style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:3px;margin-top:4px;">길  일 · Auspicious Day</p>
     </div>
     <div class="disclaimer-box">
-      <div class="disclaimer-title">서비스 이용 전 안내</div>
+      <div class="disclaimer-title" data-i18n="disclaimerTitle">서비스 이용 전 안내</div>
       <div class="disclaimer-item">
         <span class="disclaimer-icon">🔮</span>
-        <p class="disclaimer-text"><strong>참고용 서비스</strong><br>본 앱은 사주·별자리·음력 등 동양 역학 기반의 <strong>길일 참고 정보</strong>를 제공합니다. 실제 결과를 보장하지 않습니다.</p>
+        <p class="disclaimer-text" data-i18n="disclaimerRef"><strong>참고용 서비스</strong><br>본 앱은 사주·별자리·음력 등 동양 역학 기반의 <strong>길일 참고 정보</strong>를 제공합니다. 실제 결과를 보장하지 않습니다.</p>
       </div>
       <div class="disclaimer-item">
         <span class="disclaimer-icon">🏥</span>
-        <p class="disclaimer-text"><strong>의료 조언 아님</strong><br>성형·출산 카테고리의 날짜 추천은 <strong>의료적 진단이나 조언이 아닙니다.</strong> 실제 수술 일정은 반드시 담당 의료진과 협의하세요.</p>
+        <p class="disclaimer-text" data-i18n="disclaimerMed"><strong>의료 조언 아님</strong><br>성형·출산 카테고리의 날짜 추천은 <strong>의료적 진단이나 조언이 아닙니다.</strong> 실제 수술 일정은 반드시 담당 의료진과 협의하세요.</p>
       </div>
       <div class="disclaimer-item">
         <span class="disclaimer-icon">💰</span>
-        <p class="disclaimer-text"><strong>재무 조언 아님</strong><br>투자 카테고리의 추천은 <strong>재무 조언이 아니며</strong> 투자 손익에 대한 책임을 지지 않습니다.</p>
+        <p class="disclaimer-text" data-i18n="disclaimerFin"><strong>재무 조언 아님</strong><br>투자 카테고리의 추천은 <strong>재무 조언이 아니며</strong> 투자 손익에 대한 책임을 지지 않습니다.</p>
       </div>
       <div class="disclaimer-item">
         <span class="disclaimer-icon">📱</span>
-        <p class="disclaimer-text"><strong>개인정보</strong><br>입력한 생년월일은 기기 내에서만 처리되며 서버에 저장되지 않습니다.</p>
+        <p class="disclaimer-text" data-i18n="disclaimerPrivacy"><strong>개인정보</strong><br>입력한 생년월일은 기기 내에서만 처리되며 서버에 저장되지 않습니다.</p>
       </div>
     </div>
-    <button class="disclaimer-agree" onclick="agreeDisclaimer()" type="button">동의하고 시작하기</button>
-    <button class="disclaimer-skip" onclick="agreeDisclaimer()" type="button">나중에 다시 보기</button>
+    <button class="disclaimer-agree" onclick="agreeDisclaimer()" type="button" data-i18n="agreeBtn">동의하고 시작하기</button>
+    <button class="disclaimer-skip" onclick="agreeDisclaimer()" type="button" data-i18n="skipBtn">나중에 다시 보기</button>
   </div>
 </div>
 
@@ -1649,11 +1661,11 @@ body {
 <div class="screen" id="s-loading">
   <div class="loading-wrap">
     <span class="loading-symbol">吉</span>
-    <p class="loading-title">길일 계산 중</p>
+    <p class="loading-title" data-i18n="loadingTitle">길일 계산 중</p>
     <div class="loading-steps">
-      <div class="loading-step" id="ls-1">🌙 별자리 · 사주 분석</div>
-      <div class="loading-step" id="ls-2">📅 황도 · 손없는날 확인</div>
-      <div class="loading-step" id="ls-3">✨ 최적 날짜 선별 중</div>
+      <div class="loading-step" id="ls-1" data-i18n="loadingStep1">🌙 별자리 · 사주 분석</div>
+      <div class="loading-step" id="ls-2" data-i18n="loadingStep2">📅 황도 · 손없는날 확인</div>
+      <div class="loading-step" id="ls-3" data-i18n="loadingStep3">✨ 최적 날짜 선별 중</div>
     </div>
     <div class="loading-bar-track">
       <div class="loading-bar-fill" id="loading-bar"></div>
@@ -1680,7 +1692,7 @@ body {
       <!-- 개인 사주 기반 카드 (생년월일 저장 시에만 표시) -->
       <div class="hw-row" id="hw-personal-row" style="display:none;">
         <div class="hw-card">
-          <div class="hw-label">✨ 오늘의 길일지수</div>
+          <div class="hw-label" data-i18n="hwTodayLabel">✨ 오늘의 길일지수</div>
           <div class="hw-score-wrap">
             <div class="hw-score-num" id="hw-today-score">--</div>
             <div class="hw-score-max">/ 100</div>
@@ -1689,7 +1701,7 @@ body {
           <div class="hw-score-tag" id="hw-today-tag"></div>
         </div>
         <div class="hw-card">
-          <div class="hw-label">🏆 이번주 베스트</div>
+          <div class="hw-label" data-i18n="hwWeekBest">🏆 이번주 베스트</div>
           <div class="hw-best-date" id="hw-best-date">--</div>
           <div class="hw-best-score" id="hw-best-score"></div>
           <div class="hw-best-sub" id="hw-best-sub"></div>
@@ -1698,7 +1710,7 @@ body {
       <!-- 손없는날 배너 -->
       <div class="hw-card">
         <div class="hw-son-header">
-          <div class="hw-son-month-label" id="hw-son-month-label">🌟 이달의 손없는날</div>
+          <div class="hw-son-month-label" id="hw-son-month-label" data-i18n="hwSonLabel">🌟 이달의 손없는날</div>
         </div>
         <div class="hw-son-list" id="hw-son-list"></div>
       </div>
@@ -1708,7 +1720,7 @@ body {
       <button class="cat-group-btn hero-group selected-group" id="cat-surgery"
               onclick="selectGroupSingle('surgery')" type="button">
         <span style="font-size:20px">💉</span>
-        <span class="cg-label">성형 · 시술 길일<span class="hero-sub">Cosmetic · Procedure</span></span>
+        <span class="cg-label" data-i18n="catSurgery">성형 · 시술 길일<span class="hero-sub">Cosmetic · Procedure</span></span>
       </button>
 
       <!-- 그룹 2: 생활 길일 (개업·이사·여행) -->
@@ -1716,13 +1728,13 @@ body {
         <button class="cat-group-btn" id="grp-life"
                 onclick="toggleGroup('life')" type="button">
           <span class="cg-emoji">🏠</span>
-          <span class="cg-label">생활 길일</span>
+          <span class="cg-label" data-i18n="catLife">생활 길일</span>
           <span class="cg-arrow">›</span>
         </button>
         <div class="cat-sub-panel" id="sub-life">
-          <button class="cat-btn-sub" id="cat-business" onclick="selectSub('business','life')" type="button"><span class="cat-emoji">🏪</span>개업</button>
-          <button class="cat-btn-sub" id="cat-moving"   onclick="selectSub('moving','life')"   type="button"><span class="cat-emoji">📦</span>이사</button>
-          <button class="cat-btn-sub" id="cat-travel"   onclick="selectSub('travel','life')"   type="button"><span class="cat-emoji">✈️</span>여행</button>
+          <button class="cat-btn-sub" id="cat-business" onclick="selectSub('business','life')" type="button"><span class="cat-emoji">🏪</span><span data-i18n="subBusiness">개업</span></button>
+          <button class="cat-btn-sub" id="cat-moving"   onclick="selectSub('moving','life')"   type="button"><span class="cat-emoji">📦</span><span data-i18n="subMoving">이사</span></button>
+          <button class="cat-btn-sub" id="cat-travel"   onclick="selectSub('travel','life')"   type="button"><span class="cat-emoji">✈️</span><span data-i18n="subTravel">여행</span></button>
         </div>
       </div>
 
@@ -1731,12 +1743,12 @@ body {
         <button class="cat-group-btn" id="grp-wealth"
                 onclick="toggleGroup('wealth')" type="button">
           <span class="cg-emoji">💰</span>
-          <span class="cg-label">재물 · 인연</span>
+          <span class="cg-label" data-i18n="catWealth">재물 · 인연</span>
           <span class="cg-arrow">›</span>
         </button>
         <div class="cat-sub-panel cols2" id="sub-wealth">
-          <button class="cat-btn-sub" id="cat-love"   onclick="selectSub('love','wealth')"   type="button"><span class="cat-emoji">💍</span>결혼·선보기</button>
-          <button class="cat-btn-sub" id="cat-invest" onclick="selectSub('invest','wealth')" type="button"><span class="cat-emoji">📈</span>투자</button>
+          <button class="cat-btn-sub" id="cat-love"   onclick="selectSub('love','wealth')"   type="button"><span class="cat-emoji">💍</span><span data-i18n="subLove">결혼·선보기</span></button>
+          <button class="cat-btn-sub" id="cat-invest" onclick="selectSub('invest','wealth')" type="button"><span class="cat-emoji">📈</span><span data-i18n="subInvest">투자</span></button>
         </div>
       </div>
 
@@ -1744,11 +1756,11 @@ body {
       <button class="cat-group-btn" id="cat-birth"
               onclick="selectGroupSingle('birth')" type="button">
         <span class="cg-emoji">🍼</span>
-        <span class="cg-label">출산 길일</span>
+        <span class="cg-label" data-i18n="catBirth">출산 길일</span>
       </button>
 
-      <button class="btn-primary" id="startBtn" type="button">내 길일 찾기 →</button>
-      <button class="btn-ghost" type="button">이미 계정이 있어요</button>
+      <button class="btn-primary" id="startBtn" type="button" data-i18n="startBtn">내 길일 찾기 →</button>
+      <button class="btn-ghost" type="button" data-i18n="accountBtn">이미 계정이 있어요</button>
     </div>
   </div>
 </div>
@@ -1756,30 +1768,30 @@ body {
 <div class="screen" id="s2">
   <div class="header">
     <button class="back-btn" onclick="goTo('s1')" type="button">←</button>
-    <span class="header-title" id="s2-title">정보 입력</span>
+    <span class="header-title" id="s2-title" data-i18n="infoInput">정보 입력</span>
     <span class="step-ind">1 / 2</span>
   </div>
 
   <div class="form-body">
-    <div class="sec-label">생년월일 유형</div>
+    <div class="sec-label" data-i18n="birthTypeLabel">생년월일 유형</div>
     <div class="cal-type-row">
-      <button class="cal-type-btn selected" id="btn-solar" onclick="selectCalType('solar')" type="button">양력 ☀️</button>
-      <button class="cal-type-btn" id="btn-lunar" onclick="selectCalType('lunar')" type="button">음력 🌙</button>
-      <button class="cal-type-btn" id="btn-lunar-leap" onclick="selectCalType('lunar-leap')" type="button">음력 윤달 🌙+</button>
+      <button class="cal-type-btn selected" id="btn-solar" onclick="selectCalType('solar')" type="button" data-i18n="calSolar">양력 ☀️</button>
+      <button class="cal-type-btn" id="btn-lunar" onclick="selectCalType('lunar')" type="button" data-i18n="calLunar">음력 🌙</button>
+      <button class="cal-type-btn" id="btn-lunar-leap" onclick="selectCalType('lunar-leap')" type="button" data-i18n="calLunarLeap">음력 윤달 🌙+</button>
     </div>
     <div class="lunar-notice" id="lunar-notice">solarlunar.js 기반 음력 변환 · 1900~2100년 지원</div>
 
-    <div class="sec-label">생년월일</div>
+    <div class="sec-label" data-i18n="birthDateLabel">생년월일</div>
     <div class="birth-row">
       <input type="number" class="input-field birth-field year" id="birthyear" placeholder="연도" value="1990" min="1900" max="2100" inputmode="numeric" />
       <input type="number" class="input-field birth-field month" id="birthmonth" placeholder="월" value="5" min="1" max="12" inputmode="numeric" />
       <input type="number" class="input-field birth-field day" id="birthday" placeholder="일" value="15" min="1" max="31" inputmode="numeric" />
     </div>
 
-    <div class="sec-label">성별</div>
+    <div class="sec-label" data-i18n="genderLabel">성별</div>
     <div class="gender-row">
-      <button class="gender-btn selected" onclick="selectGender(this)" type="button">여성 ♀</button>
-      <button class="gender-btn" onclick="selectGender(this)" type="button">남성 ♂</button>
+      <button class="gender-btn selected" onclick="selectGender(this)" type="button" data-i18n="genderFemale">여성 ♀</button>
+      <button class="gender-btn" onclick="selectGender(this)" type="button" data-i18n="genderMale">남성 ♂</button>
     </div>
 
     <div class="algo-note">
@@ -1979,8 +1991,8 @@ body {
   </div>
 
   <div class="cta-wrap" style="padding:0 24px;">
-    <button class="btn-primary" onclick="calculateGilil()" type="button">길일 찾기 →</button>
-    <div class="small-note">사주·별자리·음력(solarlunar) 기반 길일 추천 · 참고용으로 활용하세요.</div>
+    <button class="btn-primary" onclick="calculateGilil()" type="button" data-i18n="findBtn">길일 찾기 →</button>
+    <div class="small-note" data-i18n="smallNote">사주·별자리·음력(solarlunar) 기반 길일 추천 · 참고용으로 활용하세요.</div>
   </div>
 </div>
 
@@ -1994,12 +2006,12 @@ body {
   <div class="score-banner">
     <div class="moon-circle"></div>
     <div>
-      <div class="banner-title">이번 추천 로직</div>
+      <div class="banner-title" data-i18n="bannerTitle">이번 추천 로직</div>
       <div class="banner-val" id="moon-banner">계산 중...</div>
     </div>
   </div>
 
-  <div class="dates-label">추천 길일 TOP 3</div>
+  <div class="dates-label" data-i18n="top3Label">추천 길일 TOP 3</div>
 
   <div class="date-card best" id="card0">
     <div class="best-badge">최적</div>
@@ -3990,6 +4002,272 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   tryWidget(20);
 });
+
+// ══════════════════════════════════════════════
+// i18n — 다국어 지원 (ko / en / ja / zh / vi)
+// ══════════════════════════════════════════════
+var TEXTS = {
+  ko: {
+    tapToBegin: 'tap to begin',
+    disclaimerTitle: '서비스 이용 전 안내',
+    disclaimerRef: '<strong>참고용 서비스</strong><br>본 앱은 사주·별자리·음력 등 동양 역학 기반의 <strong>길일 참고 정보</strong>를 제공합니다. 실제 결과를 보장하지 않습니다.',
+    disclaimerMed: '<strong>의료 조언 아님</strong><br>성형·출산 카테고리의 날짜 추천은 <strong>의료적 진단이나 조언이 아닙니다.</strong> 실제 수술 일정은 반드시 담당 의료진과 협의하세요.',
+    disclaimerFin: '<strong>재무 조언 아님</strong><br>투자 카테고리의 추천은 <strong>재무 조언이 아니며</strong> 투자 손익에 대한 책임을 지지 않습니다.',
+    disclaimerPrivacy: '<strong>개인정보</strong><br>입력한 생년월일은 기기 내에서만 처리되며 서버에 저장되지 않습니다.',
+    agreeBtn: '동의하고 시작하기',
+    skipBtn: '나중에 다시 보기',
+    loadingTitle: '길일 계산 중',
+    loadingStep1: '🌙 별자리 · 사주 분석',
+    loadingStep2: '📅 황도 · 손없는날 확인',
+    loadingStep3: '✨ 최적 날짜 선별 중',
+    hwTodayLabel: '✨ 오늘의 길일지수',
+    hwWeekBest: '🏆 이번주 베스트',
+    hwSonLabel: '🌟 이달의 손없는날',
+    catSurgery: '성형 · 시술 길일',
+    catLife: '생활 길일',
+    subBusiness: '개업',
+    subMoving: '이사',
+    subTravel: '여행',
+    catWealth: '재물 · 인연',
+    subLove: '결혼·선보기',
+    subInvest: '투자',
+    catBirth: '출산 길일',
+    startBtn: '내 길일 찾기 →',
+    accountBtn: '이미 계정이 있어요',
+    infoInput: '정보 입력',
+    birthTypeLabel: '생년월일 유형',
+    calSolar: '양력 ☀️',
+    calLunar: '음력 🌙',
+    calLunarLeap: '음력 윤달 🌙+',
+    birthDateLabel: '생년월일',
+    genderLabel: '성별',
+    genderFemale: '여성 ♀',
+    genderMale: '남성 ♂',
+    findBtn: '길일 찾기 →',
+    smallNote: '사주·별자리·음력(solarlunar) 기반 길일 추천 · 참고용으로 활용하세요.',
+    bannerTitle: '이번 추천 로직',
+    top3Label: '추천 길일 TOP 3'
+  },
+  en: {
+    tapToBegin: 'tap to begin',
+    disclaimerTitle: 'Before You Start',
+    disclaimerRef: '<strong>For Reference Only</strong><br>This app provides auspicious date recommendations based on Eastern astrology, Four Pillars, and the lunar calendar. Results are not guaranteed.',
+    disclaimerMed: '<strong>Not Medical Advice</strong><br>Date recommendations for cosmetic/birth categories are <strong>not medical diagnoses or advice.</strong> Please consult your doctor for actual scheduling.',
+    disclaimerFin: '<strong>Not Financial Advice</strong><br>Investment recommendations are <strong>not financial advice.</strong> We are not responsible for any investment outcomes.',
+    disclaimerPrivacy: '<strong>Privacy</strong><br>Your date of birth is processed only on your device and is never stored on a server.',
+    agreeBtn: 'Agree & Start',
+    skipBtn: 'Remind Me Later',
+    loadingTitle: 'Calculating Auspicious Days',
+    loadingStep1: '🌙 Analyzing Zodiac & Four Pillars',
+    loadingStep2: '📅 Checking Lunar Calendar & Lucky Days',
+    loadingStep3: '✨ Selecting Best Dates',
+    hwTodayLabel: '✨ Today\'s Fortune Index',
+    hwWeekBest: '🏆 Best Day This Week',
+    hwSonLabel: '🌟 Lucky Days This Month',
+    catSurgery: 'Cosmetic · Procedure',
+    catLife: 'Lifestyle',
+    subBusiness: 'Business',
+    subMoving: 'Moving',
+    subTravel: 'Travel',
+    catWealth: 'Love · Wealth',
+    subLove: 'Marriage · Dating',
+    subInvest: 'Investment',
+    catBirth: 'Birth · Delivery',
+    startBtn: 'Find My Lucky Days →',
+    accountBtn: 'I already have an account',
+    infoInput: 'Enter Info',
+    birthTypeLabel: 'Birth Calendar Type',
+    calSolar: 'Solar ☀️',
+    calLunar: 'Lunar 🌙',
+    calLunarLeap: 'Lunar Leap 🌙+',
+    birthDateLabel: 'Date of Birth',
+    genderLabel: 'Gender',
+    genderFemale: 'Female ♀',
+    genderMale: 'Male ♂',
+    findBtn: 'Find Lucky Days →',
+    smallNote: 'Recommendations based on Four Pillars, Zodiac & Lunar calendar · For reference only.',
+    bannerTitle: 'Recommendation Logic',
+    top3Label: 'TOP 3 Auspicious Days'
+  },
+  ja: {
+    tapToBegin: 'タップして始める',
+    disclaimerTitle: 'ご利用前のご案内',
+    disclaimerRef: '<strong>参考情報サービス</strong><br>このアプリは四柱推命・星座・旧暦などの東洋占術に基づく<strong>吉日参考情報</strong>を提供します。実際の結果を保証するものではありません。',
+    disclaimerMed: '<strong>医療アドバイスではありません</strong><br>美容・出産カテゴリの日付推薦は<strong>医療診断や医療アドバイスではありません。</strong>実際の手術日程は必ず担当医師にご相談ください。',
+    disclaimerFin: '<strong>投資アドバイスではありません</strong><br>投資カテゴリの推薦は<strong>財務アドバイスではなく</strong>、投資損益についての責任は負いません。',
+    disclaimerPrivacy: '<strong>個人情報</strong><br>入力した生年月日はデバイス内でのみ処理され、サーバーには保存されません。',
+    agreeBtn: '同意して始める',
+    skipBtn: 'あとで確認する',
+    loadingTitle: '吉日を計算中',
+    loadingStep1: '🌙 星座・四柱推命の分析',
+    loadingStep2: '📅 黄道・吉日の確認',
+    loadingStep3: '✨ 最適な日を選定中',
+    hwTodayLabel: '✨ 今日の吉日指数',
+    hwWeekBest: '🏆 今週のベスト',
+    hwSonLabel: '🌟 今月の吉日',
+    catSurgery: '美容整形・施術',
+    catLife: 'ライフスタイル',
+    subBusiness: '開業',
+    subMoving: '引越し',
+    subTravel: '旅行',
+    catWealth: '縁・財運',
+    subLove: '結婚・お見合い',
+    subInvest: '投資',
+    catBirth: '出産吉日',
+    startBtn: '吉日を探す →',
+    accountBtn: 'すでにアカウントがある',
+    infoInput: '情報入力',
+    birthTypeLabel: '生年月日の種類',
+    calSolar: '新暦 ☀️',
+    calLunar: '旧暦 🌙',
+    calLunarLeap: '旧暦閏月 🌙+',
+    birthDateLabel: '生年月日',
+    genderLabel: '性別',
+    genderFemale: '女性 ♀',
+    genderMale: '男性 ♂',
+    findBtn: '吉日を探す →',
+    smallNote: '四柱推命・星座・旧暦に基づく吉日推薦 · 参考用にご利用ください。',
+    bannerTitle: '推薦ロジック',
+    top3Label: '吉日 TOP 3'
+  },
+  zh: {
+    tapToBegin: '点击开始',
+    disclaimerTitle: '使用前须知',
+    disclaimerRef: '<strong>仅供参考</strong><br>本应用基于四柱八字、星座、农历等东方玄学提供<strong>吉日参考信息</strong>，不保证实际效果。',
+    disclaimerMed: '<strong>非医疗建议</strong><br>整形·生育类别的日期推荐<strong>不属于医疗诊断或建议</strong>，实际手术日期请务必与主治医生协商。',
+    disclaimerFin: '<strong>非财务建议</strong><br>投资类别推荐<strong>非财务建议</strong>，不承担任何投资损益责任。',
+    disclaimerPrivacy: '<strong>隐私</strong><br>输入的生日仅在设备内处理，不会保存至服务器。',
+    agreeBtn: '同意并开始',
+    skipBtn: '稍后再看',
+    loadingTitle: '正在计算吉日',
+    loadingStep1: '🌙 分析星座与四柱',
+    loadingStep2: '📅 查询黄道与吉日',
+    loadingStep3: '✨ 筛选最佳日期',
+    hwTodayLabel: '✨ 今日吉日指数',
+    hwWeekBest: '🏆 本周最佳',
+    hwSonLabel: '🌟 本月吉日',
+    catSurgery: '整形·医美',
+    catLife: '生活',
+    subBusiness: '开业',
+    subMoving: '搬家',
+    subTravel: '旅行',
+    catWealth: '姻缘·财运',
+    subLove: '婚嫁·相亲',
+    subInvest: '投资',
+    catBirth: '生育吉日',
+    startBtn: '查找我的吉日 →',
+    accountBtn: '已有账户',
+    infoInput: '信息输入',
+    birthTypeLabel: '生日类型',
+    calSolar: '公历 ☀️',
+    calLunar: '农历 🌙',
+    calLunarLeap: '农历闰月 🌙+',
+    birthDateLabel: '出生日期',
+    genderLabel: '性别',
+    genderFemale: '女 ♀',
+    genderMale: '男 ♂',
+    findBtn: '查找吉日 →',
+    smallNote: '基于四柱八字、星座、农历的吉日推荐 · 仅供参考。',
+    bannerTitle: '推荐逻辑',
+    top3Label: '吉日 TOP 3'
+  },
+  vi: {
+    tapToBegin: 'Chạm để bắt đầu',
+    disclaimerTitle: 'Thông báo trước khi sử dụng',
+    disclaimerRef: '<strong>Chỉ mang tính tham khảo</strong><br>Ứng dụng cung cấp thông tin ngày lành dựa trên tử vi, cung hoàng đạo và âm lịch Đông phương. Không đảm bảo kết quả thực tế.',
+    disclaimerMed: '<strong>Không phải tư vấn y tế</strong><br>Đề xuất ngày cho phẫu thuật thẩm mỹ/sinh sản <strong>không phải chẩn đoán hay tư vấn y tế.</strong> Hãy tham khảo bác sĩ cho lịch thực tế.',
+    disclaimerFin: '<strong>Không phải tư vấn tài chính</strong><br>Đề xuất đầu tư <strong>không phải tư vấn tài chính</strong>, chúng tôi không chịu trách nhiệm về kết quả đầu tư.',
+    disclaimerPrivacy: '<strong>Quyền riêng tư</strong><br>Ngày sinh nhập vào chỉ được xử lý trên thiết bị của bạn, không lưu trữ trên máy chủ.',
+    agreeBtn: 'Đồng ý & Bắt đầu',
+    skipBtn: 'Nhắc lại sau',
+    loadingTitle: 'Đang tính ngày lành',
+    loadingStep1: '🌙 Phân tích hoàng đạo & tử vi',
+    loadingStep2: '📅 Kiểm tra ngày tốt theo âm lịch',
+    loadingStep3: '✨ Chọn lọc ngày tốt nhất',
+    hwTodayLabel: '✨ Chỉ số ngày lành hôm nay',
+    hwWeekBest: '🏆 Ngày tốt nhất tuần này',
+    hwSonLabel: '🌟 Ngày lành tháng này',
+    catSurgery: 'Thẩm mỹ · Phẫu thuật',
+    catLife: 'Sinh hoạt',
+    subBusiness: 'Khai trương',
+    subMoving: 'Chuyển nhà',
+    subTravel: 'Du lịch',
+    catWealth: 'Duyên số · Tài lộc',
+    subLove: 'Kết hôn · Hẹn hò',
+    subInvest: 'Đầu tư',
+    catBirth: 'Ngày lành sinh con',
+    startBtn: 'Tìm ngày lành của tôi →',
+    accountBtn: 'Tôi đã có tài khoản',
+    infoInput: 'Nhập thông tin',
+    birthTypeLabel: 'Loại lịch sinh nhật',
+    calSolar: 'Dương lịch ☀️',
+    calLunar: 'Âm lịch 🌙',
+    calLunarLeap: 'Âm lịch nhuận 🌙+',
+    birthDateLabel: 'Ngày sinh',
+    genderLabel: 'Giới tính',
+    genderFemale: 'Nữ ♀',
+    genderMale: 'Nam ♂',
+    findBtn: 'Tìm ngày lành →',
+    smallNote: 'Đề xuất ngày lành theo tử vi, hoàng đạo & âm lịch · Chỉ mang tính tham khảo.',
+    bannerTitle: 'Logic đề xuất',
+    top3Label: 'TOP 3 Ngày Lành'
+  }
+};
+
+var currentLang = 'ko';
+
+function t(key) {
+  return (TEXTS[currentLang] && TEXTS[currentLang][key]) || (TEXTS.ko && TEXTS.ko[key]) || key;
+}
+
+function applyI18n(lang) {
+  currentLang = lang;
+  localStorage.setItem('gilil_lang', lang);
+  // 언어 버튼 활성화 표시
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+  // data-i18n 속성 가진 요소 텍스트/HTML 업데이트
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    var val = t(key);
+    if (val.indexOf('<') >= 0) {
+      el.innerHTML = val;
+    } else {
+      el.textContent = val;
+    }
+  });
+  // <html lang> 속성 업데이트
+  document.documentElement.lang = lang;
+}
+
+function detectLanguage() {
+  var saved = localStorage.getItem('gilil_lang');
+  if (saved && TEXTS[saved]) { applyI18n(saved); return; }
+  // 브라우저 언어 힌트로 우선 적용
+  var nav = (navigator.language || navigator.userLanguage || 'ko').toLowerCase();
+  var navLang = 'ko';
+  if (nav.startsWith('ja')) navLang = 'ja';
+  else if (nav.startsWith('zh')) navLang = 'zh';
+  else if (nav.startsWith('vi')) navLang = 'vi';
+  else if (nav.startsWith('en')) navLang = 'en';
+  // IP 기반 감지 (ipapi.co 무료 API)
+  fetch('https://ipapi.co/json/')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var cc = (data.country_code || '').toUpperCase();
+      var lang = 'ko';
+      if (cc === 'JP') lang = 'ja';
+      else if (cc === 'CN' || cc === 'TW' || cc === 'HK' || cc === 'SG') lang = 'zh';
+      else if (cc === 'VN') lang = 'vi';
+      else if (cc !== 'KR') lang = navLang !== 'ko' ? navLang : 'en';
+      applyI18n(lang);
+    })
+    .catch(function() { applyI18n(navLang); });
+}
+
+// 페이지 로드 시 언어 감지 실행
+detectLanguage();
 </script>
 </body>
 </html>
