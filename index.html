@@ -1900,7 +1900,7 @@ body {
       <button class="cal-type-btn" id="btn-lunar" onclick="selectCalType('lunar')" type="button" data-i18n="calLunar">음력 🌙</button>
       <button class="cal-type-btn" id="btn-lunar-leap" onclick="selectCalType('lunar-leap')" type="button" data-i18n="calLunarLeap">음력 윤달 🌙+</button>
     </div>
-    <div class="lunar-notice" id="lunar-notice">solarlunar.js 기반 음력 변환 · 1900~2100년 지원</div>
+    <div class="lunar-notice" id="lunar-notice" data-i18n="lunarNotice">solarlunar.js 기반 음력 변환 · 1900~2100년 지원</div>
 
     <div class="sec-label" data-i18n="birthDateLabel">생년월일</div>
     <div class="birth-row">
@@ -2518,20 +2518,20 @@ function isSurgeryClosedDay(date) {
 // 약물 규칙
 // ────────────────────────────────────────────────
 var MED_RULES = {
-  aspirin:      { label: '아스피린/항응고제', stopDays: 7,  affects: ['all'], group: 'stop' },
-  vitaminE:     { label: '비타민E/오메가3',  stopDays: 7,  affects: ['all'], group: 'stop' },
-  herbal:       { label: '한약/홍삼/건강즙', stopDays: 7,  affects: ['all'], group: 'stop' },
-  diet:         { label: '다이어트 보조제',  stopDays: 7,  affects: ['all'], group: 'stop' },
-  hormone:      { label: '호르몬제/피임약',  stopDays: 10, affects: ['all'], group: 'stop' },
-  isotretinoin: { label: '이소트레티노인',   stopDays: 30, affects: ['laser'], group: 'stop' },
-  bp:           { label: '혈압약',           stopDays: 0,  affects: ['all'], group: 'continue' },
-  diabetes:     { label: '당뇨약/인슐린',    stopDays: 0,  affects: ['all'], group: 'continue' },
-  thyroid:      { label: '갑상선호르몬제',   stopDays: 0,  affects: ['all'], group: 'continue' },
-  immunosuppressant: { label: '면역억제제/류마티스 약', stopDays: 0, affects: ['all'], group: 'consult' },
-  steroid:           { label: '스테로이드 장기복용',   stopDays: 0, affects: ['all'], group: 'consult' },
-  psych:             { label: '정신과약/수면제',        stopDays: 0, affects: ['all'], group: 'consult' },
-  neuro:             { label: '간질약/신경과약',        stopDays: 0, affects: ['all'], group: 'consult' },
-  otherRx:           { label: '기타 처방약',            stopDays: 0, affects: ['all'], group: 'consult' }
+  aspirin:      { labelKey: 'medRuleAspirin', stopDays: 7,  affects: ['all'], group: 'stop' },
+  vitaminE:     { labelKey: 'medRuleVitE',    stopDays: 7,  affects: ['all'], group: 'stop' },
+  herbal:       { labelKey: 'medRuleHerbal',  stopDays: 7,  affects: ['all'], group: 'stop' },
+  diet:         { labelKey: 'medRuleDiet',    stopDays: 7,  affects: ['all'], group: 'stop' },
+  hormone:      { labelKey: 'medRuleHormone', stopDays: 10, affects: ['all'], group: 'stop' },
+  isotretinoin: { labelKey: 'medRuleIsotret', stopDays: 30, affects: ['laser'], group: 'stop' },
+  bp:           { labelKey: 'medRuleBP',      stopDays: 0,  affects: ['all'], group: 'continue' },
+  diabetes:     { labelKey: 'medRuleDiabetes',stopDays: 0,  affects: ['all'], group: 'continue' },
+  thyroid:      { labelKey: 'medRuleThyroid', stopDays: 0,  affects: ['all'], group: 'continue' },
+  immunosuppressant: { labelKey: 'medRuleImmuno',  stopDays: 0, affects: ['all'], group: 'consult' },
+  steroid:           { labelKey: 'medRuleSteroid', stopDays: 0, affects: ['all'], group: 'consult' },
+  psych:             { labelKey: 'medRulePsych',   stopDays: 0, affects: ['all'], group: 'consult' },
+  neuro:             { labelKey: 'medRuleNeuro',   stopDays: 0, affects: ['all'], group: 'consult' },
+  otherRx:           { labelKey: 'medRuleOther',   stopDays: 0, affects: ['all'], group: 'consult' }
 };
 
 // ────────────────────────────────────────────────
@@ -2618,7 +2618,7 @@ var LUNAR_MONTHS = {
   2030:[29,30,29,30,29,29,30,29,30,30,30,29,30]
 };
 
-var JIANCHU_NAMES = ['건','제','만','평','정','집','파','위','성','수','개','폐'];
+var JIANCHU_NAMES_KO = ['건','제','만','평','정','집','파','위','성','수','개','폐'];
 var HWANGDO_JIANCHU = [0,2,3,4,5,8,10]; // 建滿平定執成開
 
 // ────────────────────────────────────────────────
@@ -2776,16 +2776,16 @@ function isPseudoHwangdoDay(d) {
 }
 
 function getJianchuName(d) {
-  return JIANCHU_NAMES[getJianchuIndex(d)];
+  return t('jianchuNames').split(',')[getJianchuIndex(d)];
 }
 
 // ────────────────────────────────────────────────
 // 간지
 // ────────────────────────────────────────────────
 function getGanji(year) {
-  var gan = ['경','신','임','계','갑','을','병','정','무','기'];
-  var ji  = ['신','유','술','해','자','축','인','묘','진','사','오','미'];
-  return gan[year % 10] + ji[year % 12] + '년';
+  var gan = t('heavenlyStemsAlt').split(',');
+  var ji  = t('earthlyBranchesAlt').split(',');
+  return gan[year % 10] + ji[year % 12] + t('stemSuffix');
 }
 
 function getDayGanji(date) {
@@ -2795,14 +2795,14 @@ function getDayGanji(date) {
   if (typeof solarlunar !== 'undefined' && solarlunar.solar2lunar) {
     try {
       var r = solarlunar.solar2lunar(y, m, d);
-      if (r && r.gzDay) return r.gzDay + '일';
+      if (r && r.gzDay) return r.gzDay + t('daySuffix');
     } catch(e) {}
   }
   var base = new Date(2000,0,1);
   var diff = Math.floor((date - base) / 86400000);
-  var gan = ['갑','을','병','정','무','기','경','신','임','계'];
-  var ji  = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
-  return gan[((diff%10)+10)%10] + ji[((diff+4)%12+12)%12] + '일'; // 辰=4 offset
+  var gan = t('heavenlyStems').split(',');
+  var ji  = t('earthlyBranches').split(',');
+  return gan[((diff%10)+10)%10] + ji[((diff+4)%12+12)%12] + t('daySuffix'); // 辰=4 offset
 }
 
 // ────────────────────────────────────────────────
@@ -2879,15 +2879,15 @@ function getPersonalSeed(birthYear, birthMonth, birthDay) {
 // 궁합
 // ────────────────────────────────────────────────
 function getPartnerScore(userYear, partnerYear) {
-  if (!partnerYear) return { score:0, note:'상대 생년 미입력' };
+  if (!partnerYear) return { score:0, note:t('partnerNone') };
   var a = getBirthZhi(userYear);
   var b = getBirthZhi(partnerYear);
   var diff = Math.abs(a - b) % 12;
-  if (diff === 4 || diff === 8) return { score:10, note:'삼합 궁합 최상' };
-  if (diff === 0) return { score:7,  note:'같은 띠 · 무난' };
-  if (diff === 6) return { score:-8, note:'충 · 궁합 불리' };
-  if (diff === 3 || diff === 9) return { score:3, note:'보통 수준' };
-  return { score:5, note:'무난한 궁합' };
+  if (diff === 4 || diff === 8) return { score:10, note:t('partnerBest') };
+  if (diff === 0) return { score:7,  note:t('partnerSame') };
+  if (diff === 6) return { score:-8, note:t('partnerConflict') };
+  if (diff === 3 || diff === 9) return { score:3, note:t('partnerNormal') };
+  return { score:5, note:t('partnerOk') };
 }
 
 // ────────────────────────────────────────────────
@@ -2929,53 +2929,50 @@ function getEarliestSafeDate(category, selectedSurgery, meds, today) {
 // ────────────────────────────────────────────────
 function getWeekdayScore(cat, dow) {
   if (cat === 'surgery') {
-    // 토요일 = 정상 수술일 (성형외과 토요일 운영)
-    if (dow === 2) return { score:10, tag:'🗓️ 화요일 수술 최적' };
-    if (dow === 3) return { score:9,  tag:'🗓️ 수요일 안정적' };
-    if (dow === 5) return { score:9,  tag:'💤 금요일 주말 회복' };
-    if (dow === 4) return { score:8,  tag:'🗓️ 목요일 무난' };
-    if (dow === 6) return { score:7,  tag:'🏥 토요일 수술 가능' };
-    if (dow === 1) return { score:6,  tag:'🗓️ 월요일 가능' };
-    return { score:-99, tag:'' }; // 일요일 (isSurgeryClosedDay로 이미 제거됨)
+    if (dow === 2) return { score:10, tag:t('wdSurgTue') };
+    if (dow === 3) return { score:9,  tag:t('wdSurgWed') };
+    if (dow === 5) return { score:9,  tag:t('wdSurgFri') };
+    if (dow === 4) return { score:8,  tag:t('wdSurgThu') };
+    if (dow === 6) return { score:7,  tag:t('wdSurgSat') };
+    if (dow === 1) return { score:6,  tag:t('wdSurgMon') };
+    return { score:-99, tag:'' };
   }
   if (cat === 'business') {
-    if (dow === 2 || dow === 4) return { score:10, tag:'🏪 화·목 개업 최적' };
-    if (dow >= 1 && dow <= 5)   return { score:6,  tag:'📈 주중 운영 시작' };
-    return { score:-4, tag:'⚠️ 주말 개업 약한 감점' };
+    if (dow === 2 || dow === 4) return { score:10, tag:t('wdBizBest') };
+    if (dow >= 1 && dow <= 5)   return { score:6,  tag:t('wdBizWeekday') };
+    return { score:-4, tag:t('wdBizWeekend') };
   }
   if (cat === 'moving') {
-    if (dow === 3 || dow === 4) return { score:8, tag:'🚚 중주간 이동 선호' };
-    if (dow === 6) return { score:-6, tag:'⚠️ 토요일 혼잡' };
-    if (dow === 0) return { score:-3, tag:'⚠️ 일요일 조정 필요' };
-    return { score:4, tag:'📦 무난한 일정' };
+    if (dow === 3 || dow === 4) return { score:8, tag:t('wdMoveMid') };
+    if (dow === 6) return { score:-6, tag:t('wdMoveSat') };
+    if (dow === 0) return { score:-3, tag:t('wdMoveSun') };
+    return { score:4, tag:t('wdMoveOk') };
   }
   if (cat === 'travel') {
-    if (dow === 5 || dow === 6) return { score:10, tag:'✈️ 금·토 출발 선호' };
-    if (dow === 1) return { score:-4, tag:'⚠️ 월요일 피로 감점' };
-    return { score:5, tag:'🧳 무난한 출발' };
+    if (dow === 5 || dow === 6) return { score:10, tag:t('wdTravelFriSat') };
+    if (dow === 1) return { score:-4, tag:t('wdTravelMon') };
+    return { score:5, tag:t('wdTravelOk') };
   }
   if (cat === 'love') {
-    if (dow === 6 || dow === 0) return { score:10, tag:'💍 주말 일정 선호' };
-    if (dow === 5) return { score:7,  tag:'🌹 금요일 분위기' };
-    return { score:3, tag:'☕ 평일 일정 가능' };
+    if (dow === 6 || dow === 0) return { score:10, tag:t('wdLoveWeekend') };
+    if (dow === 5) return { score:7,  tag:t('wdLoveFri') };
+    return { score:3, tag:t('wdLoveWeekday') };
   }
   if (cat === 'invest') {
-    // 목요일(목성의 날) 최우선, 화·수 시장 집중일 선호, 월요일·금요일 변동성
-    if (dow === 4) return { score:10, tag:'🪐 목요일 목성 기운 최강' };
-    if (dow === 2) return { score:8,  tag:'📊 화요일 시장 집중일' };
-    if (dow === 3) return { score:8,  tag:'📈 수요일 안정 흐름' };
-    if (dow === 1) return { score:5,  tag:'⚡ 월요일 변동 주의' };
-    if (dow === 5) return { score:4,  tag:'⚠️ 금요일 주말 리스크' };
-    return { score:2, tag:'⚠️ 주말 시장 휴장' };
+    if (dow === 4) return { score:10, tag:t('wdInvestThu') };
+    if (dow === 2) return { score:8,  tag:t('wdInvestTue') };
+    if (dow === 3) return { score:8,  tag:t('wdInvestWed') };
+    if (dow === 1) return { score:5,  tag:t('wdInvestMon') };
+    if (dow === 5) return { score:4,  tag:t('wdInvestFri') };
+    return { score:2, tag:t('wdInvestWeekend') };
   }
   if (cat === 'birth') {
-    // 제왕절개: 화·목 최적 (성형외과 로직과 유사), 일요일 회피
-    if (dow === 2) return { score:10, tag:'🏥 화요일 수술 최적' };
-    if (dow === 4) return { score:9,  tag:'🏥 목요일 안정적' };
-    if (dow === 3) return { score:8,  tag:'🏥 수요일 무난' };
-    if (dow === 5) return { score:7,  tag:'🌸 금요일 주말 회복' };
-    if (dow === 1) return { score:5,  tag:'📅 월요일 가능' };
-    if (dow === 6) return { score:4,  tag:'🏥 토요일 가능' };
+    if (dow === 2) return { score:10, tag:t('wdBirthTue') };
+    if (dow === 4) return { score:9,  tag:t('wdBirthThu') };
+    if (dow === 3) return { score:8,  tag:t('wdBirthWed') };
+    if (dow === 5) return { score:7,  tag:t('wdBirthFri') };
+    if (dow === 1) return { score:5,  tag:t('wdBirthMon') };
+    if (dow === 6) return { score:4,  tag:t('wdBirthSat') };
     return { score:-5, tag:'' };
   }
   return { score:0, tag:'' };
@@ -2987,30 +2984,29 @@ function getWeekdayScore(cat, dow) {
 function getRecoveryScore(surgeryType, date) {
   var dow = date.getDay();
   if (surgeryType === 'eye' || surgeryType === 'nose' || surgeryType === 'contour') {
-    if (dow === 5) return { score:10, note:'주말 회복 여유 큼' };
-    if (dow >= 1 && dow <= 4) return { score:7, note:'평일 수술 가능' };
-    if (dow === 6) return { score:5, note:'토요일 수술 가능' };
-    return { score:-6, note:'회복 관리 비선호' };
+    if (dow === 5) return { score:10, note:t('recWeekend') };
+    if (dow >= 1 && dow <= 4) return { score:7, note:t('recWeekday') };
+    if (dow === 6) return { score:5, note:t('recSat') };
+    return { score:-6, note:t('recBad') };
   }
   if (surgeryType === 'filler' || surgeryType === 'laser') {
-    if (dow >= 1 && dow <= 6) return { score:7, note:'짧은 회복에 무난' };
-    return { score:2, note:'가능하나 우선순위 낮음' };
+    if (dow >= 1 && dow <= 6) return { score:7, note:t('recShort') };
+    return { score:2, note:t('recLow') };
   }
   if (surgeryType === 'liposuction') {
-    if (dow === 4 || dow === 5) return { score:9, note:'압박복·회복 관리 유리' };
-    if (dow === 6) return { score:6, note:'토요일 수술 가능' };
-    if (dow >= 1 && dow <= 3) return { score:6, note:'무난한 회복 일정' };
-    return { score:-5, note:'회복 동선 비선호' };
+    if (dow === 4 || dow === 5) return { score:9, note:t('recLipo1') };
+    if (dow === 6) return { score:6, note:t('recSat') };
+    if (dow >= 1 && dow <= 3) return { score:6, note:t('recLipoWeekday') };
+    return { score:-5, note:t('recLipoBad') };
   }
   if (surgeryType === 'hair') {
-    // 모발이식: 수술 후 최소 3일 안정 필요, 주말 직전이 최적
-    if (dow === 4 || dow === 5) return { score:10, note:'주말 포함 3일 안정 가능' };
-    if (dow === 2 || dow === 3) return { score:8, note:'평일 안정기 확보' };
-    if (dow === 1) return { score:6, note:'주중 회복 가능' };
-    if (dow === 6) return { score:5, note:'토요일 수술 가능' };
-    return { score:-4, note:'일요일 비권장' };
+    if (dow === 4 || dow === 5) return { score:10, note:t('recContour1') };
+    if (dow === 2 || dow === 3) return { score:8, note:t('recContour2') };
+    if (dow === 1) return { score:6, note:t('recContourMon') };
+    if (dow === 6) return { score:5, note:t('recContourSat') };
+    return { score:-4, note:t('recContourSun') };
   }
-  return { score:5, note:'기본 회복 점수' };
+  return { score:5, note:t('recDefault') };
 }
 
 // ────────────────────────────────────────────────
@@ -3018,11 +3014,11 @@ function getRecoveryScore(surgeryType, date) {
 // ────────────────────────────────────────────────
 function getProximityScore(date, windowStart) {
   var days = Math.floor((date - windowStart) / 86400000);
-  if (days <= 5)  return { score:10, note:'안전일 직후 가까운 일정' };
-  if (days <= 10) return { score:9,  note:'가까운 일정' };
-  if (days <= 18) return { score:7,  note:'무난한 일정' };
-  if (days <= 25) return { score:4,  note:'조금 여유 있는 일정' };
-  return           { score:1,  note:'범위 후반 일정' };
+  if (days <= 5)  return { score:10, note:t('proxClose') };
+  if (days <= 10) return { score:9,  note:t('proxNear') };
+  if (days <= 18) return { score:7,  note:t('proxOk') };
+  if (days <= 25) return { score:4,  note:t('proxFar') };
+  return           { score:1,  note:t('proxLate') };
 }
 
 // ────────────────────────────────────────────────
@@ -3058,108 +3054,96 @@ function scoreDate(date, context) {
   if (cat === 'surgery') {
     var rec = getRecoveryScore(context.selectedSurgery, date);
     score += rec.score * (w.recovery / 10);
-    reasons.push('회복 동선');
+    reasons.push(t('reasonRecovery'));
     if (rec.score >= 7) tags.push({ text:'🛌 ' + rec.note, good:true });
     else if (rec.score < 0) tags.push({ text:'⚠️ ' + rec.note, good:false });
 
     var prox = getProximityScore(date, context.surgeryWindow.start);
     score += prox.score * (w.proximity / 10);
-    reasons.push('안전일 기준 일정');
+    reasons.push(t('reasonProximity'));
     if (prox.score >= 7) tags.push({ text:'⏱️ ' + prox.note, good:true });
 
     if (context.consultMeds && context.consultMeds.length) {
       score -= w.consultPenalty;
-      tags.push({ text:'🩺 상담 우선 약물 있음', good:false });
+      tags.push({ text:t('tagConsultMed'), good:false });
     }
 
-    // 보름 붓기 페널티 (눈·코·윤곽·모발이식)
     if (['eye','nose','contour','hair'].indexOf(context.selectedSurgery) >= 0 && moon.bucket === 'full') {
       score -= 10;
-      tags.push({ text:'⚠️ 보름 붓기·부종 주의', good:false });
+      tags.push({ text:t('tagFullMoonWarn'), good:false });
     }
-    // 모발이식 전용: 달이 기우는 시기 최적 (염증·붓기 최소화)
     if (context.selectedSurgery === 'hair') {
       if (moon.bucket === 'waning' || moon.bucket === 'lastquarter' || moon.bucket === 'dark') {
         score += 8;
-        tags.push({ text:'🌘 달 기우는 시기 · 이식 최적', good:true });
+        tags.push({ text:t('tagWaningHair'), good:true });
       } else if (moon.bucket === 'new') {
         score += 5;
-        tags.push({ text:'🌑 신월 · 새 시작 에너지', good:true });
+        tags.push({ text:t('tagNewMoonEnergy'), good:true });
       }
     }
-    // 레이저 진정 가점
     if (context.selectedSurgery === 'laser' && (moon.bucket === 'waning' || moon.bucket === 'dark')) {
       score += 5;
-      tags.push({ text:'✨ 시술 후 진정 흐름', good:true });
+      tags.push({ text:t('tagPostProcCalm'), good:true });
     }
-    // 수술 황도 반영 (보조)
     if (hwangdo && w.hwangdo > 0) {
       score += w.hwangdo;
-      reasons.push('황도');
-      tags.push({ text:'🧿 황도 ' + jianchuName + '일', good:true });
+      reasons.push(t('reasonHwangdo'));
+      tags.push({ text:t('tagHwangdoDay') + jianchuName + t('hwangdoDaySuffix'), good:true });
     }
-    // 수술 손없는날 (보조)
     if (son) {
       score += w.son * 0.4;
-      reasons.push('손없는날');
-      tags.push({ text:'🌟 손없는날', good:true });
+      reasons.push(t('reasonSon'));
+      tags.push({ text:t('tagSonDay'), good:true });
     }
   }
 
-  // ── STAGE 2: 개인화 (별자리 + 사주) ──
-  // 별자리 — 가중치 최대화 (개인마다 다름)
+  // ── STAGE 2 ──
   score += zodiacVal * (w.zodiac / 10);
-  reasons.push('별자리 성향');
-  if (zodiacVal >= 8) tags.push({ text:'⭐ ' + context.signObj.sign + ' 강점일', good:true });
-  else if (zodiacVal >= 6) tags.push({ text:'⭐ ' + context.signObj.sign, good:true });
+  reasons.push(t('reasonZodiac'));
+  if (zodiacVal >= 8) tags.push({ text:t('tagZodiacStrong') + context.signObj.sign + t('zodiacStrongDay'), good:true });
+  else if (zodiacVal >= 6) tags.push({ text:t('tagZodiacStrong') + context.signObj.sign, good:true });
 
-  // 사주 충(冲) — 강한 회피
   if (conflict) {
     score -= w.conflict;
-    reasons.push('사주 충 강감점');
-    tags.push({ text:'⚠️ 사주 충(冲)일', good:false });
+    reasons.push(t('reasonConflict'));
+    tags.push({ text:t('tagConflictDay'), good:false });
   }
-  // 삼형(三刑) — 중간 감점
   if (sanghyung && !conflict) {
     score -= Math.round(w.conflict * 0.55);
-    reasons.push('삼형 감점');
-    tags.push({ text:'⚠️ 삼형(三刑)일', good:false });
+    reasons.push(t('reasonSanghyung'));
+    tags.push({ text:t('tagSanghyungDay'), good:false });
   }
-  // 육합(六合) — 가점
   if (hap) {
     score += Math.round(w.conflict * 0.45);
-    reasons.push('육합 가점');
-    tags.push({ text:'✨ 육합(六合)일', good:true });
+    reasons.push(t('reasonHarmony'));
+    tags.push({ text:t('tagHarmonyDay'), good:true });
   }
 
-  // ── STAGE 3: 달력 공통 ──
+  // ── STAGE 3 ──
   score += moon.score * (w.moon / 10);
-  reasons.push('달 주기');
+  reasons.push(t('reasonMoon'));
   tags.push({ text:moon.name, good:moon.score >= 7 });
 
-  // 투자 전용: 달 차오르는 시기 강화 (새 시작·성장 에너지)
   if (cat === 'invest') {
     if (moon.bucket === 'new' || moon.bucket === 'waxing') {
       score += 8;
-      tags.push({ text:'🌱 달 차오름 · 투자 시작 좋음', good:true });
+      tags.push({ text:t('tagInvestWaxing'), good:true });
     } else if (moon.bucket === 'full') {
       score += 3;
-      tags.push({ text:'🌕 보름 · 에너지 절정', good:true });
+      tags.push({ text:t('tagInvestFull'), good:true });
     } else if (moon.bucket === 'dark') {
       score -= 4;
-      tags.push({ text:'🌑 그믐 · 투자 관망 권장', good:false });
+      tags.push({ text:t('tagInvestWaning'), good:false });
     }
   }
 
-  // 손없는날 (수술은 위 STAGE1에서 처리)
   if (son && cat !== 'surgery') {
     var sonMult = { business:1, moving:1, travel:0.6, love:1, invest:0.5, birth:1 };
     score += w.son * (sonMult[cat] || 0.5);
-    reasons.push('손없는날');
-    tags.push({ text:'🌟 손없는날', good:true });
+    reasons.push(t('reasonSon'));
+    tags.push({ text:t('tagSonDay'), good:true });
   }
 
-  // 황도 (수술은 위 STAGE1에서 처리)
   var useHwangdo = cat !== 'surgery' && (
     cat === 'moving' ||
     cat === 'invest' ||
@@ -3169,48 +3153,41 @@ function scoreDate(date, context) {
   );
   if (hwangdo && useHwangdo && w.hwangdo > 0) {
     score += w.hwangdo;
-    reasons.push('황도');
-    tags.push({ text:'🧿 황도 ' + jianchuName + '일', good:true });
+    reasons.push(t('reasonHwangdo'));
+    tags.push({ text:t('tagHwangdoDay') + jianchuName + t('hwangdoDaySuffix'), good:true });
   }
 
-  // 요일
   score += dowScore.score * (w.weekday / 10);
-  reasons.push('요일');
+  reasons.push(t('reasonWeekday'));
   if (dowScore.tag) tags.push({ text:dowScore.tag, good:dowScore.score >= 0 });
 
-  // 궁합
   if (cat === 'love' && context.partnerYear) {
     score += partnerScore.score * (w.partner / 10);
-    reasons.push('궁합');
+    reasons.push(t('reasonCompat'));
     tags.push({
       text: partnerScore.score >= 0 ? '💑 ' + partnerScore.note : '⚠️ ' + partnerScore.note,
       good: partnerScore.score >= 0
     });
   }
 
-  // 카테고리 세부 보정
   if (cat === 'surgery') {
     if (context.selectedSurgery === 'filler' && dow === 5) score += 2;
-    // 모발이식: 손없는날 강가점 (이식된 모근 안착 기원)
     if (context.selectedSurgery === 'hair' && son) score += 6;
-    // 모발이식: 사주 합(合)일 추가 가점
     if (context.selectedSurgery === 'hair' && hap) score += 4;
   }
   if (cat === 'invest') {
     var opt = context.selectedOption;
     if ((opt === 'stock' || opt === 'stock-domestic') && (dow === 2 || dow === 4)) score += 3;
-    // 해외주식: 금·토요일 선호 (미국 장 고려), 월요일은 주말갭 리스크 감점
     if (opt === 'stock-overseas') {
       if (dow === 4 || dow === 2) score += 3;
-      if (dow === 5) { score += 2; tags.push({ text:'🌐 해외장 주말 전 진입', good:true }); }
-      if (dow === 1) { score -= 3; tags.push({ text:'⚠️ 해외장 월요일 갭 주의', good:false }); }
+      if (dow === 5) { score += 2; tags.push({ text:t('tagInvestOverseasFri'), good:true }); }
+      if (dow === 1) { score -= 3; tags.push({ text:t('tagInvestOverseasMon'), good:false }); }
     }
     if (opt === 'coin' && moon.bucket === 'waxing') score += 4;
     if (opt === 'realestate' && son) score += 5;
     if (opt === 'fund' && (dow === 3 || dow === 4)) score += 2;
-    // 투자: 육합일 강가점
     if (hap) score += 4;
-    tags.push({ text:'⚠️ 역학 기반 참고용 · 손익 책임 없음', good:false });
+    tags.push({ text:t('tagInvestDisclaimer'), good:false });
   }
   if (cat === 'travel') {
     if (context.selectedOption === 'overseas' && (dow === 5 || dow === 6)) score += 3;
@@ -3218,7 +3195,7 @@ function scoreDate(date, context) {
     if (context.selectedOption === 'honeymoon' && (dow === 5 || dow === 6)) score += 3;
   }
   if (cat === 'business') {
-    if (context.selectedOption === 'beauty' && context.signObj.sign.indexOf('천칭') >= 0) score += 3;
+    if (context.selectedOption === 'beauty' && context.signObj.sign.indexOf(t('signLibraKey')) >= 0) score += 3;
     if (context.selectedOption === 'food' && (dow === 4 || dow === 5)) score += 2;
     if (context.selectedOption === 'it' && (dow === 2 || dow === 3)) score += 2;
   }
@@ -3232,26 +3209,21 @@ function scoreDate(date, context) {
   }
   if (cat === 'birth') {
     var bopt = context.selectedOption;
-    // 달이 차오르는 시기 강가점
     if (moon.bucket === 'waxing' || moon.bucket === 'new') {
       score += 10;
-      tags.push({ text:'🌱 달 차오름 · 새 생명 기운', good:true });
+      tags.push({ text:t('tagBirthWaxing'), good:true });
     } else if (moon.bucket === 'full') {
       score += 5;
-      tags.push({ text:'🌕 보름 · 에너지 충만', good:true });
+      tags.push({ text:t('tagBirthFull'), good:true });
     } else if (moon.bucket === 'dark') {
       score -= 5;
-      tags.push({ text:'🌑 그믐 · 회복 에너지 약함', good:false });
+      tags.push({ text:t('tagBirthWaning'), good:false });
     }
-    // 제왕절개: 일요일 강패널티
     if (bopt === 'csection' && dow === 0) score -= 15;
-    // 산후조리: 손없는날 추가 강가점
     if (bopt === 'postcare' && son) score += 6;
-    // 백일·돌: 주말 선호
     if (bopt === 'naming' && (dow === 6 || dow === 0)) score += 5;
-    // 육합일 가점 (새 생명 탄생)
     if (hap) score += 5;
-    tags.push({ text:'⚠️ 실제 출산일은 의료진 지시 우선', good:false });
+    tags.push({ text:t('tagBirthMedical'), good:false });
   }
 
   // 개인 시드 tie-break (사람마다 동점 시 다른 날짜 우선)
@@ -3532,7 +3504,7 @@ function renderResults() {
     consultRow.style.display = 'flex';
 
     if (latestAnalysis.stopMeds.length) {
-      var stopLabels = latestAnalysis.stopMeds.map(function(m) { return m.rule.label; }).join(', ');
+      var stopLabels = latestAnalysis.stopMeds.map(function(m) { return t(m.rule.labelKey); }).join(', ');
       document.getElementById('meds-warning-text').innerHTML =
         stopLabels + ' ' + t('medResultStopApplied').replace('{date}', formatDate(latestAnalysis.earliestSafeDate)).replace('{end}', formatDate(latestAnalysis.surgeryWindow.end));
       document.getElementById('d-meds').innerHTML = t('medResultApplied');
@@ -3542,7 +3514,7 @@ function renderResults() {
     }
 
     if (latestAnalysis.consultMeds.length) {
-      var cLabels = latestAnalysis.consultMeds.map(function(m) { return m.rule.label; }).join(', ');
+      var cLabels = latestAnalysis.consultMeds.map(function(m) { return t(m.rule.labelKey); }).join(', ');
       document.getElementById('consult-warning-text').innerHTML =
         cLabels + '<br><strong>' + t('consultConfirm') + '</strong>';
       document.getElementById('d-consult').innerHTML =
@@ -3689,8 +3661,8 @@ function goTo(id) {
   applyTheme(currentCat);
 
   if (id === 's2') {
-    var titles = { surgery:'성형 · 시술 정보', business:'개업 정보', moving:'이사 정보', travel:'여행 정보', love:'결혼 · 선보기 정보', invest:'투자 정보', birth:'출산 정보' };
-    document.getElementById('s2-title').textContent = titles[currentCat] || '정보 입력';
+    var titles = { surgery:t('s2TitleSurgery'), business:t('s2TitleBusiness'), moving:t('s2TitleMoving'), travel:t('s2TitleTravel'), love:t('s2TitleLove'), invest:t('s2TitleInvest'), birth:t('s2TitleBirth') };
+    document.getElementById('s2-title').textContent = titles[currentCat] || t('infoInput');
     ['surgery','business','moving','travel','love','invest','birth'].forEach(function(form) {
       var el = document.getElementById('form-' + form);
       if (!el) return;
@@ -3808,9 +3780,9 @@ function getBirthDate() {
     // 음력은 최대 30일
     if (d > 30) throw new Error(t('errLunarDayRange'));
   }
-  if (calType === 'solar') return { originalType:'양력', date:new Date(y, m-1, d), approx:false };
-  if (calType === 'lunar') return { originalType:'음력', date:lunarToSolar(y, m, d, false), approx:(!LUNAR_NEW_YEAR[y]||!LUNAR_MONTHS[y]) };
-  return { originalType:'음력 윤달', date:lunarToSolar(y, m, d, true), approx:(!LUNAR_NEW_YEAR[y]||!LUNAR_MONTHS[y]) };
+  if (calType === 'solar') return { originalType:t('calTypeSolar'), date:new Date(y, m-1, d), approx:false };
+  if (calType === 'lunar') return { originalType:t('calTypeLunar'), date:lunarToSolar(y, m, d, false), approx:(!LUNAR_NEW_YEAR[y]||!LUNAR_MONTHS[y]) };
+  return { originalType:t('calTypeLunarLeap'), date:lunarToSolar(y, m, d, true), approx:(!LUNAR_NEW_YEAR[y]||!LUNAR_MONTHS[y]) };
 }
 
 // ────────────────────────────────────────────────
@@ -4033,7 +4005,7 @@ function captureCard() {
     logging: false
   }).then(function(canvas) {
     var link = document.createElement('a');
-    link.download = '길일_추천카드.png';
+    link.download = t('shareFileName');
     link.href = canvas.toDataURL('image/png');
     document.body.appendChild(link);
     link.click();
@@ -4042,7 +4014,7 @@ function captureCard() {
 
     if (navigator.share && navigator.canShare) {
       canvas.toBlob(function(blob) {
-        var file = new File([blob], '길일_추천카드.png', { type: 'image/png' });
+        var file = new File([blob], t('shareFileName'), { type: 'image/png' });
         if (navigator.canShare({ files: [file] })) {
           navigator.share({
             title: t('shareTitle'),
@@ -4078,7 +4050,7 @@ function saveToCalendar(dateStr, title) {
   var blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
-  a.href = url; a.download = '길일_추천.ics';
+  a.href = url; a.download = t('shareIcsName');
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
   hideCalModal();
@@ -4552,7 +4524,92 @@ var TEXTS = {
     algoNote: '이 앱은 <strong>사주/별자리/음력(손없는날/황도)</strong> 기반으로 길일을 추천합니다.<br>생년월일이 다르면 결과가 다르게 나오도록 설계되었으며,<br>약물은 <strong>날짜 제거 필터</strong>로 작동합니다.',
     // ── 약물 결과 텍스트 ──
     medResultStopApplied: '선택 → <strong>{date}</strong> 이후 {end}까지 범위에서 추천',
-    medResultNoStop: '중단 필요 약물 없음 · 오늘+3일 ~ 오늘+45일 범위에서 추천'
+    medResultNoStop: '중단 필요 약물 없음 · 오늘+3일 ~ 오늘+45일 범위에서 추천',
+    // ── MED_RULES labels ──
+    medRuleAspirin: '아스피린/항응고제', medRuleVitE: '비타민E/오메가3',
+    medRuleHerbal: '한약/홍삼/건강즙', medRuleDiet: '다이어트 보조제',
+    medRuleHormone: '호르몬제/피임약', medRuleIsotret: '이소트레티노인',
+    medRuleBP: '혈압약', medRuleDiabetes: '당뇨약/인슐린',
+    medRuleThyroid: '갑상선호르몬제', medRuleImmuno: '면역억제제/류마티스 약',
+    medRuleSteroid: '스테로이드 장기복용', medRulePsych: '정신과약/수면제',
+    medRuleNeuro: '간질약/신경과약', medRuleOther: '기타 처방약',
+    // ── Jianchu ──
+    jianchuNames: '건,제,만,평,정,집,파,위,성,수,개,폐',
+    // ── Ganji stems/branches ──
+    heavenlyStems: '갑,을,병,정,무,기,경,신,임,계',
+    earthlyBranches: '자,축,인,묘,진,사,오,미,신,유,술,해',
+    stemSuffix: '년', daySuffix: '일',
+    heavenlyStemsAlt: '경,신,임,계,갑,을,병,정,무,기',
+    earthlyBranchesAlt: '신,유,술,해,자,축,인,묘,진,사,오,미',
+    // ── Partner compatibility ──
+    partnerNone: '상대 생년 미입력', partnerBest: '삼합 궁합 최상',
+    partnerSame: '같은 띠 · 무난', partnerConflict: '충 · 궁합 불리',
+    partnerNormal: '보통 수준', partnerOk: '무난한 궁합',
+    // ── Weekday score tags ──
+    wdSurgTue: '🗓️ 화요일 수술 최적', wdSurgWed: '🗓️ 수요일 안정적',
+    wdSurgFri: '💤 금요일 주말 회복', wdSurgThu: '🗓️ 목요일 무난',
+    wdSurgSat: '🏥 토요일 수술 가능', wdSurgMon: '🗓️ 월요일 가능',
+    wdBizBest: '🏪 화·목 개업 최적', wdBizWeekday: '📈 주중 운영 시작',
+    wdBizWeekend: '⚠️ 주말 개업 약한 감점',
+    wdMoveMid: '🚚 중주간 이동 선호', wdMoveSat: '⚠️ 토요일 혼잡',
+    wdMoveSun: '⚠️ 일요일 조정 필요', wdMoveOk: '📦 무난한 일정',
+    wdTravelFriSat: '✈️ 금·토 출발 선호', wdTravelMon: '⚠️ 월요일 피로 감점',
+    wdTravelOk: '🧳 무난한 출발',
+    wdLoveWeekend: '💍 주말 일정 선호', wdLoveFri: '🌹 금요일 분위기',
+    wdLoveWeekday: '☕ 평일 일정 가능',
+    wdInvestThu: '🪐 목요일 목성 기운 최강', wdInvestTue: '📊 화요일 시장 집중일',
+    wdInvestWed: '📈 수요일 안정 흐름', wdInvestMon: '⚡ 월요일 변동 주의',
+    wdInvestFri: '⚠️ 금요일 주말 리스크', wdInvestWeekend: '⚠️ 주말 시장 휴장',
+    wdBirthTue: '🏥 화요일 수술 최적', wdBirthThu: '🏥 목요일 안정적',
+    wdBirthWed: '🏥 수요일 무난', wdBirthFri: '🌸 금요일 주말 회복',
+    wdBirthMon: '📅 월요일 가능', wdBirthSat: '🏥 토요일 가능',
+    // ── Recovery notes ──
+    recWeekend: '주말 회복 여유 큼', recWeekday: '평일 수술 가능',
+    recSat: '토요일 수술 가능', recBad: '회복 관리 비선호',
+    recShort: '짧은 회복에 무난', recLow: '가능하나 우선순위 낮음',
+    recLipo1: '압박복·회복 관리 유리', recLipo2: '무난한 회복 일정',
+    recLipoWeekday: '무난한 회복 일정', recLipoBad: '회복 동선 비선호',
+    recContour1: '주말 포함 3일 안정 가능', recContour2: '평일 안정기 확보',
+    recContourMon: '주중 회복 가능', recContourSat: '토요일 수술 가능',
+    recContourSun: '일요일 비권장', recDefault: '기본 회복 점수',
+    proxClose: '안전일 직후 가까운 일정', proxNear: '가까운 일정',
+    proxOk: '무난한 일정', proxFar: '조금 여유 있는 일정', proxLate: '범위 후반 일정',
+    // ── Score tags ──
+    tagConsultMed: '🩺 상담 우선 약물 있음', tagFullMoonWarn: '⚠️ 보름 붓기·부종 주의',
+    tagWaningHair: '🌘 달 기우는 시기 · 이식 최적', tagNewMoonEnergy: '🌑 신월 · 새 시작 에너지',
+    tagPostProcCalm: '✨ 시술 후 진정 흐름',
+    tagHwangdoDay: '🧿 황도 ', tagSonDay: '🌟 손없는날',
+    tagZodiacStrong: '⭐ ', tagConflictDay: '⚠️ 사주 충(冲)일',
+    tagSanghyungDay: '⚠️ 삼형(三刑)일', tagHarmonyDay: '✨ 육합(六合)일',
+    tagInvestWaxing: '🌱 달 차오름 · 투자 시작 좋음', tagInvestFull: '🌕 보름 · 에너지 절정',
+    tagInvestWaning: '🌑 그믐 · 투자 관망 권장',
+    tagInvestOverseasFri: '🌐 해외장 주말 전 진입', tagInvestOverseasMon: '⚠️ 해외장 월요일 갭 주의',
+    tagInvestDisclaimer: '⚠️ 역학 기반 참고용 · 손익 책임 없음',
+    tagBirthWaxing: '🌱 달 차오름 · 새 생명 기운', tagBirthFull: '🌕 보름 · 에너지 충만',
+    tagBirthWaning: '🌑 그믐 · 회복 에너지 약함',
+    tagBirthMedical: '⚠️ 실제 출산일은 의료진 지시 우선',
+    // ── Reason strings ──
+    reasonRecovery: '회복 동선', reasonProximity: '안전일 기준 일정',
+    reasonHwangdo: '황도', reasonSon: '손없는날', reasonZodiac: '별자리 성향',
+    reasonConflict: '사주 충 강감점', reasonSanghyung: '삼형 감점',
+    reasonHarmony: '육합 가점', reasonMoon: '달 주기', reasonWeekday: '요일', reasonCompat: '궁합',
+    // ── s2 titles ──
+    s2TitleSurgery: '성형 · 시술 정보', s2TitleBusiness: '개업 정보',
+    s2TitleMoving: '이사 정보', s2TitleTravel: '여행 정보',
+    s2TitleLove: '결혼 · 선보기 정보', s2TitleInvest: '투자 정보',
+    s2TitleBirth: '출산 정보',
+    // ── Birth date types ──
+    calTypeSolar: '양력', calTypeLunar: '음력', calTypeLunarLeap: '음력 윤달',
+    // ── Share file names ──
+    shareFileName: '길일_추천카드.png', shareIcsName: '길일_추천.ics',
+    // ── Lunar notice ──
+    lunarNotice: 'solarlunar.js 기반 음력 변환 · 1900~2100년 지원',
+    // ── Zodiac sign suffix ──
+    zodiacStrongDay: ' 강점일',
+    // ── Hwangdo suffix ──
+    hwangdoDaySuffix: '일',
+    // ── Libra check ──
+    signLibraKey: '천칭'
   },
   en: {
     tapToBegin: 'tap to begin',
@@ -4729,7 +4786,77 @@ var TEXTS = {
     hwSonMonth: ' Son-eobsneun Days', hwSonNone: 'No Son-eobsneun days', hwTodayLabel2: 'Today',
     algoNote: 'This app recommends auspicious days based on <strong>Saju/Zodiac/Lunar (Son-eobsneun/Hwangdo)</strong>.<br>Results vary by date of birth.<br>Medications act as <strong>date removal filters</strong>.',
     medResultStopApplied: 'Selected → Recommend from <strong>{date}</strong> to {end}',
-    medResultNoStop: 'No stop-meds selected · Today+3 to Today+45 days range'
+    medResultNoStop: 'No stop-meds selected · Today+3 to Today+45 days range',
+    medRuleAspirin: 'Aspirin/Anticoagulants', medRuleVitE: 'Vitamin E/Omega-3',
+    medRuleHerbal: 'Herbal/Ginseng', medRuleDiet: 'Diet Supplements',
+    medRuleHormone: 'Hormones/Contraceptives', medRuleIsotret: 'Isotretinoin',
+    medRuleBP: 'Blood Pressure Meds', medRuleDiabetes: 'Diabetes Meds/Insulin',
+    medRuleThyroid: 'Thyroid Hormones', medRuleImmuno: 'Immunosuppressants/Rheumatics',
+    medRuleSteroid: 'Long-term Steroids', medRulePsych: 'Psych Meds/Sleep Aids',
+    medRuleNeuro: 'Anti-epileptics/Neuro Meds', medRuleOther: 'Other Prescriptions',
+    jianchuNames: 'Build,Remove,Full,Balance,Stable,Hold,Break,Danger,Complete,Receive,Open,Close',
+    heavenlyStems: 'Gap,Eul,Byeong,Jeong,Mu,Gi,Gyeong,Sin,Im,Gye',
+    earthlyBranches: 'Ja,Chuk,In,Myo,Jin,Sa,O,Mi,Sin,Yu,Sul,Hae',
+    stemSuffix: ' Year', daySuffix: '',
+    heavenlyStemsAlt: 'Gyeong,Sin,Im,Gye,Gap,Eul,Byeong,Jeong,Mu,Gi',
+    earthlyBranchesAlt: 'Sin,Yu,Sul,Hae,Ja,Chuk,In,Myo,Jin,Sa,O,Mi',
+    partnerNone: 'Partner year not entered', partnerBest: 'Best compatibility (Samhap)',
+    partnerSame: 'Same sign · Decent', partnerConflict: 'Conflict · Unfavorable',
+    partnerNormal: 'Average', partnerOk: 'Decent compatibility',
+    wdSurgTue: '🗓️ Tuesday: Optimal for surgery', wdSurgWed: '🗓️ Wednesday: Stable',
+    wdSurgFri: '💤 Friday: Weekend recovery', wdSurgThu: '🗓️ Thursday: Decent',
+    wdSurgSat: '🏥 Saturday: Surgery possible', wdSurgMon: '🗓️ Monday: Possible',
+    wdBizBest: '🏪 Tue/Thu: Best for opening', wdBizWeekday: '📈 Weekday start',
+    wdBizWeekend: '⚠️ Weekend: Slight penalty',
+    wdMoveMid: '🚚 Mid-week moving preferred', wdMoveSat: '⚠️ Saturday: Congested',
+    wdMoveSun: '⚠️ Sunday: Adjustment needed', wdMoveOk: '📦 Decent schedule',
+    wdTravelFriSat: '✈️ Fri/Sat departure preferred', wdTravelMon: '⚠️ Monday: Fatigue penalty',
+    wdTravelOk: '🧳 Decent departure',
+    wdLoveWeekend: '💍 Weekend preferred', wdLoveFri: '🌹 Friday ambiance',
+    wdLoveWeekday: '☕ Weekday possible',
+    wdInvestThu: '🪐 Thursday: Jupiter energy peak', wdInvestTue: '📊 Tuesday: Market focus',
+    wdInvestWed: '📈 Wednesday: Stable flow', wdInvestMon: '⚡ Monday: Volatility caution',
+    wdInvestFri: '⚠️ Friday: Weekend risk', wdInvestWeekend: '⚠️ Weekend: Market closed',
+    wdBirthTue: '🏥 Tuesday: Optimal', wdBirthThu: '🏥 Thursday: Stable',
+    wdBirthWed: '🏥 Wednesday: Decent', wdBirthFri: '🌸 Friday: Weekend recovery',
+    wdBirthMon: '📅 Monday: Possible', wdBirthSat: '🏥 Saturday: Possible',
+    recWeekend: 'Ample weekend recovery', recWeekday: 'Weekday surgery possible',
+    recSat: 'Saturday surgery possible', recBad: 'Recovery unfavorable',
+    recShort: 'Short recovery OK', recLow: 'Possible but lower priority',
+    recLipo1: 'Compression & recovery friendly', recLipo2: 'Decent recovery schedule',
+    recLipoWeekday: 'Decent recovery schedule', recLipoBad: 'Recovery route unfavorable',
+    recContour1: '3-day rest incl. weekend', recContour2: 'Weekday rest secured',
+    recContourMon: 'Weekday recovery possible', recContourSat: 'Saturday surgery possible',
+    recContourSun: 'Sunday not recommended', recDefault: 'Base recovery score',
+    proxClose: 'Near post-safe date', proxNear: 'Close schedule',
+    proxOk: 'Decent schedule', proxFar: 'Slightly relaxed schedule', proxLate: 'Late in range',
+    tagConsultMed: '🩺 Consultation-required meds present', tagFullMoonWarn: '⚠️ Full moon swelling risk',
+    tagWaningHair: '🌘 Waning moon · Optimal for transplant', tagNewMoonEnergy: '🌑 New moon · Fresh start energy',
+    tagPostProcCalm: '✨ Post-procedure calming flow',
+    tagHwangdoDay: '🧿 Hwangdo ', tagSonDay: '🌟 Son-eobsneun day',
+    tagZodiacStrong: '⭐ ', tagConflictDay: '⚠️ Saju Conflict day',
+    tagSanghyungDay: '⚠️ Sanghyung (三刑) day', tagHarmonyDay: '✨ Yukhap (六合) day',
+    tagInvestWaxing: '🌱 Waxing moon · Good start', tagInvestFull: '🌕 Full moon · Peak energy',
+    tagInvestWaning: '🌑 Dark moon · Observe recommended',
+    tagInvestOverseasFri: '🌐 Overseas pre-weekend entry', tagInvestOverseasMon: '⚠️ Overseas Monday gap risk',
+    tagInvestDisclaimer: '⚠️ Reference only · No liability for gains/losses',
+    tagBirthWaxing: '🌱 Waxing moon · New life energy', tagBirthFull: '🌕 Full moon · Full energy',
+    tagBirthWaning: '🌑 Dark moon · Low recovery energy',
+    tagBirthMedical: '⚠️ Actual birth date per medical guidance',
+    reasonRecovery: 'Recovery route', reasonProximity: 'Safe date proximity',
+    reasonHwangdo: 'Hwangdo', reasonSon: 'Son-eobsneun', reasonZodiac: 'Zodiac traits',
+    reasonConflict: 'Saju conflict penalty', reasonSanghyung: 'Sanghyung penalty',
+    reasonHarmony: 'Yukhap bonus', reasonMoon: 'Moon cycle', reasonWeekday: 'Day of week', reasonCompat: 'Compatibility',
+    s2TitleSurgery: 'Surgery Info', s2TitleBusiness: 'Business Info',
+    s2TitleMoving: 'Moving Info', s2TitleTravel: 'Travel Info',
+    s2TitleLove: 'Love & Marriage Info', s2TitleInvest: 'Investment Info',
+    s2TitleBirth: 'Birth Info',
+    calTypeSolar: 'Solar', calTypeLunar: 'Lunar', calTypeLunarLeap: 'Lunar (Leap)',
+    shareFileName: 'gilil_card.png', shareIcsName: 'gilil_recommendation.ics',
+    lunarNotice: 'Lunar conversion via solarlunar.js · 1900–2100 supported',
+    zodiacStrongDay: ' strong day',
+    hwangdoDaySuffix: ' day',
+    signLibraKey: 'Libra'
   },
   ja: {
     tapToBegin: 'タップして始める',
@@ -4906,7 +5033,77 @@ var TEXTS = {
     hwSonMonth: '月の孫のいない日', hwSonNone: '孫のいない日なし', hwTodayLabel2: '今日',
     algoNote: 'このアプリは<strong>四柱推命/星座/旧暦(孫のいない日/黄道)</strong>で吉日を推奨します。<br>生年月日により結果が異なります。<br>薬は<strong>日程除外フィルター</strong>として機能します。',
     medResultStopApplied: '選択 → <strong>{date}</strong>以降{end}までの範囲で推奨',
-    medResultNoStop: '中止必要薬なし · 今日+3日 ~ 今日+45日範囲で推奨'
+    medResultNoStop: '中止必要薬なし · 今日+3日 ~ 今日+45日範囲で推奨',
+    medRuleAspirin: 'アスピリン/抗凝固薬', medRuleVitE: 'ビタミンE/オメガ3',
+    medRuleHerbal: '漢方薬/紅参', medRuleDiet: 'ダイエットサプリ',
+    medRuleHormone: 'ホルモン剤/ピル', medRuleIsotret: 'イソトレチノイン',
+    medRuleBP: '降圧薬', medRuleDiabetes: '糖尿病薬/インスリン',
+    medRuleThyroid: '甲状腺ホルモン剤', medRuleImmuno: '免疫抑制剤/リウマチ薬',
+    medRuleSteroid: 'ステロイド長期服用', medRulePsych: '精神科薬/睡眠薬',
+    medRuleNeuro: '抗てんかん薬/神経科薬', medRuleOther: 'その他処方薬',
+    jianchuNames: '建,除,満,平,定,執,破,危,成,収,開,閉',
+    heavenlyStems: '甲,乙,丙,丁,戊,己,庚,辛,壬,癸',
+    earthlyBranches: '子,丑,寅,卯,辰,巳,午,未,申,酉,戌,亥',
+    stemSuffix: '年', daySuffix: '日',
+    heavenlyStemsAlt: '庚,辛,壬,癸,甲,乙,丙,丁,戊,己',
+    earthlyBranchesAlt: '申,酉,戌,亥,子,丑,寅,卯,辰,巳,午,未',
+    partnerNone: '相手の生年未入力', partnerBest: '三合 · 最高の相性',
+    partnerSame: '同じ干支 · 無難', partnerConflict: '衝 · 不利な相性',
+    partnerNormal: '普通レベル', partnerOk: '無難な相性',
+    wdSurgTue: '🗓️ 火曜日 手術最適', wdSurgWed: '🗓️ 水曜日 安定',
+    wdSurgFri: '💤 金曜日 週末回復', wdSurgThu: '🗓️ 木曜日 無難',
+    wdSurgSat: '🏥 土曜日 手術可能', wdSurgMon: '🗓️ 月曜日 可能',
+    wdBizBest: '🏪 火·木 開業最適', wdBizWeekday: '📈 平日開始',
+    wdBizWeekend: '⚠️ 週末 減点',
+    wdMoveMid: '🚚 週半ば移動推奨', wdMoveSat: '⚠️ 土曜日 混雑',
+    wdMoveSun: '⚠️ 日曜日 調整必要', wdMoveOk: '📦 無難な日程',
+    wdTravelFriSat: '✈️ 金·土出発推奨', wdTravelMon: '⚠️ 月曜日 疲労減点',
+    wdTravelOk: '🧳 無難な出発',
+    wdLoveWeekend: '💍 週末日程推奨', wdLoveFri: '🌹 金曜日の雰囲気',
+    wdLoveWeekday: '☕ 平日日程可能',
+    wdInvestThu: '🪐 木曜日 木星エネルギー最強', wdInvestTue: '📊 火曜日 市場集中日',
+    wdInvestWed: '📈 水曜日 安定フロー', wdInvestMon: '⚡ 月曜日 変動注意',
+    wdInvestFri: '⚠️ 金曜日 週末リスク', wdInvestWeekend: '⚠️ 週末 市場休場',
+    wdBirthTue: '🏥 火曜日 最適', wdBirthThu: '🏥 木曜日 安定',
+    wdBirthWed: '🏥 水曜日 無難', wdBirthFri: '🌸 金曜日 週末回復',
+    wdBirthMon: '📅 月曜日 可能', wdBirthSat: '🏥 土曜日 可能',
+    recWeekend: '週末回復余裕あり', recWeekday: '平日手術可能',
+    recSat: '土曜日手術可能', recBad: '回復管理に不向き',
+    recShort: '短い回復で無難', recLow: '可能だが優先度低い',
+    recLipo1: '圧迫服·回復管理に有利', recLipo2: '無難な回復日程',
+    recLipoWeekday: '無難な回復日程', recLipoBad: '回復動線に不向き',
+    recContour1: '週末含む3日安静可能', recContour2: '平日安定期確保',
+    recContourMon: '平日回復可能', recContourSat: '土曜日手術可能',
+    recContourSun: '日曜日非推奨', recDefault: '基本回復スコア',
+    proxClose: '安全日直後の近い日程', proxNear: '近い日程',
+    proxOk: '無難な日程', proxFar: '少し余裕のある日程', proxLate: '範囲後半の日程',
+    tagConsultMed: '🩺 要相談薬あり', tagFullMoonWarn: '⚠️ 満月 むくみ注意',
+    tagWaningHair: '🌘 月欠け期 · 移植最適', tagNewMoonEnergy: '🌑 新月 · 新たなエネルギー',
+    tagPostProcCalm: '✨ 施術後鎮静フロー',
+    tagHwangdoDay: '🧿 黄道 ', tagSonDay: '🌟 孫のいない日',
+    tagZodiacStrong: '⭐ ', tagConflictDay: '⚠️ 四柱衝(冲)日',
+    tagSanghyungDay: '⚠️ 三刑日', tagHarmonyDay: '✨ 六合日',
+    tagInvestWaxing: '🌱 月満ち · 投資開始好適', tagInvestFull: '🌕 満月 · エネルギー絶頂',
+    tagInvestWaning: '🌑 闇夜 · 投資観望推奨',
+    tagInvestOverseasFri: '🌐 海外市場 週末前参入', tagInvestOverseasMon: '⚠️ 海外市場 月曜ギャップ注意',
+    tagInvestDisclaimer: '⚠️ 参考用 · 損益責任なし',
+    tagBirthWaxing: '🌱 月満ち · 新生命の気運', tagBirthFull: '🌕 満月 · エネルギー充満',
+    tagBirthWaning: '🌑 闇夜 · 回復エネルギー弱い',
+    tagBirthMedical: '⚠️ 実際の出産日は医療指示優先',
+    reasonRecovery: '回復動線', reasonProximity: '安全日基準日程',
+    reasonHwangdo: '黄道', reasonSon: '孫のいない日', reasonZodiac: '星座傾向',
+    reasonConflict: '四柱衝の強減点', reasonSanghyung: '三刑減点',
+    reasonHarmony: '六合加点', reasonMoon: '月周期', reasonWeekday: '曜日', reasonCompat: '相性',
+    s2TitleSurgery: '整形·施術情報', s2TitleBusiness: '開業情報',
+    s2TitleMoving: '引越し情報', s2TitleTravel: '旅行情報',
+    s2TitleLove: '結婚·お見合い情報', s2TitleInvest: '投資情報',
+    s2TitleBirth: '出産情報',
+    calTypeSolar: '陽暦', calTypeLunar: '陰暦', calTypeLunarLeap: '陰暦 閏月',
+    shareFileName: '吉日_カード.png', shareIcsName: '吉日_推薦.ics',
+    lunarNotice: 'solarlunar.js基盤の旧暦変換 · 1900〜2100年対応',
+    zodiacStrongDay: ' 強み日',
+    hwangdoDaySuffix: '日',
+    signLibraKey: '天秤'
   },
   zh: {
     tapToBegin: '点击开始',
@@ -5083,7 +5280,77 @@ var TEXTS = {
     hwSonMonth: '月孙无日', hwSonNone: '无孙无日', hwTodayLabel2: '今天',
     algoNote: '本应用基于<strong>四柱/星座/农历(孙无日/黄道)</strong>推荐吉日。<br>出生日期不同结果不同。<br>药物作为<strong>日期排除过滤器</strong>。',
     medResultStopApplied: '已选择 → 从<strong>{date}</strong>到{end}范围推荐',
-    medResultNoStop: '未选择停药 · 今天+3~45天范围推荐'
+    medResultNoStop: '未选择停药 · 今天+3~45天范围推荐',
+    medRuleAspirin: '阿司匹林/抗凝药', medRuleVitE: '维生素E/鱼油',
+    medRuleHerbal: '中药/红参', medRuleDiet: '减肥药',
+    medRuleHormone: '激素药/避孕药', medRuleIsotret: '异维A酸',
+    medRuleBP: '降压药', medRuleDiabetes: '糖尿病药/胰岛素',
+    medRuleThyroid: '甲状腺激素', medRuleImmuno: '免疫抑制剂/风湿药',
+    medRuleSteroid: '长期类固醇', medRulePsych: '精神科药/安眠药',
+    medRuleNeuro: '抗癫痫药/神经科药', medRuleOther: '其他处方药',
+    jianchuNames: '建,除,满,平,定,执,破,危,成,收,开,闭',
+    heavenlyStems: '甲,乙,丙,丁,戊,己,庚,辛,壬,癸',
+    earthlyBranches: '子,丑,寅,卯,辰,巳,午,未,申,酉,戌,亥',
+    stemSuffix: '年', daySuffix: '日',
+    heavenlyStemsAlt: '庚,辛,壬,癸,甲,乙,丙,丁,戊,己',
+    earthlyBranchesAlt: '申,酉,戌,亥,子,丑,寅,卯,辰,巳,午,未',
+    partnerNone: '对方生年未输入', partnerBest: '三合 · 最佳',
+    partnerSame: '同属相 · 尚可', partnerConflict: '冲 · 不利',
+    partnerNormal: '一般水平', partnerOk: '尚可',
+    wdSurgTue: '🗓️ 周二 手术最佳', wdSurgWed: '🗓️ 周三 稳定',
+    wdSurgFri: '💤 周五 周末恢复', wdSurgThu: '🗓️ 周四 尚可',
+    wdSurgSat: '🏥 周六 可手术', wdSurgMon: '🗓️ 周一 可以',
+    wdBizBest: '🏪 周二·四 开业最佳', wdBizWeekday: '📈 工作日开始',
+    wdBizWeekend: '⚠️ 周末 轻微扣分',
+    wdMoveMid: '🚚 周中搬家优选', wdMoveSat: '⚠️ 周六 拥挤',
+    wdMoveSun: '⚠️ 周日 需调整', wdMoveOk: '📦 尚可日程',
+    wdTravelFriSat: '✈️ 周五·六出发优选', wdTravelMon: '⚠️ 周一 疲劳扣分',
+    wdTravelOk: '🧳 尚可出发',
+    wdLoveWeekend: '💍 周末优选', wdLoveFri: '🌹 周五氛围',
+    wdLoveWeekday: '☕ 工作日可以',
+    wdInvestThu: '🪐 周四 木星能量最强', wdInvestTue: '📊 周二 市场聚焦',
+    wdInvestWed: '📈 周三 稳定走势', wdInvestMon: '⚡ 周一 波动注意',
+    wdInvestFri: '⚠️ 周五 周末风险', wdInvestWeekend: '⚠️ 周末 市场休市',
+    wdBirthTue: '🏥 周二 最佳', wdBirthThu: '🏥 周四 稳定',
+    wdBirthWed: '🏥 周三 尚可', wdBirthFri: '🌸 周五 周末恢复',
+    wdBirthMon: '📅 周一 可以', wdBirthSat: '🏥 周六 可以',
+    recWeekend: '周末恢复充裕', recWeekday: '工作日可手术',
+    recSat: '周六可手术', recBad: '恢复不便',
+    recShort: '短期恢复无碍', recLow: '可以但优先级低',
+    recLipo1: '压力服·恢复管理有利', recLipo2: '尚可恢复日程',
+    recLipoWeekday: '尚可恢复日程', recLipoBad: '恢复路线不佳',
+    recContour1: '含周末3天静养', recContour2: '工作日休息期确保',
+    recContourMon: '工作日可恢复', recContourSat: '周六可手术',
+    recContourSun: '周日不推荐', recDefault: '基础恢复分',
+    proxClose: '安全日后近期日程', proxNear: '较近日程',
+    proxOk: '尚可日程', proxFar: '稍宽裕日程', proxLate: '范围后半段',
+    tagConsultMed: '🩺 需咨询药物', tagFullMoonWarn: '⚠️ 满月浮肿注意',
+    tagWaningHair: '🌘 月亏期 · 移植最佳', tagNewMoonEnergy: '🌑 新月 · 新开始能量',
+    tagPostProcCalm: '✨ 术后镇静期',
+    tagHwangdoDay: '🧿 黄道 ', tagSonDay: '🌟 孙无日',
+    tagZodiacStrong: '⭐ ', tagConflictDay: '⚠️ 四柱冲日',
+    tagSanghyungDay: '⚠️ 三刑日', tagHarmonyDay: '✨ 六合日',
+    tagInvestWaxing: '🌱 月盈 · 投资开始好', tagInvestFull: '🌕 满月 · 能量巅峰',
+    tagInvestWaning: '🌑 月暗 · 建议观望',
+    tagInvestOverseasFri: '🌐 海外盘 周末前入场', tagInvestOverseasMon: '⚠️ 海外盘 周一缺口注意',
+    tagInvestDisclaimer: '⚠️ 仅供参考 · 不承担盈亏责任',
+    tagBirthWaxing: '🌱 月盈 · 新生命气运', tagBirthFull: '🌕 满月 · 能量充沛',
+    tagBirthWaning: '🌑 月暗 · 恢复能量弱',
+    tagBirthMedical: '⚠️ 实际出产日以医嘱为准',
+    reasonRecovery: '恢复路线', reasonProximity: '安全日基准日程',
+    reasonHwangdo: '黄道', reasonSon: '孙无日', reasonZodiac: '星座倾向',
+    reasonConflict: '四柱冲强扣分', reasonSanghyung: '三刑扣分',
+    reasonHarmony: '六合加分', reasonMoon: '月周期', reasonWeekday: '星期', reasonCompat: '合婚',
+    s2TitleSurgery: '整形·手术信息', s2TitleBusiness: '开业信息',
+    s2TitleMoving: '搬家信息', s2TitleTravel: '旅行信息',
+    s2TitleLove: '婚恋信息', s2TitleInvest: '投资信息',
+    s2TitleBirth: '生育信息',
+    calTypeSolar: '阳历', calTypeLunar: '阴历', calTypeLunarLeap: '阴历 闰月',
+    shareFileName: '吉日_推荐卡.png', shareIcsName: '吉日_推荐.ics',
+    lunarNotice: 'solarlunar.js 阴历转换 · 支持1900~2100年',
+    zodiacStrongDay: ' 强势日',
+    hwangdoDaySuffix: '日',
+    signLibraKey: '天秤'
   },
   vi: {
     tapToBegin: 'Chạm để bắt đầu',
@@ -5260,7 +5527,77 @@ var TEXTS = {
     hwSonMonth: ' Ngày Tốt tháng', hwSonNone: 'Không có Ngày Tốt', hwTodayLabel2: 'Hôm nay',
     algoNote: 'Ứng dụng đề xuất ngày lành dựa trên <strong>Tứ trụ/Cung/Âm lịch</strong>.<br>Kết quả khác nhau theo ngày sinh.<br>Thuốc hoạt động như <strong>bộ lọc loại bỏ ngày</strong>.',
     medResultStopApplied: 'Đã chọn → Đề xuất từ <strong>{date}</strong> đến {end}',
-    medResultNoStop: 'Chưa chọn thuốc ngừng · Hôm nay+3~45 ngày'
+    medResultNoStop: 'Chưa chọn thuốc ngừng · Hôm nay+3~45 ngày',
+    medRuleAspirin: 'Aspirin/Thuốc chống đông', medRuleVitE: 'Vitamin E/Omega-3',
+    medRuleHerbal: 'Đông y/Nhân sâm', medRuleDiet: 'Thực phẩm giảm cân',
+    medRuleHormone: 'Nội tiết/Tránh thai', medRuleIsotret: 'Isotretinoin',
+    medRuleBP: 'Thuốc huyết áp', medRuleDiabetes: 'Thuốc tiểu đường/Insulin',
+    medRuleThyroid: 'Hormone tuyến giáp', medRuleImmuno: 'Ức chế miễn dịch/Thấp khớp',
+    medRuleSteroid: 'Steroid dài hạn', medRulePsych: 'Thuốc tâm thần/An thần',
+    medRuleNeuro: 'Thuốc thần kinh/Động kinh', medRuleOther: 'Thuốc kê đơn khác',
+    jianchuNames: 'Kiến,Trừ,Mãn,Bình,Định,Chấp,Phá,Nguy,Thành,Thu,Khai,Bế',
+    heavenlyStems: 'Giáp,Ất,Bính,Đinh,Mậu,Kỷ,Canh,Tân,Nhâm,Quý',
+    earthlyBranches: 'Tý,Sửu,Dần,Mão,Thìn,Tỵ,Ngọ,Mùi,Thân,Dậu,Tuất,Hợi',
+    stemSuffix: ' Năm', daySuffix: '',
+    heavenlyStemsAlt: 'Canh,Tân,Nhâm,Quý,Giáp,Ất,Bính,Đinh,Mậu,Kỷ',
+    earthlyBranchesAlt: 'Thân,Dậu,Tuất,Hợi,Tý,Sửu,Dần,Mão,Thìn,Tỵ,Ngọ,Mùi',
+    partnerNone: 'Chưa nhập năm sinh đối phương', partnerBest: 'Tam hợp · Tốt nhất',
+    partnerSame: 'Cùng tuổi · Ổn', partnerConflict: 'Xung · Bất lợi',
+    partnerNormal: 'Mức trung bình', partnerOk: 'Hợp ổn',
+    wdSurgTue: '🗓️ Thứ Ba: Tối ưu phẫu thuật', wdSurgWed: '🗓️ Thứ Tư: Ổn định',
+    wdSurgFri: '💤 Thứ Sáu: Nghỉ cuối tuần', wdSurgThu: '🗓️ Thứ Năm: Khá',
+    wdSurgSat: '🏥 Thứ Bảy: Có thể phẫu thuật', wdSurgMon: '🗓️ Thứ Hai: Được',
+    wdBizBest: '🏪 T3·T5 khai trương tối ưu', wdBizWeekday: '📈 Ngày thường bắt đầu',
+    wdBizWeekend: '⚠️ Cuối tuần trừ nhẹ',
+    wdMoveMid: '🚚 Giữa tuần chuyển nhà tốt', wdMoveSat: '⚠️ Thứ Bảy: Đông đúc',
+    wdMoveSun: '⚠️ Chủ Nhật: Cần điều chỉnh', wdMoveOk: '📦 Lịch ổn',
+    wdTravelFriSat: '✈️ T6·T7 khởi hành tốt', wdTravelMon: '⚠️ Thứ Hai: Mệt mỏi',
+    wdTravelOk: '🧳 Khởi hành ổn',
+    wdLoveWeekend: '💍 Cuối tuần ưu tiên', wdLoveFri: '🌹 Thứ Sáu lãng mạn',
+    wdLoveWeekday: '☕ Ngày thường được',
+    wdInvestThu: '🪐 Thứ Năm: Năng lượng Mộc tinh', wdInvestTue: '📊 Thứ Ba: Thị trường tập trung',
+    wdInvestWed: '📈 Thứ Tư: Dòng chảy ổn định', wdInvestMon: '⚡ Thứ Hai: Biến động',
+    wdInvestFri: '⚠️ Thứ Sáu: Rủi ro cuối tuần', wdInvestWeekend: '⚠️ Cuối tuần: Thị trường đóng',
+    wdBirthTue: '🏥 Thứ Ba: Tối ưu', wdBirthThu: '🏥 Thứ Năm: Ổn định',
+    wdBirthWed: '🏥 Thứ Tư: Khá', wdBirthFri: '🌸 Thứ Sáu: Nghỉ cuối tuần',
+    wdBirthMon: '📅 Thứ Hai: Được', wdBirthSat: '🏥 Thứ Bảy: Được',
+    recWeekend: 'Nghỉ cuối tuần dồi dào', recWeekday: 'Phẫu thuật ngày thường được',
+    recSat: 'Thứ Bảy phẫu thuật được', recBad: 'Hồi phục không thuận',
+    recShort: 'Hồi phục ngắn ổn', recLow: 'Được nhưng ưu tiên thấp',
+    recLipo1: 'Áo nén·hồi phục thuận lợi', recLipo2: 'Lịch hồi phục ổn',
+    recLipoWeekday: 'Lịch hồi phục ổn', recLipoBad: 'Lộ trình hồi phục bất lợi',
+    recContour1: '3 ngày nghỉ kể cả cuối tuần', recContour2: 'Nghỉ ngày thường đảm bảo',
+    recContourMon: 'Hồi phục ngày thường được', recContourSat: 'Thứ Bảy phẫu thuật được',
+    recContourSun: 'Chủ Nhật không khuyến khích', recDefault: 'Điểm hồi phục cơ bản',
+    proxClose: 'Lịch gần sau ngày an toàn', proxNear: 'Lịch gần',
+    proxOk: 'Lịch ổn', proxFar: 'Lịch hơi dư dả', proxLate: 'Cuối khoảng',
+    tagConsultMed: '🩺 Có thuốc cần tư vấn', tagFullMoonWarn: '⚠️ Trăng tròn: sưng phù',
+    tagWaningHair: '🌘 Trăng khuyết · Cấy tóc tối ưu', tagNewMoonEnergy: '🌑 Trăng mới · Năng lượng mới',
+    tagPostProcCalm: '✨ Sau thủ thuật: dịu nhẹ',
+    tagHwangdoDay: '🧿 Hoàng đạo ', tagSonDay: '🌟 Ngày Tốt',
+    tagZodiacStrong: '⭐ ', tagConflictDay: '⚠️ Ngày Xung tứ trụ',
+    tagSanghyungDay: '⚠️ Ngày Tam hình', tagHarmonyDay: '✨ Ngày Lục hợp',
+    tagInvestWaxing: '🌱 Trăng lên · Đầu tư tốt', tagInvestFull: '🌕 Trăng tròn · Đỉnh năng lượng',
+    tagInvestWaning: '🌑 Trăng tối · Nên quan sát',
+    tagInvestOverseasFri: '🌐 Sàn ngoại cuối tuần', tagInvestOverseasMon: '⚠️ Sàn ngoại T2 gap rủi ro',
+    tagInvestDisclaimer: '⚠️ Tham khảo · Không chịu trách nhiệm lãi/lỗ',
+    tagBirthWaxing: '🌱 Trăng lên · Sinh lực mới', tagBirthFull: '🌕 Trăng tròn · Tràn năng lượng',
+    tagBirthWaning: '🌑 Trăng tối · Năng lượng yếu',
+    tagBirthMedical: '⚠️ Ngày sinh thực tế theo chỉ dẫn y tế',
+    reasonRecovery: 'Lộ trình hồi phục', reasonProximity: 'Lịch theo ngày an toàn',
+    reasonHwangdo: 'Hoàng đạo', reasonSon: 'Ngày Tốt', reasonZodiac: 'Xu hướng cung',
+    reasonConflict: 'Xung tứ trụ trừ điểm', reasonSanghyung: 'Tam hình trừ điểm',
+    reasonHarmony: 'Lục hợp cộng điểm', reasonMoon: 'Chu kỳ trăng', reasonWeekday: 'Thứ trong tuần', reasonCompat: 'Hợp tuổi',
+    s2TitleSurgery: 'Thông tin phẫu thuật', s2TitleBusiness: 'Thông tin khai trương',
+    s2TitleMoving: 'Thông tin chuyển nhà', s2TitleTravel: 'Thông tin du lịch',
+    s2TitleLove: 'Thông tin hôn nhân', s2TitleInvest: 'Thông tin đầu tư',
+    s2TitleBirth: 'Thông tin sinh sản',
+    calTypeSolar: 'Dương lịch', calTypeLunar: 'Âm lịch', calTypeLunarLeap: 'Âm lịch nhuận',
+    shareFileName: 'ngay_lanh_card.png', shareIcsName: 'ngay_lanh.ics',
+    lunarNotice: 'Chuyển đổi âm lịch qua solarlunar.js · Hỗ trợ 1900–2100',
+    zodiacStrongDay: ' ngày mạnh',
+    hwangdoDaySuffix: '',
+    signLibraKey: 'Libra'
   }
 };
 
