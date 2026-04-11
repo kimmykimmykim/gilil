@@ -1915,199 +1915,197 @@ body {
       <button class="gender-btn" onclick="selectGender(this)" type="button" data-i18n="genderMale">남성 ♂</button>
     </div>
 
-    <div class="algo-note">
-      이 버전은 <strong>사주·별자리 중심 개인화 추천</strong>을 목표로 합니다.
-      생년월일이 다르면 결과가 다르게 나오도록 설계되었으며,
-      약물은 <strong>날짜 제거 필터</strong>로 작동합니다.
+    <div class="algo-note" data-i18n="algoNote">
+      이 앱은 <strong>사주/별자리/음력(손없는날/황도)</strong> 기반으로 길일을 추천합니다.<br>생년월일이 다르면 결과가 다르게 나오도록 설계되었으며,<br>약물은 <strong>날짜 제거 필터</strong>로 작동합니다.
     </div>
 
     <div class="sub-form show" id="form-surgery">
-      <div class="sec-label">수술 / 시술 종류</div>
+      <div class="sec-label" data-i18n="surgTypeLabel">수술 / 시술 종류</div>
       <div class="surgery-grid">
-        <button class="surgery-btn selected" data-surgery="eye" onclick="selectSurgery(this)" type="button"><span class="emoji">👁️</span>눈 수술</button>
-        <button class="surgery-btn" data-surgery="nose" onclick="selectSurgery(this)" type="button"><span class="emoji">👃</span>코 수술</button>
-        <button class="surgery-btn" data-surgery="filler" onclick="selectSurgery(this)" type="button"><span class="emoji">💉</span>보톡스 · 필러</button>
-        <button class="surgery-btn" data-surgery="liposuction" onclick="selectSurgery(this)" type="button"><span class="emoji">✨</span>지방흡입</button>
-        <button class="surgery-btn" data-surgery="contour" onclick="selectSurgery(this)" type="button"><span class="emoji">🦷</span>윤곽 수술</button>
-        <button class="surgery-btn" data-surgery="laser" onclick="selectSurgery(this)" type="button"><span class="emoji">🌿</span>피부 레이저</button>
-        <button class="surgery-btn" data-surgery="hair" onclick="selectSurgery(this)" type="button"><span class="emoji">💈</span>모발이식</button>
+        <button class="surgery-btn selected" data-surgery="eye" onclick="selectSurgery(this)" type="button"><span class="emoji">👁️</span><span data-i18n="surgEye">눈 수술</span></button>
+        <button class="surgery-btn" data-surgery="nose" onclick="selectSurgery(this)" type="button"><span class="emoji">👃</span><span data-i18n="surgNose">코 수술</span></button>
+        <button class="surgery-btn" data-surgery="filler" onclick="selectSurgery(this)" type="button"><span class="emoji">💉</span><span data-i18n="surgFiller">보톡스 · 필러</span></button>
+        <button class="surgery-btn" data-surgery="liposuction" onclick="selectSurgery(this)" type="button"><span class="emoji">✨</span><span data-i18n="surgLipo">지방흡입</span></button>
+        <button class="surgery-btn" data-surgery="contour" onclick="selectSurgery(this)" type="button"><span class="emoji">🦷</span><span data-i18n="surgContour">윤곽 수술</span></button>
+        <button class="surgery-btn" data-surgery="laser" onclick="selectSurgery(this)" type="button"><span class="emoji">🌿</span><span data-i18n="surgLaser">피부 레이저</span></button>
+        <button class="surgery-btn" data-surgery="hair" onclick="selectSurgery(this)" type="button"><span class="emoji">💈</span><span data-i18n="surgHair">모발이식</span></button>
       </div>
 
-      <div class="sec-label">복용 중인 약물 / 영양제</div>
+      <div class="sec-label" data-i18n="medLabel">복용 중인 약물 / 영양제</div>
 
-      <div class="meds-section-title">⛔ 수술 전 중단 필요 <span class="badge badge-stop">날짜 제거 필터</span></div>
+      <div class="meds-section-title"><span data-i18n="medStopTitle">⛔ 수술 전 중단 필요</span> <span class="badge badge-stop" data-i18n="medStopBadge">날짜 제거 필터</span></div>
       <div class="meds-box">
         <div class="med-item">
-          <div><div class="med-name">아스피린 / 항응고제</div><div class="med-sub danger">출혈 위험 · 기본 7일 전 중단</div></div>
+          <div><div class="med-name" data-i18n="medAspirin">아스피린 / 항응고제</div><div class="med-sub danger" data-i18n="medAspirinSub">출혈 위험 · 기본 7일 전 중단</div></div>
           <button class="toggle med-toggle" data-med="aspirin" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">비타민 E / 고용량 오메가3</div><div class="med-sub danger">멍·출혈 증가 · 기본 7일 전 중단</div></div>
+          <div><div class="med-name" data-i18n="medVitE">비타민 E / 고용량 오메가3</div><div class="med-sub danger" data-i18n="medVitESub">멍·출혈 증가 · 기본 7일 전 중단</div></div>
           <button class="toggle med-toggle" data-med="vitaminE" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">한약 / 홍삼 / 건강즙</div><div class="med-sub danger">성분 다양 · 기본 7일 전 중단</div></div>
+          <div><div class="med-name" data-i18n="medHerbal">한약 / 홍삼 / 건강즙</div><div class="med-sub danger" data-i18n="medHerbalSub">성분 다양 · 기본 7일 전 중단</div></div>
           <button class="toggle med-toggle" data-med="herbal" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">다이어트 보조제 / 성분 불명 보충제</div><div class="med-sub danger">성분 불명 · 기본 7일 전 중단</div></div>
+          <div><div class="med-name" data-i18n="medDiet">다이어트 보조제 / 성분 불명 보충제</div><div class="med-sub danger" data-i18n="medDietSub">성분 불명 · 기본 7일 전 중단</div></div>
           <button class="toggle med-toggle" data-med="diet" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">호르몬제 / 피임약</div><div class="med-sub danger">혈전 관련 확인 필요 · 보수적으로 10일 전 반영</div></div>
+          <div><div class="med-name" data-i18n="medHormone">호르몬제 / 피임약</div><div class="med-sub danger" data-i18n="medHormoneSub">혈전 관련 확인 필요 · 보수적으로 10일 전 반영</div></div>
           <button class="toggle med-toggle" data-med="hormone" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">이소트레티노인 계열</div><div class="med-sub danger">피부 레이저는 더 긴 간격 필요 가능</div></div>
+          <div><div class="med-name" data-i18n="medIsotret">이소트레티노인 계열</div><div class="med-sub danger" data-i18n="medIsotretSub">피부 레이저는 더 긴 간격 필요 가능</div></div>
           <button class="toggle med-toggle" data-med="isotretinoin" type="button" onclick="toggleMed(this)"></button>
         </div>
       </div>
-      <div class="warn-notice">⚠️ 이 앱은 진단이 아닙니다. 실제 수술 가능일은 병원 지시가 우선입니다. 다만 선택한 약물의 중단 필요 일수는 추천 날짜에서 실제로 필터링됩니다.</div>
+      <div class="warn-notice" data-i18n="medWarnNotice">⚠️ 이 앱은 진단이 아닙니다. 실제 수술 가능일은 병원 지시가 우선입니다. 다만 선택한 약물의 중단 필요 일수는 추천 날짜에서 실제로 필터링됩니다.</div>
 
-      <div class="meds-section-title" style="margin-top:20px;">✅ 보통 유지 약물 <span class="badge badge-ok">날짜 차단 없음</span></div>
+      <div class="meds-section-title" style="margin-top:20px;"><span data-i18n="medSafeTitle">✅ 보통 유지 약물</span> <span class="badge badge-ok" data-i18n="medSafeBadge">날짜 차단 없음</span></div>
       <div class="meds-box safe">
         <div class="med-item">
-          <div><div class="med-name">혈압약</div><div class="med-sub safe-text">보통 유지하되 담당의 확인 필요</div></div>
+          <div><div class="med-name" data-i18n="medBP">혈압약</div><div class="med-sub safe-text" data-i18n="medBPSub">보통 유지하되 담당의 확인 필요</div></div>
           <button class="toggle med-toggle" data-med="bp" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">당뇨약 / 인슐린</div><div class="med-sub safe-text">조절 필요 가능 · 병원 지시 우선</div></div>
+          <div><div class="med-name" data-i18n="medDiabetes">당뇨약 / 인슐린</div><div class="med-sub safe-text" data-i18n="medDiabetesSub">조절 필요 가능 · 병원 지시 우선</div></div>
           <button class="toggle med-toggle" data-med="diabetes" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">갑상선호르몬제 / 신지로이드</div><div class="med-sub safe-text">보통 유지 약물로 분류 · 금식/복용시간은 병원 지시 우선</div></div>
+          <div><div class="med-name" data-i18n="medThyroid">갑상선호르몬제 / 신지로이드</div><div class="med-sub safe-text" data-i18n="medThyroidSub">보통 유지 약물로 분류 · 금식/복용시간은 병원 지시 우선</div></div>
           <button class="toggle med-toggle" data-med="thyroid" type="button" onclick="toggleMed(this)"></button>
         </div>
       </div>
 
-      <div class="meds-section-title" style="margin-top:20px;">🩺 반드시 상담 필요 <span class="badge badge-consult">자동 추천 신뢰도 낮춤</span></div>
+      <div class="meds-section-title" style="margin-top:20px;"><span data-i18n="medConsultTitle">🩺 반드시 상담 필요</span> <span class="badge badge-consult" data-i18n="medConsultBadge">자동 추천 신뢰도 낮춤</span></div>
       <div class="meds-box consult">
         <div class="med-item">
-          <div><div class="med-name">면역억제제 / 류마티스 약</div><div class="med-sub consult-text">수술 종류·질환 상태에 따라 달라짐 · 개별 상담 필요</div></div>
+          <div><div class="med-name" data-i18n="medImmuno">면역억제제 / 류마티스 약</div><div class="med-sub consult-text" data-i18n="medImmunoSub">수술 종류·질환 상태에 따라 달라짐 · 개별 상담 필요</div></div>
           <button class="toggle med-toggle" data-med="immunosuppressant" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">스테로이드 장기복용</div><div class="med-sub consult-text">복용량/기간에 따라 수술 전 조정 필요 가능</div></div>
+          <div><div class="med-name" data-i18n="medSteroid">스테로이드 장기복용</div><div class="med-sub consult-text" data-i18n="medSteroidSub">복용량/기간에 따라 수술 전 조정 필요 가능</div></div>
           <button class="toggle med-toggle" data-med="steroid" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">정신과약 / 수면제</div><div class="med-sub consult-text">마취·진정 약물과 상호작용 확인 필요</div></div>
+          <div><div class="med-name" data-i18n="medPsych">정신과약 / 수면제</div><div class="med-sub consult-text" data-i18n="medPsychSub">마취·진정 약물과 상호작용 확인 필요</div></div>
           <button class="toggle med-toggle" data-med="psych" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">간질약 / 신경과약</div><div class="med-sub consult-text">임의 중단 금지 · 수술 전 복용계획 확인 필요</div></div>
+          <div><div class="med-name" data-i18n="medNeuro">간질약 / 신경과약</div><div class="med-sub consult-text" data-i18n="medNeuroSub">임의 중단 금지 · 수술 전 복용계획 확인 필요</div></div>
           <button class="toggle med-toggle" data-med="neuro" type="button" onclick="toggleMed(this)"></button>
         </div>
         <div class="med-item">
-          <div><div class="med-name">기타 처방약 복용</div><div class="med-sub consult-text">앱이 자동 판정하기 어려운 약물 · 병원 상담 권장</div></div>
+          <div><div class="med-name" data-i18n="medOther">기타 처방약 복용</div><div class="med-sub consult-text" data-i18n="medOtherSub">앱이 자동 판정하기 어려운 약물 · 병원 상담 권장</div></div>
           <button class="toggle med-toggle" data-med="otherRx" type="button" onclick="toggleMed(this)"></button>
         </div>
       </div>
-      <div class="consult-notice">🩺 위 항목은 날짜를 무조건 막는 약이 아니라, <strong>앱 자동 추천보다 담당의 상담이 우선</strong>인 약으로 처리됩니다.</div>
+      <div class="consult-notice" data-i18n="medConsultNotice">🩺 위 항목은 날짜를 무조건 막는 약이 아니라, <strong>앱 자동 추천보다 담당의 상담이 우선</strong>인 약으로 처리됩니다.</div>
     </div>
 
     <div class="sub-form" id="form-business">
-      <div class="sec-label">업종 유형</div>
+      <div class="sec-label" data-i18n="bizTypeLabel">업종 유형</div>
       <div class="option-grid">
-        <button class="option-btn selected" data-option="food" onclick="selectOption(this)" type="button"><span class="emoji">🍽️</span>음식점 · 카페</button>
-        <button class="option-btn" data-option="retail" onclick="selectOption(this)" type="button"><span class="emoji">🛍️</span>소매 · 의류</button>
-        <button class="option-btn" data-option="service" onclick="selectOption(this)" type="button"><span class="emoji">💼</span>사무 · 서비스</button>
-        <button class="option-btn" data-option="beauty" onclick="selectOption(this)" type="button"><span class="emoji">🏥</span>의료 · 미용</button>
-        <button class="option-btn" data-option="factory" onclick="selectOption(this)" type="button"><span class="emoji">🏗️</span>건설 · 제조</button>
-        <button class="option-btn" data-option="it" onclick="selectOption(this)" type="button"><span class="emoji">💻</span>IT · 온라인</button>
+        <button class="option-btn selected" data-option="food" onclick="selectOption(this)" type="button"><span class="emoji">🍽️</span><span data-i18n="bizFood">음식점 · 카페</span></button>
+        <button class="option-btn" data-option="retail" onclick="selectOption(this)" type="button"><span class="emoji">🛍️</span><span data-i18n="bizRetail">소매 · 의류</span></button>
+        <button class="option-btn" data-option="service" onclick="selectOption(this)" type="button"><span class="emoji">💼</span><span data-i18n="bizService">사무 · 서비스</span></button>
+        <button class="option-btn" data-option="beauty" onclick="selectOption(this)" type="button"><span class="emoji">🏥</span><span data-i18n="bizBeauty">의료 · 미용</span></button>
+        <button class="option-btn" data-option="factory" onclick="selectOption(this)" type="button"><span class="emoji">🏗️</span><span data-i18n="bizFactory">건설 · 제조</span></button>
+        <button class="option-btn" data-option="it" onclick="selectOption(this)" type="button"><span class="emoji">💻</span><span data-i18n="bizIT">IT · 온라인</span></button>
       </div>
-      <div class="sec-label">희망 개업 기간</div>
+      <div class="sec-label" data-i18n="bizPeriodLabel">희망 개업 기간</div>
       <div class="birth-row">
         <input type="number" class="input-field" id="business-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
         <input type="number" class="input-field" id="business-end-month" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
       </div>
-      <label class="checkbox-wrap"><input type="checkbox" id="business-hwangdo" checked /> 황도 보조점수 반영</label>
-      <div class="info-banner">🏪 손없는날 + 황도 + 사주 충돌 회피 + 별자리를 기반으로 추천합니다.</div>
+      <label class="checkbox-wrap"><input type="checkbox" id="business-hwangdo" checked /> <span data-i18n="bizHwangdo">황도 보조점수 반영</span></label>
+      <div class="info-banner" data-i18n="bizInfo">🏪 손없는날 + 황도 + 사주 충돌 회피 + 별자리를 기반으로 추천합니다.</div>
     </div>
 
     <div class="sub-form" id="form-moving">
-      <div class="sec-label">이사 유형</div>
+      <div class="sec-label" data-i18n="moveTypeLabel">이사 유형</div>
       <div class="option-grid">
-        <button class="option-btn selected" data-option="home" onclick="selectOption(this)" type="button"><span class="emoji">🏠</span>일반 이사</button>
-        <button class="option-btn" data-option="office" onclick="selectOption(this)" type="button"><span class="emoji">🏢</span>사무실 이사</button>
-        <button class="option-btn" data-option="newhome" onclick="selectOption(this)" type="button"><span class="emoji">🆕</span>신축 입주</button>
-        <button class="option-btn" data-option="rent" onclick="selectOption(this)" type="button"><span class="emoji">🔄</span>전세 · 월세</button>
+        <button class="option-btn selected" data-option="home" onclick="selectOption(this)" type="button"><span class="emoji">🏠</span><span data-i18n="moveHome">일반 이사</span></button>
+        <button class="option-btn" data-option="office" onclick="selectOption(this)" type="button"><span class="emoji">🏢</span><span data-i18n="moveOffice">사무실 이사</span></button>
+        <button class="option-btn" data-option="newhome" onclick="selectOption(this)" type="button"><span class="emoji">🆕</span><span data-i18n="moveNew">신축 입주</span></button>
+        <button class="option-btn" data-option="rent" onclick="selectOption(this)" type="button"><span class="emoji">🔄</span><span data-i18n="moveRent">전세 · 월세</span></button>
       </div>
-      <div class="sec-label">희망 이사 기간</div>
+      <div class="sec-label" data-i18n="movePeriodLabel">희망 이사 기간</div>
       <div class="birth-row">
         <input type="number" class="input-field" id="moving-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
         <input type="number" class="input-field" id="moving-end-month" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
       </div>
-      <div class="info-banner">🏠 손없는날을 가장 강하게 반영하고, 사주 충돌일을 회피합니다.</div>
+      <div class="info-banner" data-i18n="moveInfo">🏠 손없는날을 가장 강하게 반영하고, 사주 충돌일을 회피합니다.</div>
     </div>
 
     <div class="sub-form" id="form-travel">
-      <div class="sec-label">여행 유형</div>
+      <div class="sec-label" data-i18n="travelTypeLabel">여행 유형</div>
       <div class="option-grid">
-        <button class="option-btn selected" data-option="overseas" onclick="selectOption(this)" type="button"><span class="emoji">✈️</span>해외여행</button>
-        <button class="option-btn" data-option="domestic" onclick="selectOption(this)" type="button"><span class="emoji">🚗</span>국내여행</button>
-        <button class="option-btn" data-option="honeymoon" onclick="selectOption(this)" type="button"><span class="emoji">💑</span>신혼여행</button>
-        <button class="option-btn" data-option="family" onclick="selectOption(this)" type="button"><span class="emoji">👨‍👩‍👧</span>가족여행</button>
+        <button class="option-btn selected" data-option="overseas" onclick="selectOption(this)" type="button"><span class="emoji">✈️</span><span data-i18n="travelOverseas">해외여행</span></button>
+        <button class="option-btn" data-option="domestic" onclick="selectOption(this)" type="button"><span class="emoji">🚗</span><span data-i18n="travelDomestic">국내여행</span></button>
+        <button class="option-btn" data-option="honeymoon" onclick="selectOption(this)" type="button"><span class="emoji">💑</span><span data-i18n="travelHoney">신혼여행</span></button>
+        <button class="option-btn" data-option="family" onclick="selectOption(this)" type="button"><span class="emoji">👨‍👩‍👧</span><span data-i18n="travelFamily">가족여행</span></button>
       </div>
-      <div class="sec-label">출발 희망 기간</div>
+      <div class="sec-label" data-i18n="travelPeriodLabel">출발 희망 기간</div>
       <div class="birth-row">
         <input type="number" class="input-field" id="travel-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
         <input type="number" class="input-field" id="travel-end-month" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
       </div>
-      <div class="info-banner">✈️ 별자리 성향 + 달 주기 + 출발 요일을 기반으로 추천합니다.</div>
+      <div class="info-banner" data-i18n="travelInfo">✈️ 별자리 성향 + 달 주기 + 출발 요일을 기반으로 추천합니다.</div>
     </div>
 
     <div class="sub-form" id="form-love">
-      <div class="sec-label">유형</div>
+      <div class="sec-label" data-i18n="loveTypeLabel">유형</div>
       <div class="option-grid">
-        <button class="option-btn selected" data-option="wedding" onclick="selectOption(this)" type="button"><span class="emoji">💒</span>결혼식 날짜</button>
-        <button class="option-btn" data-option="proposal" onclick="selectOption(this)" type="button"><span class="emoji">💍</span>약혼 · 프로포즈</button>
-        <button class="option-btn" data-option="meeting" onclick="selectOption(this)" type="button"><span class="emoji">👫</span>첫 선보기</button>
-        <button class="option-btn" data-option="date" onclick="selectOption(this)" type="button"><span class="emoji">☕</span>맞선 · 소개팅</button>
+        <button class="option-btn selected" data-option="wedding" onclick="selectOption(this)" type="button"><span class="emoji">💒</span><span data-i18n="loveWedding">결혼식 날짜</span></button>
+        <button class="option-btn" data-option="proposal" onclick="selectOption(this)" type="button"><span class="emoji">💍</span><span data-i18n="loveProposal">약혼 · 프로포즈</span></button>
+        <button class="option-btn" data-option="meeting" onclick="selectOption(this)" type="button"><span class="emoji">👫</span><span data-i18n="loveMeeting">첫 선보기</span></button>
+        <button class="option-btn" data-option="date" onclick="selectOption(this)" type="button"><span class="emoji">☕</span><span data-i18n="loveDate">맞선 · 소개팅</span></button>
       </div>
-      <div class="sec-label">상대방 출생 연도 (선택)</div>
+      <div class="sec-label" data-i18n="lovePartnerYear">상대방 출생 연도 (선택)</div>
       <input type="number" class="input-field" id="partner-year" placeholder="상대방 출생 연도" inputmode="numeric" />
-      <div class="sec-label">희망 기간</div>
+      <div class="sec-label" data-i18n="lovePeriodLabel">희망 기간</div>
       <div class="birth-row">
         <input type="number" class="input-field" id="love-start-month" placeholder="시작 월" value="5" min="1" max="12" inputmode="numeric" />
         <input type="number" class="input-field" id="love-end-month" placeholder="종료 월" value="10" min="1" max="12" inputmode="numeric" />
       </div>
-      <label class="checkbox-wrap"><input type="checkbox" id="love-hwangdo" checked /> 황도 보조점수 반영</label>
-      <div class="info-banner">💍 주말 선호 + 손없는날 + 별자리 + 상대 띠 조화를 기반으로 추천합니다.</div>
+      <label class="checkbox-wrap"><input type="checkbox" id="love-hwangdo" checked /> <span data-i18n="loveHwangdo">황도 보조점수 반영</span></label>
+      <div class="info-banner" data-i18n="loveInfo">💍 주말 선호 + 손없는날 + 별자리 + 상대 띠 조화를 기반으로 추천합니다.</div>
     </div>
 
     <div class="sub-form" id="form-invest">
-      <div class="sec-label">투자 유형</div>
+      <div class="sec-label" data-i18n="investTypeLabel">투자 유형</div>
       <div class="option-grid">
-        <button class="option-btn selected" data-option="stock-domestic" onclick="selectOption(this)" type="button"><span class="emoji">🇰🇷</span>국내주식</button>
-        <button class="option-btn" data-option="stock-overseas" onclick="selectOption(this)" type="button"><span class="emoji">🌐</span>미국주식</button>
-        <button class="option-btn" data-option="coin" onclick="selectOption(this)" type="button"><span class="emoji">🪙</span>코인</button>
-        <button class="option-btn" data-option="realestate" onclick="selectOption(this)" type="button"><span class="emoji">🏢</span>부동산</button>
+        <button class="option-btn selected" data-option="stock-domestic" onclick="selectOption(this)" type="button"><span class="emoji">🇰🇷</span><span data-i18n="investKR">국내주식</span></button>
+        <button class="option-btn" data-option="stock-overseas" onclick="selectOption(this)" type="button"><span class="emoji">🌐</span><span data-i18n="investUS">미국주식</span></button>
+        <button class="option-btn" data-option="coin" onclick="selectOption(this)" type="button"><span class="emoji">🪙</span><span data-i18n="investCoin">코인</span></button>
+        <button class="option-btn" data-option="realestate" onclick="selectOption(this)" type="button"><span class="emoji">🏢</span><span data-i18n="investRE">부동산</span></button>
       </div>
-      <div class="sec-label">희망 투자 기간</div>
+      <div class="sec-label" data-i18n="investPeriodLabel">희망 투자 기간</div>
       <div class="birth-row">
         <input type="number" class="input-field" id="invest-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
         <input type="number" class="input-field" id="invest-end-month" placeholder="종료 월" value="12" min="1" max="12" inputmode="numeric" />
       </div>
-      <div class="info-banner">📈 달 차오름 + 황도길일 + 목성 요일 + 별자리 금전운을 기반으로 추천합니다.</div>
-      <div class="warn-notice" style="margin-top:12px;">⚠️ 역학 기반 <strong>참고용</strong>입니다. 실제 투자 손익에 대한 책임을 지지 않으며, 재무 조언이 아닙니다.</div>
+      <div class="info-banner" data-i18n="investInfo">📈 달 차오름 + 황도길일 + 목성 요일 + 별자리 금전운을 기반으로 추천합니다.</div>
+      <div class="warn-notice" style="margin-top:12px;" data-i18n="investWarn">⚠️ 역학 기반 <strong>참고용</strong>입니다. 실제 투자 손익에 대한 책임을 지지 않으며, 재무 조언이 아닙니다.</div>
     </div>
 
     <div class="sub-form" id="form-birth">
-      <div class="sec-label">출산 유형</div>
+      <div class="sec-label" data-i18n="birthTypeLabel">출산 유형</div>
       <div class="option-grid">
-        <button class="option-btn selected" data-option="csection" onclick="selectOption(this)" type="button"><span class="emoji">🏥</span>제왕절개<br>날짜 선택</button>
-        <button class="option-btn" data-option="postcare" onclick="selectOption(this)" type="button"><span class="emoji">🌸</span>산후조리<br>시작 길일</button>
-        <button class="option-btn" data-option="natural" onclick="selectOption(this)" type="button"><span class="emoji">🍼</span>자연분만<br>길일 참고</button>
-        <button class="option-btn" data-option="naming" onclick="selectOption(this)" type="button"><span class="emoji">✨</span>백일·돌<br>행사 길일</button>
+        <button class="option-btn selected" data-option="csection" onclick="selectOption(this)" type="button"><span class="emoji">🏥</span><span data-i18n="birthCS">제왕절개</span><br><span data-i18n="birthCSsub">날짜 선택</span></button>
+        <button class="option-btn" data-option="postcare" onclick="selectOption(this)" type="button"><span class="emoji">🌸</span><span data-i18n="birthPost">산후조리</span><br><span data-i18n="birthPostSub">시작 길일</span></button>
+        <button class="option-btn" data-option="natural" onclick="selectOption(this)" type="button"><span class="emoji">🍼</span><span data-i18n="birthNatural">자연분만</span><br><span data-i18n="birthNaturalSub">길일 참고</span></button>
+        <button class="option-btn" data-option="naming" onclick="selectOption(this)" type="button"><span class="emoji">✨</span><span data-i18n="birthNaming">백일·돌</span><br><span data-i18n="birthNamingSub">행사 길일</span></button>
       </div>
-      <div class="sec-label">출산 예정월 범위</div>
+      <div class="sec-label" data-i18n="birthPeriodLabel">출산 예정월 범위</div>
       <div class="birth-row">
         <input type="number" class="input-field" id="birth-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
         <input type="number" class="input-field" id="birth-end-month" placeholder="종료 월" value="3" min="1" max="12" inputmode="numeric" />
       </div>
-      <div class="info-banner">🍼 손없는날 + 사주 합(六合) + 달 주기를 기반으로 추천합니다.</div>
-      <div class="warn-notice" style="margin-top:12px;">⚠️ 이 앱의 출산 추천은 사주·달 주기 기반 <strong>참고용</strong>입니다. 실제 출산 일정은 반드시 담당 의료진의 지시를 따르세요.</div>
+      <div class="info-banner" data-i18n="birthInfo">🍼 손없는날 + 사주 합(六合) + 달 주기를 기반으로 추천합니다.</div>
+      <div class="warn-notice" style="margin-top:12px;" data-i18n="birthWarn">⚠️ 이 앱의 출산 추천은 사주·달 주기 기반 <strong>참고용</strong>입니다. 실제 출산 일정은 반드시 담당 의료진의 지시를 따르세요.</div>
     </div>
   </div>
 
@@ -2142,7 +2140,7 @@ body {
       <div class="premium-lock-desc" data-i18n="premiumDesc">최고 길일 TOP 1을 확인하려면<br/>프리미엄을 구매하세요</div>
       <button class="premium-lock-btn" type="button" data-i18n="premiumUnlock">₩1,900 잠금해제</button>
     </div>
-    <div class="best-badge">최적</div>
+    <div class="best-badge" data-i18n="bestBadge">최적</div>
     <div class="date-top">
       <div class="date-num" id="date0">-</div>
       <div>
@@ -2151,7 +2149,7 @@ body {
       </div>
     </div>
     <div class="score-row" id="tags0"></div>
-    <div class="bar-label"><span>종합 점수</span><span id="score0" style="color:#E8006A;font-size:20px;font-weight:800;font-family:'Noto Serif KR',serif;">-</span></div>
+    <div class="bar-label"><span data-i18n="totalScore">종합 점수</span><span id="score0" style="color:#E8006A;font-size:20px;font-weight:800;font-family:'Noto Serif KR',serif;">-</span></div>
     <div class="bar-track"><div class="bar-fill" id="bar0" style="width:0%"></div></div>
   </div>
 
@@ -2164,7 +2162,7 @@ body {
       </div>
     </div>
     <div class="score-row" id="tags1"></div>
-    <div class="bar-label"><span>종합 점수</span><span id="score1" style="color:#E8006A;font-size:20px;font-weight:800;font-family:'Noto Serif KR',serif;">-</span></div>
+    <div class="bar-label"><span data-i18n="totalScore">종합 점수</span><span id="score1" style="color:#E8006A;font-size:20px;font-weight:800;font-family:'Noto Serif KR',serif;">-</span></div>
     <div class="bar-track"><div class="bar-fill" id="bar1" style="width:0%"></div></div>
   </div>
 
@@ -2177,27 +2175,27 @@ body {
       </div>
     </div>
     <div class="score-row" id="tags2"></div>
-    <div class="bar-label"><span>종합 점수</span><span id="score2" style="color:#E8006A;font-size:20px;font-weight:800;font-family:'Noto Serif KR',serif;">-</span></div>
+    <div class="bar-label"><span data-i18n="totalScore">종합 점수</span><span id="score2" style="color:#E8006A;font-size:20px;font-weight:800;font-family:'Noto Serif KR',serif;">-</span></div>
     <div class="bar-track"><div class="bar-fill" id="bar2" style="width:0%"></div></div>
   </div>
 
   <div class="warn-box" id="meds-warn-box">
     <div style="font-size:16px;flex-shrink:0">⚠️</div>
-    <div class="warn-text" id="meds-warning-text">선택한 약물 때문에 일정이 조정되었습니다.</div>
+    <div class="warn-text" id="meds-warning-text" data-i18n="medsWarnDefault">선택한 약물 때문에 일정이 조정되었습니다.</div>
   </div>
 
   <div class="consult-box" id="consult-warn-box">
     <div style="font-size:16px;flex-shrink:0">🩺</div>
-    <div class="consult-text-result" id="consult-warning-text">반드시 담당의 상담이 필요한 약물이 있습니다.</div>
+    <div class="consult-text-result" id="consult-warning-text" data-i18n="consultWarnDefault">반드시 담당의 상담이 필요한 약물이 있습니다.</div>
   </div>
 
   <div class="detail-box">
-    <div class="detail-row"><div class="d-icon">🗓️</div><div><div class="d-key">추천 기준</div><div class="d-val" id="d-core">-</div></div></div>
-    <div class="detail-row"><div class="d-icon">⭐</div><div><div class="d-key">별자리 반영</div><div class="d-val" id="d-zodiac">-</div></div></div>
-    <div class="detail-row"><div class="d-icon">🌙</div><div><div class="d-key">음력 · 손없는날 · 황도</div><div class="d-val" id="d-lunar">-</div></div></div>
-    <div class="detail-row"><div class="d-icon">🧿</div><div><div class="d-key">출생 간지 참고</div><div class="d-val" id="d-ganji">-</div></div></div>
-    <div class="detail-row" id="d-meds-row"><div class="d-icon">💊</div><div><div class="d-key">약물 반영</div><div class="d-val" id="d-meds">-</div></div></div>
-    <div class="detail-row" id="d-consult-row"><div class="d-icon">🩺</div><div><div class="d-key">상담 우선 약물</div><div class="d-val" id="d-consult">-</div></div></div>
+    <div class="detail-row"><div class="d-icon">🗓️</div><div><div class="d-key" data-i18n="detailCore">추천 기준</div><div class="d-val" id="d-core">-</div></div></div>
+    <div class="detail-row"><div class="d-icon">⭐</div><div><div class="d-key" data-i18n="detailZodiac">별자리 반영</div><div class="d-val" id="d-zodiac">-</div></div></div>
+    <div class="detail-row"><div class="d-icon">🌙</div><div><div class="d-key" data-i18n="detailLunar">음력 · 손없는날 · 황도</div><div class="d-val" id="d-lunar">-</div></div></div>
+    <div class="detail-row"><div class="d-icon">🧿</div><div><div class="d-key" data-i18n="detailGanji">출생 간지 참고</div><div class="d-val" id="d-ganji">-</div></div></div>
+    <div class="detail-row" id="d-meds-row"><div class="d-icon">💊</div><div><div class="d-key" data-i18n="detailMeds">약물 반영</div><div class="d-val" id="d-meds">-</div></div></div>
+    <div class="detail-row" id="d-consult-row"><div class="d-icon">🩺</div><div><div class="d-key" data-i18n="detailConsult">상담 우선 약물</div><div class="d-val" id="d-consult">-</div></div></div>
   </div>
 
   <!-- 프리미엄 구매 배너 -->
@@ -2209,11 +2207,11 @@ body {
   </div>
 
   <div class="result-cta">
-    <button class="btn-gold" onclick="showCalModal()" type="button">📅 캘린더에 저장</button>
-    <button class="btn-card" onclick="generateShareCard()" type="button">🌸 길일 카드 저장</button>
+    <button class="btn-gold" onclick="showCalModal()" type="button" data-i18n="btnCalSave">📅 캘린더에 저장</button>
+    <button class="btn-card" onclick="generateShareCard()" type="button" data-i18n="btnShareCard">🌸 길일 카드 저장</button>
     <div class="share-row">
-      <button class="btn-kakao" onclick="shareKakao()" type="button"><span>💬</span> 공유</button>
-      <button class="btn-copy" onclick="copyLink()" type="button"><span>🔗</span> 복사</button>
+      <button class="btn-kakao" onclick="shareKakao()" type="button" data-i18n="btnShare"><span>💬</span> 공유</button>
+      <button class="btn-copy" onclick="copyLink()" type="button" data-i18n="btnCopy"><span>🔗</span> 복사</button>
     </div>
   </div>
 </div>
@@ -2250,7 +2248,7 @@ body {
     <div style="height:1px;background:linear-gradient(to right,transparent,rgba(232,0,106,0.3),transparent);margin-bottom:18px;"></div>
 
     <!-- TOP3 날짜 -->
-    <p style="font-size:9px;color:#B86010;letter-spacing:2px;font-style:italic;margin:0 0 12px;">추천 길일 TOP 3</p>
+    <p style="font-size:9px;color:#B86010;letter-spacing:2px;font-style:italic;margin:0 0 12px;" data-i18n="top3Label">추천 길일 TOP 3</p>
 
     <!-- 1등 -->
     <div id="card-date0" style="background:rgba(232,0,106,0.13);border:1.5px solid rgba(232,0,106,0.38);border-radius:14px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
@@ -2261,7 +2259,7 @@ body {
       </div>
       <div style="text-align:right;">
         <p style="font-size:11px;font-weight:600;color:#E8006A;margin:0;" id="card-d0-score">-</p>
-        <p style="font-size:9px;color:rgba(42,26,26,0.35);margin:0;">점수</p>
+        <p style="font-size:9px;color:rgba(42,26,26,0.35);margin:0;" data-i18n="shareCardScoreSuffix">점수</p>
       </div>
     </div>
 
@@ -2291,17 +2289,17 @@ body {
     <!-- 하단 태그 + 출처 -->
     <div style="display:flex;align-items:center;justify-content:space-between;">
       <div id="card-tags" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
-      <p style="font-size:9px;color:rgba(42,26,26,0.30);margin:0;letter-spacing:0.5px;white-space:nowrap;">길일 앱</p>
+      <p style="font-size:9px;color:rgba(42,26,26,0.30);margin:0;letter-spacing:0.5px;white-space:nowrap;" data-i18n="shareCardAppName">길일 앱</p>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="calModal" onclick="hideCalModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-title">📅 캘린더에 저장</div>
-    <div class="modal-sub">저장할 날짜를 선택하세요</div>
+    <div class="modal-title" data-i18n="calModalTitle">📅 캘린더에 저장</div>
+    <div class="modal-sub" data-i18n="calModalSub">저장할 날짜를 선택하세요</div>
     <div id="cal-buttons"></div>
-    <button class="modal-close" onclick="hideCalModal()" type="button">닫기</button>
+    <button class="modal-close" onclick="hideCalModal()" type="button" data-i18n="calModalClose">닫기</button>
   </div>
 </div>
 
@@ -2660,7 +2658,7 @@ function isValidMonthDay(month, day) {
 function toMonthDayValue(m, d) { return m * 100 + d; }
 function clampScore(val) { return Math.max(0, Math.min(100, Math.round(val))); }
 function formatDate(date) {
-  return date.getFullYear() + '년 ' + (date.getMonth()+1) + '월 ' + date.getDate() + '일';
+  return date.getFullYear() + t('unitYear') + ' ' + (date.getMonth()+1) + t('unitMonth') + ' ' + date.getDate() + t('unitDay');
 }
 
 // ────────────────────────────────────────────────
@@ -2745,14 +2743,14 @@ function getMoonPhase(date) {
   var known = new Date(2000, 0, 6, 18, 14, 0);
   var diff = (date - known) / 86400000;
   var phase = ((diff % 29.53058867) + 29.53058867) % 29.53058867;
-  if (phase < 1.5)  return { name:'🌑 삭 직후',   bucket:'new',         score:10 };
-  if (phase < 6.5)  return { name:'🌒 초승',       bucket:'waxing',      score:9  };
-  if (phase < 10.5) return { name:'🌓 상현',       bucket:'half',        score:7  };
-  if (phase < 13.5) return { name:'🌔 차오름',     bucket:'growing',     score:5  };
-  if (phase < 16.5) return { name:'🌕 보름',       bucket:'full',        score:2  };
-  if (phase < 20.5) return { name:'🌖 기우는 달',  bucket:'waning',      score:8  };
-  if (phase < 24.5) return { name:'🌗 하현',       bucket:'lastquarter', score:8  };
-  return              { name:'🌘 그믐 전',    bucket:'dark',        score:9  };
+  if (phase < 1.5)  return { name:'🌑 ' + t('moonNew'),          bucket:'new',         score:10 };
+  if (phase < 6.5)  return { name:'🌒 ' + t('moonWaxCrescent'), bucket:'waxing',      score:9  };
+  if (phase < 10.5) return { name:'🌓 ' + t('moonFirstQ'),      bucket:'half',        score:7  };
+  if (phase < 13.5) return { name:'🌔 ' + t('moonWaxGibbous'),  bucket:'growing',     score:5  };
+  if (phase < 16.5) return { name:'🌕 ' + t('moonFull'),        bucket:'full',        score:2  };
+  if (phase < 20.5) return { name:'🌖 ' + t('moonWanGibbous'),  bucket:'waning',      score:8  };
+  if (phase < 24.5) return { name:'🌗 ' + t('moonLastQ'),       bucket:'lastquarter', score:8  };
+  return              { name:'🌘 ' + t('moonWanCrescent'), bucket:'dark',        score:9  };
 }
 
 function isSonEobsneunNal(lunarDay) {
@@ -2810,21 +2808,25 @@ function getDayGanji(date) {
 // ────────────────────────────────────────────────
 // 별자리
 // ────────────────────────────────────────────────
+var SIGN_KEYS = ['Capricorn','Aquarius','Pisces','Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius'];
+
 function getWesternSign(month, day) {
   if (!isValidMonthDay(month, day)) return null;
   var md = toMonthDayValue(month, day);
-  if (md >= 120 && md <= 218) return WESTERN_SIGNS[1];
-  if (md >= 219 && md <= 320) return WESTERN_SIGNS[2];
-  if (md >= 321 && md <= 419) return WESTERN_SIGNS[3];
-  if (md >= 420 && md <= 520) return WESTERN_SIGNS[4];
-  if (md >= 521 && md <= 620) return WESTERN_SIGNS[5];
-  if (md >= 621 && md <= 722) return WESTERN_SIGNS[6];
-  if (md >= 723 && md <= 822) return WESTERN_SIGNS[7];
-  if (md >= 823 && md <= 922) return WESTERN_SIGNS[8];
-  if (md >= 923 && md <= 1022) return WESTERN_SIGNS[9];
-  if (md >= 1023 && md <= 1121) return WESTERN_SIGNS[10];
-  if (md >= 1122 && md <= 1221) return WESTERN_SIGNS[11];
-  return WESTERN_SIGNS[0];
+  var idx = 0;
+  if (md >= 120 && md <= 218) idx = 1;
+  else if (md >= 219 && md <= 320) idx = 2;
+  else if (md >= 321 && md <= 419) idx = 3;
+  else if (md >= 420 && md <= 520) idx = 4;
+  else if (md >= 521 && md <= 620) idx = 5;
+  else if (md >= 621 && md <= 722) idx = 6;
+  else if (md >= 723 && md <= 822) idx = 7;
+  else if (md >= 823 && md <= 922) idx = 8;
+  else if (md >= 923 && md <= 1022) idx = 9;
+  else if (md >= 1023 && md <= 1121) idx = 10;
+  else if (md >= 1122 && md <= 1221) idx = 11;
+  var obj = WESTERN_SIGNS[idx];
+  return { sign: t('sign' + SIGN_KEYS[idx]), note: t('note' + SIGN_KEYS[idx]), traits: obj.traits };
 }
 
 // ────────────────────────────────────────────────
@@ -3350,7 +3352,7 @@ function calculateGilil() {
         date: date,
         month: month,
         day: date.getDate(),
-        dayName: ['일','월','화','수','목','금','토'][date.getDay()],
+        dayName: [t('daySun'),t('dayMon'),t('dayTue'),t('dayWed'),t('dayThu'),t('dayFri'),t('daySat')][date.getDay()],
         lunar: scored.lunar,
         lunarDay: scored.lunarDay,
         isSon: scored.isSon,
@@ -3380,7 +3382,7 @@ function calculateGilil() {
             date: dd,
             month: dd.getMonth()+1,
             day: dd.getDate(),
-            dayName: ['일','월','화','수','목','금','토'][dd.getDay()],
+            dayName: [t('daySun'),t('dayMon'),t('dayTue'),t('dayWed'),t('dayThu'),t('dayFri'),t('daySat')][dd.getDay()],
             lunar: sc2.lunar, lunarDay: sc2.lunarDay,
             isSon: sc2.isSon, isHwangdo: sc2.isHwangdo,
             jianchuName: sc2.jianchuName, dayGanji: sc2.dayGanji,
@@ -3407,7 +3409,7 @@ function calculateGilil() {
       if (!tooClose) top3.push(cand);
     }
 
-    if (top3.length < 3) throw new Error('추천 날짜를 충분히 찾지 못했습니다. 기간을 넓혀주세요.');
+    if (top3.length < 3) throw new Error(t('errNotEnoughDates'));
 
     // 바 시각화: 1등 = 100%, 나머지 상대 비율 (차이가 보이도록)
     var maxRaw = Math.max(top3[0].rawScore, 1); // NaN/음수 방어
@@ -3439,7 +3441,7 @@ function calculateGilil() {
     goTo('s3');
   } catch (err) {
     showLoading(false);
-    showToastError(err.message || '계산 중 오류가 발생했습니다.');
+    showToastError(err.message || t('errCalcFailed'));
   }
   }, 1600);
 }
@@ -3451,29 +3453,29 @@ function renderResults() {
   if (!top3Results.length || !latestAnalysis) return;
 
   var catLabelMap = {
-    surgery:'성형 · 시술', business:'개업', moving:'이사', travel:'여행', love:'결혼 · 선보기',
-    invest:'투자', birth:'출산',
-    'stock-domestic':'국내주식 투자', 'stock-overseas':'해외주식 투자'
+    surgery:t('catSurgeryLabel'), business:t('catBusinessLabel'), moving:t('catMovingLabel'), travel:t('catTravelLabel'), love:t('catLoveLabel'),
+    invest:t('catInvestLabel'), birth:t('catBirthLabel'),
+    'stock-domestic':t('catStockKR'), 'stock-overseas':t('catStockUS')
   };
   var displayCat = (currentCat === 'invest' && (latestAnalysis.selectedOption === 'stock-domestic' || latestAnalysis.selectedOption === 'stock-overseas'))
     ? latestAnalysis.selectedOption
     : currentCat;
   var catLabel = catLabelMap[displayCat] || catLabelMap[currentCat] || '';
 
-  var greet = latestAnalysis.birthYear + '년생 · ' + latestAnalysis.birthType + ' 입력 · ' + latestAnalysis.ganji;
-  if (latestAnalysis.birthApprox) greet += ' · 음력 근사 포함';
+  var greet = latestAnalysis.birthYear + t('resultGreetSuffix') + ' · ' + latestAnalysis.birthType + ' ' + t('resultGreetInput') + ' · ' + latestAnalysis.ganji;
+  if (latestAnalysis.birthApprox) greet += ' · ' + t('resultGreetApprox');
   document.getElementById('result-greeting').textContent = greet;
   document.getElementById('result-title').innerHTML =
-    '최적의 <span>' + catLabel + ' 길일</span> 3일을<br />찾았습니다';
+    t('resultTitle').replace('{cat}', catLabel);
 
   var bannerText = {
-    surgery:  '약물 필터 → 충·삼형 제거 → 별자리·손없는날·달 주기·황도 중심 개인화 추천',
-    business: '손없는날 최우선 + 황도 + 사주 충돌 회피 + 별자리 개인화',
-    moving:   '손없는날 최우선 + 사주 충돌 강회피 + 별자리 반영',
-    travel:   '별자리 성향 + 달 흐름 + 사주 합 반영 + 출발 요일',
-    love:     '주말 선호 + 손없는날 + 황도 + 별자리 + 궁합 보정',
-    invest:   '달 차오름 + 황도길일 + 목성 요일 + 별자리 금전운 + 사주 육합 반영',
-    birth:    '달 차오름 최우선 + 손없는날 강반영 + 사주 육합 + 황도 보조'
+    surgery:  t('bannerSurgery'),
+    business: t('bannerBusiness'),
+    moving:   t('bannerMoving'),
+    travel:   t('bannerTravel'),
+    love:     t('bannerLove'),
+    invest:   t('bannerInvest'),
+    birth:    t('bannerBirth')
   };
   document.getElementById('moon-banner').textContent = bannerText[currentCat] || '';
 
@@ -3482,26 +3484,26 @@ function renderResults() {
 
     // TOP 1 무료 사용자: DOM 데이터도 숨김 (보안)
     if (i === 0 && !isPremium()) {
-      document.getElementById('date0').textContent = '??월 ??일';
-      document.getElementById('day0').textContent = '???요일';
+      document.getElementById('date0').textContent = '??' + t('unitMonth') + ' ??' + t('unitDay');
+      document.getElementById('day0').textContent = '???' + t('unitDayOfWeek');
       document.getElementById('lunar0').innerHTML = '🔒 ' + t('premiumCalDesc');
-      document.getElementById('score0').textContent = '??점';
+      document.getElementById('score0').textContent = '??' + t('unitScore');
       document.getElementById('bar0').style.width = '100%';
       document.getElementById('tags0').innerHTML = '';
       continue;
     }
 
-    document.getElementById('date' + i).textContent = r.month + '월 ' + r.day + '일';
-    document.getElementById('day' + i).textContent = r.dayName + '요일';
+    document.getElementById('date' + i).textContent = r.month + t('unitMonth') + ' ' + r.day + t('unitDay');
+    document.getElementById('day' + i).textContent = r.dayName + t('unitDayOfWeek');
 
-    var lunarText = '음력 ' + r.lunar.year + '년 ' + r.lunar.month + '월 ' + r.lunar.day + '일 · ' + r.dayGanji;
+    var lunarText = t('lunarPrefix') + ' ' + r.lunar.year + t('unitYear') + ' ' + r.lunar.month + t('unitMonth') + ' ' + r.lunar.day + t('unitDay') + ' · ' + r.dayGanji;
     if (r.lunar.term) lunarText += ' · 🌿 ' + r.lunar.term;
-    if (r.isSon) lunarText += ' <span class="inline-badge badge-son">손없는날</span>';
+    if (r.isSon) lunarText += ' <span class="inline-badge badge-son">' + t('badgeSon') + '</span>';
     if (r.isHwangdo && (currentCat === 'business' || currentCat === 'moving' || currentCat === 'love' || currentCat === 'invest' || currentCat === 'surgery')) {
-      lunarText += ' <span class="inline-badge badge-hwangdo">황도 ' + r.jianchuName + '</span>';
+      lunarText += ' <span class="inline-badge badge-hwangdo">' + t('badgeHwangdo') + ' ' + r.jianchuName + '</span>';
     }
     document.getElementById('lunar' + i).innerHTML = lunarText;
-    document.getElementById('score' + i).textContent = r.score + '점';
+    document.getElementById('score' + i).textContent = r.score + t('unitScore');
     document.getElementById('bar' + i).style.width = r.score + '%';
 
     var tagHTML = '';
@@ -3514,10 +3516,9 @@ function renderResults() {
   document.getElementById('d-core').innerHTML = top3Results[0].reasons.join(' · ');
   document.getElementById('d-zodiac').innerHTML =
     latestAnalysis.signObj.sign + '<br>' + latestAnalysis.signObj.note;
-  document.getElementById('d-lunar').innerHTML =
-    '손없는날 음력 일자 기준 반영<br>황도 건제12신 기반 보조점수';
+  document.getElementById('d-lunar').innerHTML = t('detailSonText');
   document.getElementById('d-ganji').innerHTML =
-    latestAnalysis.ganji + '<br>충(冲) 강회피 · 삼형(三刑) 감점 · 육합(六合) 가점';
+    latestAnalysis.ganji + '<br>' + t('detailGanjiText');
 
   var medsWarnBox  = document.getElementById('meds-warn-box');
   var consultWarnBox = document.getElementById('consult-warn-box');
@@ -3533,26 +3534,22 @@ function renderResults() {
     if (latestAnalysis.stopMeds.length) {
       var stopLabels = latestAnalysis.stopMeds.map(function(m) { return m.rule.label; }).join(', ');
       document.getElementById('meds-warning-text').innerHTML =
-        stopLabels + ' 선택 → <strong>' + formatDate(latestAnalysis.earliestSafeDate) + '</strong> 이후 ' +
-        formatDate(latestAnalysis.surgeryWindow.end) + '까지 범위에서 추천';
-      document.getElementById('d-meds').innerHTML =
-        '약물 중단기간 반영<br>안전일 ~ 안전일+35일 범위로 후보 제한';
+        stopLabels + ' ' + t('medResultStopApplied').replace('{date}', formatDate(latestAnalysis.earliestSafeDate)).replace('{end}', formatDate(latestAnalysis.surgeryWindow.end));
+      document.getElementById('d-meds').innerHTML = t('medResultApplied');
     } else {
-      document.getElementById('meds-warning-text').innerHTML =
-        '중단 필요 약물 없음 · 오늘+3일 ~ 오늘+45일 범위에서 추천';
-      document.getElementById('d-meds').innerHTML =
-        '중단 약물 미선택<br>오늘+3~45일 범위 탐색';
+      document.getElementById('meds-warning-text').innerHTML = t('medResultNoStop');
+      document.getElementById('d-meds').innerHTML = t('medResultNone');
     }
 
     if (latestAnalysis.consultMeds.length) {
       var cLabels = latestAnalysis.consultMeds.map(function(m) { return m.rule.label; }).join(', ');
       document.getElementById('consult-warning-text').innerHTML =
-        cLabels + '<br><strong>담당의 상담 후 날짜 확정 권장</strong>';
+        cLabels + '<br><strong>' + t('consultConfirm') + '</strong>';
       document.getElementById('d-consult').innerHTML =
-        cLabels + '<br>자동 추천 신뢰도 낮춤 · 임의 판단 금지';
+        cLabels + '<br>' + t('consultResultText');
     } else {
-      document.getElementById('consult-warning-text').innerHTML = '상담 우선 약물 선택 없음';
-      document.getElementById('d-consult').innerHTML = '상담 우선 약물 미선택';
+      document.getElementById('consult-warning-text').innerHTML = t('consultNoneMed');
+      document.getElementById('d-consult').innerHTML = t('consultResultNone');
     }
   } else {
     medsWarnBox.style.display = 'none';
@@ -3568,7 +3565,7 @@ function renderResults() {
     var m = String(r.date.getMonth()+1).padStart(2,'0');
     var d = String(r.date.getDate()).padStart(2,'0');
     var dateStr = y + m + d;
-    var title = r.month + '월 ' + r.day + '일 ' + catLabel + ' 길일';
+    var title = r.month + t('unitMonth') + ' ' + r.day + t('unitDay') + ' ' + catLabel;
     // TOP 1 무료 사용자 잠금
     if (idx === 0 && !isPremium()) {
       calButtons +=
@@ -3580,7 +3577,7 @@ function renderResults() {
       calButtons +=
         '<button class="cal-btn" type="button" onclick="saveToCalendar(\'' + dateStr + '\',\'' + title + '\')">' +
         '<span class="cal-icon">' + medals[idx] + '</span>' +
-        '<div><strong>' + r.month + '월 ' + r.day + '일 (' + r.dayName + ')</strong> · ' + r.score + '점</div>' +
+        '<div><strong>' + r.month + t('unitMonth') + ' ' + r.day + t('unitDay') + ' (' + r.dayName + ')</strong> · ' + r.score + t('unitScore') + '</div>' +
         '</button>';
     }
   });
@@ -3801,15 +3798,15 @@ function getBirthDate() {
   var y = parseInt(document.getElementById('birthyear').value, 10);
   var m = parseInt(document.getElementById('birthmonth').value, 10);
   var d = parseInt(document.getElementById('birthday').value, 10);
-  if (!y || !m || !d) throw new Error('생년월일을 입력해주세요 🗓️');
-  if (y < 1900 || y > 2100) throw new Error('연도는 1900~2100 사이로 입력해주세요');
-  if (m < 1 || m > 12) throw new Error('월은 1~12 사이로 입력해주세요');
-  if (d < 1 || d > 31) throw new Error('일은 1~31 사이로 입력해주세요');
+  if (!y || !m || !d) throw new Error(t('errBirthRequired'));
+  if (y < 1900 || y > 2100) throw new Error(t('errYearRange'));
+  if (m < 1 || m > 12) throw new Error(t('errMonthRange'));
+  if (d < 1 || d > 31) throw new Error(t('errDayRange'));
   if (calType === 'solar') {
-    if (!isValidDate(y, m, d)) throw new Error('존재하지 않는 날짜예요. 다시 확인해주세요 🙏');
+    if (!isValidDate(y, m, d)) throw new Error(t('errInvalidDate'));
   } else {
     // 음력은 최대 30일
-    if (d > 30) throw new Error('음력 날짜는 1~30일 사이로 입력해주세요');
+    if (d > 30) throw new Error(t('errLunarDayRange'));
   }
   if (calType === 'solar') return { originalType:'양력', date:new Date(y, m-1, d), approx:false };
   if (calType === 'lunar') return { originalType:'음력', date:lunarToSolar(y, m, d, false), approx:(!LUNAR_NEW_YEAR[y]||!LUNAR_MONTHS[y]) };
@@ -3820,39 +3817,39 @@ function getBirthDate() {
 // 공유 / 캘린더
 // ────────────────────────────────────────────────
 function shareKakao() {
-  if (!top3Results.length) { showToast('먼저 길일을 계산해주세요'); return; }
+  if (!top3Results.length) { showToast(t('toastCalcFirst')); return; }
   var medals = ['🥇','🥈','🥉'];
-  var text = '🌙 길일 앱 추천 결과\n\n';
+  var text = t('shareHeader') + '\n\n';
   top3Results.forEach(function(r, i) {
     if (i === 0 && !isPremium()) {
       text += t('premiumLockShare') + '\n';
     } else {
-      text += medals[i] + ' ' + r.month + '월 ' + r.day + '일 (' + r.dayName + ') · ' + r.score + '점\n';
+      text += medals[i] + ' ' + r.month + t('unitMonth') + ' ' + r.day + t('unitDay') + ' (' + r.dayName + ') · ' + r.score + t('unitScore') + '\n';
     }
   });
   if (currentCat === 'surgery' && latestAnalysis.consultMeds.length) {
-    text += '\n※ 상담 우선 약물 있음: 병원 확인 우선';
+    text += '\n' + t('shareConsultWarn');
   }
-  text += '\n기준: 사주 · 별자리 · 손없는날 · 달 주기 · 약물 필터';
+  text += '\n' + t('shareBasis');
   if (navigator.share) {
-    navigator.share({ title:'길일 추천', text:text, url:window.location.href })
-      .catch(function() { copyToClipboard(text); showToast('복사했어요! 붙여넣기 하세요'); });
+    navigator.share({ title:t('shareTitle'), text:text, url:window.location.href })
+      .catch(function() { copyToClipboard(text); showToast(t('toastCopied')); });
   } else {
     copyToClipboard(text);
-    showToast('복사했어요! 붙여넣기 하세요');
+    showToast(t('toastCopied'));
   }
 }
 
 function copyLink() {
-  if (!top3Results.length) { showToast('먼저 길일을 계산해주세요'); return; }
-  var text = '길일 추천\n' + top3Results.map(function(r, idx) {
+  if (!top3Results.length) { showToast(t('toastCalcFirst')); return; }
+  var text = t('shareTitle') + '\n' + top3Results.map(function(r, idx) {
     if (idx === 0 && !isPremium()) {
       return t('premiumLockShare');
     }
-    return ['🥇','🥈','🥉'][idx] + ' ' + r.month + '월 ' + r.day + '일 ' + r.score + '점';
+    return ['🥇','🥈','🥉'][idx] + ' ' + r.month + t('unitMonth') + ' ' + r.day + t('unitDay') + ' ' + r.score + t('unitScore');
   }).join('\n');
   copyToClipboard(text);
-  showToast('복사됐어요');
+  showToast(t('toastCopiedShort'));
 }
 
 // ────────────────────────────────────────────────
@@ -3945,22 +3942,21 @@ function checkDisclaimer() {
 }
 function generateShareCard() {
   if (!top3Results.length || !latestAnalysis) {
-    showToast('먼저 길일을 계산해주세요');
+    showToast(t('toastCalcFirst'));
     return;
   }
 
   // 카드 데이터 채우기
   var catLabelMap2 = {
-    surgery:'성형 · 시술', business:'개업', moving:'이사', travel:'여행',
-    love:'결혼 · 선보기', invest:'투자', birth:'출산',
-    'stock-domestic':'국내주식', 'stock-overseas':'미국주식'
+    surgery:t('catSurgeryLabel'), business:t('catBusinessLabel'), moving:t('catMovingLabel'), travel:t('catTravelLabel'),
+    love:t('catLoveLabel'), invest:t('catInvestLabel'), birth:t('catBirthLabel'),
+    'stock-domestic':t('catStockKR'), 'stock-overseas':t('catStockUS')
   };
   var catLabel2 = catLabelMap2[latestAnalysis.selectedOption] || catLabelMap2[currentCat] || currentCat;
-  document.getElementById('card-catname').textContent = catLabel2 + ' 길일';
+  document.getElementById('card-catname').textContent = catLabel2;
   document.getElementById('card-birthinfo').textContent =
-    latestAnalysis.birthYear + '년생 · ' + latestAnalysis.signObj.sign;
+    latestAnalysis.birthYear + t('resultGreetSuffix') + ' · ' + latestAnalysis.signObj.sign;
 
-  var days = ['일','월','화','수','목','금','토'];
   top3Results.forEach(function(r, i) {
     var mainEl  = document.getElementById('card-d' + i + '-main');
     var subEl   = document.getElementById('card-d' + i + '-sub');
@@ -3973,12 +3969,12 @@ function generateShareCard() {
       subEl.innerHTML = t('premiumDesc');
       scoreEl.textContent = '—';
     } else {
-      mainEl.textContent = r.month + '월 ' + r.day + '일 (' + r.dayName + ')';
+      mainEl.textContent = r.month + t('unitMonth') + ' ' + r.day + t('unitDay') + ' (' + r.dayName + ')';
 
       // 음력 + 손없는날/황도
-      var lunarLine = '음력 ' + r.lunar.month + '/' + r.lunar.day +
-        (r.isSon ? ' · 손없는날' : '') +
-        (r.isHwangdo ? ' · 황도' : '');
+      var lunarLine = t('lunarPrefix') + ' ' + r.lunar.month + '/' + r.lunar.day +
+        (r.isSon ? ' · ' + t('badgeSon') : '') +
+        (r.isHwangdo ? ' · ' + t('badgeHwangdo') : '');
 
       // 왜 좋은 날인지 — good 태그에서 핵심 2~3개 추출
       var reasons = r.tags
@@ -3991,7 +3987,7 @@ function generateShareCard() {
         lunarLine +
         (reasons ? '<br><span style="font-size:9px;color:rgba(192,80,10,0.65);">' + reasons + '</span>' : '');
 
-      scoreEl.textContent = r.score + '점';
+      scoreEl.textContent = r.score + t('unitScore');
     }
   });
 
@@ -4007,7 +4003,7 @@ function generateShareCard() {
     tagsEl.appendChild(span);
   });
 
-  showToast('카드 생성 중...');
+  showToast(t('shareCardGen'));
 
   // html2canvas 로드 후 캡처
   if (typeof html2canvas === 'undefined') {
@@ -4017,7 +4013,7 @@ function generateShareCard() {
     script.onerror = function() {
       // fallback: 텍스트 공유
       shareKakao();
-      showToast('이미지 저장 실패 · 텍스트로 공유합니다');
+      showToast(t('shareCardFail'));
     };
     document.head.appendChild(script);
   } else {
@@ -4042,15 +4038,15 @@ function captureCard() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    showToast('카드 저장 완료 🌸');
+    showToast(t('shareCardDone'));
 
     if (navigator.share && navigator.canShare) {
       canvas.toBlob(function(blob) {
         var file = new File([blob], '길일_추천카드.png', { type: 'image/png' });
         if (navigator.canShare({ files: [file] })) {
           navigator.share({
-            title: '길일 추천',
-            text: '나의 길일 TOP 3',
+            title: t('shareTitle'),
+            text: t('shareCardTitle'),
             files: [file]
           }).catch(function(){});
         }
@@ -4058,7 +4054,7 @@ function captureCard() {
     }
   }).catch(function(err) {
     console.error(err);
-    showToast('캡처 실패 · 다시 시도해주세요');
+    showToast(t('shareCardCaptureFail'));
   });
 }
 
@@ -4077,7 +4073,7 @@ function saveToCalendar(dateStr, title) {
     'DTSTART;VALUE=DATE:' + dateStr + '\r\n' +
     'DTEND;VALUE=DATE:' + endStr + '\r\n' +
     'SUMMARY:' + title + '\r\n' +
-    'DESCRIPTION:길일 앱 추천 일정\r\n' +
+    'DESCRIPTION:' + t('calIcsDesc') + '\r\n' +
     'END:VEVENT\r\nEND:VCALENDAR\r\n';
   var blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
   var url = URL.createObjectURL(blob);
@@ -4086,7 +4082,7 @@ function saveToCalendar(dateStr, title) {
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
   hideCalModal();
-  showToast('캘린더 파일 저장 완료');
+  showToast(t('calFileSaved'));
 }
 
 // ────────────────────────────────────────────────
@@ -4234,10 +4230,10 @@ function personalDayScore(date, birthYear, birthMonth, birthDay) {
   score = Math.max(5, Math.min(100, Math.round(score)));
 
   var tags = [];
-  if (son)      tags.push('손없는날🌟');
-  if (hwangdo)  tags.push('황도🧿');
-  if (hap)      tags.push('육합✨');
-  if (conflict) tags.push('충(冲)⚠️');
+  if (son)      tags.push(t('hwSonTag'));
+  if (hwangdo)  tags.push(t('hwHwangdoTag'));
+  if (hap)      tags.push(t('hwHapTag'));
+  if (conflict) tags.push(t('hwConflictTag'));
   tags.push(moon.name);
   return { score: score, tags: tags, son: son, hwangdo: hwangdo };
 }
@@ -4245,7 +4241,7 @@ function personalDayScore(date, birthYear, birthMonth, birthDay) {
 function renderPersonalWidgets(birthYear, birthMonth, birthDay) {
   var today = new Date();
   today.setHours(0,0,0,0);
-  var DAY_NAMES = ['일','월','화','수','목','금','토'];
+  var DAY_NAMES = [t('daySun'),t('dayMon'),t('dayTue'),t('dayWed'),t('dayThu'),t('dayFri'),t('daySat')];
 
   // 오늘 길일지수
   var td = personalDayScore(today, birthYear, birthMonth, birthDay);
@@ -4264,8 +4260,8 @@ function renderPersonalWidgets(birthYear, birthMonth, birthDay) {
   if (bestDate) {
     var isT = bestDate.getTime() === today.getTime();
     var dateTxt = (bestDate.getMonth()+1) + '/' + bestDate.getDate() + '(' + DAY_NAMES[bestDate.getDay()] + ')';
-    document.getElementById('hw-best-date').textContent  = (isT ? '오늘! ' : '') + dateTxt;
-    document.getElementById('hw-best-score').textContent = bestScore + '점';
+    document.getElementById('hw-best-date').textContent  = (isT ? t('hwToday') : '') + dateTxt;
+    document.getElementById('hw-best-score').textContent = bestScore + t('unitScore');
     var bTags = bestData.tags.slice(0,2).join(' · ');
     document.getElementById('hw-best-sub').textContent   = bTags;
   }
@@ -4275,7 +4271,7 @@ function renderPersonalWidgets(birthYear, birthMonth, birthDay) {
 function renderHomeWidgets() {
   var today = new Date();
   today.setHours(0,0,0,0);
-  var DAY_NAMES = ['일','월','화','수','목','금','토'];
+  var DAY_NAMES = [t('daySun'),t('dayMon'),t('dayTue'),t('dayWed'),t('dayThu'),t('dayFri'),t('daySat')];
   var y = today.getFullYear(), mo = today.getMonth() + 1, todayD = today.getDate();
   var sonDates = sonDatesOfMonth(y, mo);
   var remaining = sonDates.filter(function(d){ return d >= todayD; });
@@ -4287,13 +4283,13 @@ function renderHomeWidgets() {
     isCurrMonth = false;
   }
   document.getElementById('hw-son-month-label').textContent =
-    '🌟 ' + showYear + '년 ' + showMo + '월 손없는날';
+    '🌟 ' + showYear + t('unitYear') + ' ' + showMo + t('unitMonth') + ' ' + t('hwSonMonth');
   var listEl = document.getElementById('hw-son-list');
   listEl.innerHTML = '';
   if (sonDates.length === 0) {
     var noEl = document.createElement('span');
     noEl.className = 'hw-son-chip';
-    noEl.textContent = '손없는날 없음';
+    noEl.textContent = t('hwSonNone');
     listEl.appendChild(noEl);
   } else {
     sonDates.forEach(function(dd) {
@@ -4302,7 +4298,7 @@ function renderHomeWidgets() {
       var isT  = isCurrMonth && dd === todayD;
       var isPast = isCurrMonth && dd < todayD;
       chip.className = 'hw-son-chip' + (isT ? ' is-today' : '') + (isPast ? ' is-past' : '');
-      chip.textContent = showMo + '/' + dd + '(' + DAY_NAMES[dt.getDay()] + ')' + (isT ? ' 오늘' : '');
+      chip.textContent = showMo + '/' + dd + '(' + DAY_NAMES[dt.getDay()] + ')' + (isT ? ' ' + t('hwTodayLabel2') : '');
       listEl.appendChild(chip);
     });
   }
@@ -4421,7 +4417,142 @@ var TEXTS = {
     premiumLockShare: '🔒 TOP 1 길일 · 프리미엄 전용',
     premiumCalLock: 'TOP 1 길일',
     premiumCalDesc: '프리미엄 전용',
-    premiumLoadingProduct: '상품 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.'
+    premiumLoadingProduct: '상품 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.',
+    // ── 수술 폼 ──
+    surgTypeLabel: '수술 / 시술 종류',
+    surgEye: '눈 수술', surgNose: '코 수술', surgFiller: '보톡스 · 필러',
+    surgLipo: '지방흡입', surgContour: '윤곽 수술', surgLaser: '피부 레이저', surgHair: '모발이식',
+    // ── 약물 ──
+    medLabel: '복용 중인 약물 / 영양제',
+    medStopTitle: '⛔ 수술 전 중단 필요', medStopBadge: '날짜 제거 필터',
+    medAspirin: '아스피린 / 항응고제', medAspirinSub: '출혈 위험 · 기본 7일 전 중단',
+    medVitE: '비타민 E / 고용량 오메가3', medVitESub: '멍·출혈 증가 · 기본 7일 전 중단',
+    medHerbal: '한약 / 홍삼 / 건강즙', medHerbalSub: '성분 다양 · 기본 7일 전 중단',
+    medDiet: '다이어트 보조제 / 성분 불명 보충제', medDietSub: '성분 불명 · 기본 7일 전 중단',
+    medHormone: '호르몬제 / 피임약', medHormoneSub: '혈전 관련 확인 필요 · 보수적으로 10일 전 반영',
+    medIsotret: '이소트레티노인 계열', medIsotretSub: '피부 레이저는 더 긴 간격 필요 가능',
+    medWarnNotice: '⚠️ 이 앱은 진단이 아닙니다. 실제 수술 가능일은 병원 지시가 우선입니다. 다만 선택한 약물의 중단 필요 일수는 추천 날짜에서 실제로 필터링됩니다.',
+    medSafeTitle: '✅ 보통 유지 약물', medSafeBadge: '날짜 차단 없음',
+    medBP: '혈압약', medBPSub: '보통 유지하되 담당의 확인 필요',
+    medDiabetes: '당뇨약 / 인슐린', medDiabetesSub: '조절 필요 가능 · 병원 지시 우선',
+    medThyroid: '갑상선호르몬제 / 신지로이드', medThyroidSub: '보통 유지 약물로 분류 · 금식/복용시간은 병원 지시 우선',
+    medConsultTitle: '🩺 반드시 상담 필요', medConsultBadge: '자동 추천 신뢰도 낮춤',
+    medImmuno: '면역억제제 / 류마티스 약', medImmunoSub: '수술 종류·질환 상태에 따라 달라짐 · 개별 상담 필요',
+    medSteroid: '스테로이드 장기복용', medSteroidSub: '복용량/기간에 따라 수술 전 조정 필요 가능',
+    medPsych: '정신과약 / 수면제', medPsychSub: '마취·진정 약물과 상호작용 확인 필요',
+    medNeuro: '간질약 / 신경과약', medNeuroSub: '임의 중단 금지 · 수술 전 복용계획 확인 필요',
+    medOther: '기타 처방약 복용', medOtherSub: '앱이 자동 판정하기 어려운 약물 · 병원 상담 권장',
+    medConsultNotice: '🩺 위 항목은 날짜를 무조건 막는 약이 아니라, <strong>앱 자동 추천보다 담당의 상담이 우선</strong>인 약으로 처리됩니다.',
+    // ── 개업 폼 ──
+    bizTypeLabel: '업종 유형',
+    bizFood: '음식점 · 카페', bizRetail: '소매 · 의류', bizService: '사무 · 서비스',
+    bizBeauty: '의료 · 미용', bizFactory: '건설 · 제조', bizIT: 'IT · 온라인',
+    bizPeriodLabel: '희망 개업 기간', bizHwangdo: '황도 보조점수 반영',
+    bizInfo: '🏪 손없는날 + 황도 + 사주 충돌 회피 + 별자리를 기반으로 추천합니다.',
+    // ── 이사 폼 ──
+    moveTypeLabel: '이사 유형',
+    moveHome: '일반 이사', moveOffice: '사무실 이사', moveNew: '신축 입주', moveRent: '전세 · 월세',
+    movePeriodLabel: '희망 이사 기간',
+    moveInfo: '🏠 손없는날을 가장 강하게 반영하고, 사주 충돌일을 회피합니다.',
+    // ── 여행 폼 ──
+    travelTypeLabel: '여행 유형',
+    travelOverseas: '해외여행', travelDomestic: '국내여행', travelHoney: '신혼여행', travelFamily: '가족여행',
+    travelPeriodLabel: '출발 희망 기간',
+    travelInfo: '✈️ 별자리 성향 + 달 주기 + 출발 요일을 기반으로 추천합니다.',
+    // ── 결혼 폼 ──
+    loveTypeLabel: '유형',
+    loveWedding: '결혼식 날짜', loveProposal: '약혼 · 프로포즈', loveMeeting: '첫 선보기', loveDate: '맞선 · 소개팅',
+    lovePartnerYear: '상대방 출생 연도 (선택)', lovePeriodLabel: '희망 기간', loveHwangdo: '황도 보조점수 반영',
+    loveInfo: '💍 주말 선호 + 손없는날 + 별자리 + 상대 띠 조화를 기반으로 추천합니다.',
+    // ── 투자 폼 ──
+    investTypeLabel: '투자 유형',
+    investKR: '국내주식', investUS: '미국주식', investCoin: '코인', investRE: '부동산',
+    investPeriodLabel: '희망 투자 기간',
+    investInfo: '📈 달 차오름 + 황도길일 + 목성 요일 + 별자리 금전운을 기반으로 추천합니다.',
+    investWarn: '⚠️ 역학 기반 <strong>참고용</strong>입니다. 실제 투자 손익에 대한 책임을 지지 않으며, 재무 조언이 아닙니다.',
+    // ── 출산 폼 ──
+    birthTypeLabel: '출산 유형',
+    birthCS: '제왕절개', birthCSsub: '날짜 선택', birthPost: '산후조리', birthPostSub: '시작 길일',
+    birthNatural: '자연분만', birthNaturalSub: '길일 참고', birthNaming: '백일·돌', birthNamingSub: '행사 길일',
+    birthPeriodLabel: '출산 예정월 범위',
+    birthInfo: '🍼 손없는날 + 사주 합(六合) + 달 주기를 기반으로 추천합니다.',
+    birthWarn: '⚠️ 이 앱의 출산 추천은 사주·달 주기 기반 <strong>참고용</strong>입니다. 실제 출산 일정은 반드시 담당 의료진의 지시를 따르세요.',
+    // ── 공통 ──
+    startMonth: '시작 월', endMonth: '종료 월', partnerYearPH: '상대방 출생 연도',
+    // ── 결과 페이지 ──
+    bestBadge: '최적', totalScore: '종합 점수',
+    detailCore: '추천 기준', detailZodiac: '별자리 반영', detailLunar: '음력 · 손없는날 · 황도',
+    detailGanji: '출생 간지 참고', detailMeds: '약물 반영', detailConsult: '상담 우선 약물',
+    btnCalSave: '📅 캘린더에 저장', btnShareCard: '🌸 길일 카드 저장', btnShare: '💬 공유', btnCopy: '🔗 복사',
+    calModalTitle: '📅 캘린더에 저장', calModalSub: '저장할 날짜를 선택하세요', calModalClose: '닫기',
+    medsWarnDefault: '선택한 약물 때문에 일정이 조정되었습니다.',
+    consultWarnDefault: '반드시 담당의 상담이 필요한 약물이 있습니다.',
+    // ── JS 동적 텍스트 ──
+    catSurgeryLabel: '성형 · 시술', catBusinessLabel: '개업', catMovingLabel: '이사',
+    catTravelLabel: '여행', catLoveLabel: '결혼 · 선보기', catInvestLabel: '투자', catBirthLabel: '출산',
+    catStockKR: '국내주식 투자', catStockUS: '해외주식 투자',
+    resultGreetSuffix: '년생', resultGreetInput: '입력', resultGreetApprox: '음력 근사 포함',
+    resultTitle: '최적의 <span>{cat} 길일</span> 3일을<br />찾았습니다',
+    bannerSurgery: '약물 필터 → 충·삼형 제거 → 별자리·손없는날·달 주기·황도 중심 개인화 추천',
+    bannerBusiness: '손없는날 최우선 + 황도 + 사주 충돌 회피 + 별자리 개인화',
+    bannerMoving: '손없는날 최우선 + 사주 충돌 강회피 + 별자리 반영',
+    bannerTravel: '별자리 성향 + 달 흐름 + 사주 합 반영 + 출발 요일',
+    bannerLove: '주말 선호 + 손없는날 + 황도 + 별자리 + 궁합 보정',
+    bannerInvest: '달 차오름 + 황도길일 + 목성 요일 + 별자리 금전운 + 사주 육합 반영',
+    bannerBirth: '달 차오름 최우선 + 손없는날 강반영 + 사주 육합 + 황도 보조',
+    unitMonth: '월', unitDay: '일', unitDayOfWeek: '요일', unitYear: '년', unitScore: '점',
+    lunarPrefix: '음력', badgeSon: '손없는날', badgeHwangdo: '황도',
+    detailSonText: '손없는날 음력 일자 기준 반영<br>황도 건제12신 기반 보조점수',
+    detailGanjiText: '충(冲) 강회피 · 삼형(三刑) 감점 · 육합(六合) 가점',
+    medResultApplied: '약물 중단기간 반영<br>안전일 ~ 안전일+35일 범위로 후보 제한',
+    medResultNone: '중단 약물 미선택<br>오늘+3~45일 범위 탐색',
+    consultResultText: '자동 추천 신뢰도 낮춤 · 임의 판단 금지',
+    consultResultNone: '상담 우선 약물 미선택',
+    consultConfirm: '담당의 상담 후 날짜 확정 권장',
+    consultNoneMed: '상담 우선 약물 선택 없음',
+    // ── 공유 ──
+    shareTitle: '길일 추천', shareHeader: '🌙 길일 앱 추천 결과',
+    shareConsultWarn: '※ 상담 우선 약물 있음: 병원 확인 우선',
+    shareBasis: '기준: 사주 · 별자리 · 손없는날 · 달 주기 · 약물 필터',
+    toastCalcFirst: '먼저 길일을 계산해주세요', toastCopied: '복사했어요! 붙여넣기 하세요', toastCopiedShort: '복사됐어요',
+    shareCardTitle: '나의 길일 TOP 3', shareCardGen: '카드 생성 중...',
+    shareCardFail: '이미지 저장 실패 · 텍스트로 공유합니다', shareCardDone: '카드 저장 완료 🌸',
+    shareCardCaptureFail: '캡처 실패 · 다시 시도해주세요',
+    shareCardScoreSuffix: '점수', shareCardAppName: '길일 앱',
+    calFileSaved: '캘린더 파일 저장 완료', calIcsDesc: '길일 앱 추천 일정',
+    // ── 에러 ──
+    errBirthRequired: '생년월일을 입력해주세요 🗓️',
+    errYearRange: '연도는 1900~2100 사이로 입력해주세요',
+    errMonthRange: '월은 1~12 사이로 입력해주세요',
+    errDayRange: '일은 1~31 사이로 입력해주세요',
+    errInvalidDate: '존재하지 않는 날짜예요. 다시 확인해주세요 🙏',
+    errLunarDayRange: '음력 날짜는 1~30일 사이로 입력해주세요',
+    errNotEnoughDates: '추천 날짜를 충분히 찾지 못했습니다. 기간을 넓혀주세요.',
+    errCalcFailed: '계산 중 오류가 발생했습니다.',
+    // ── 별자리 ──
+    signCapricorn: '염소자리 ♑', signAquarius: '물병자리 ♒', signPisces: '물고기자리 ♓',
+    signAries: '양자리 ♈', signTaurus: '황소자리 ♉', signGemini: '쌍둥이자리 ♊',
+    signCancer: '게자리 ♋', signLeo: '사자자리 ♌', signVirgo: '처녀자리 ♍',
+    signLibra: '천칭자리 ♎', signScorpio: '전갈자리 ♏', signSagittarius: '사수자리 ♐',
+    noteCapricorn: '신중하고 계획적인 성향', noteAquarius: '변화에 열린 성향',
+    notePisces: '감수성과 공감 능력', noteAries: '추진력과 행동력이 강함',
+    noteTaurus: '안정과 미감을 중시', noteGemini: '이동성과 적응력이 좋음',
+    noteCancer: '정서적 안정과 가정을 중시', noteLeo: '존재감과 자신감이 강함',
+    noteVirgo: '정교함과 관리 능력이 좋음', noteLibra: '균형감과 미적 조화',
+    noteScorpio: '집중력과 결단력이 강함', noteSagittarius: '확장성과 모험심이 강함',
+    // ── 달 위상 ──
+    moonNew: '삭 직후', moonWaxCrescent: '초승', moonFirstQ: '상현', moonWaxGibbous: '차오름',
+    moonFull: '보름', moonWanGibbous: '기우는 달', moonLastQ: '하현', moonWanCrescent: '그믐 전',
+    // ── 요일 ──
+    daySun: '일', dayMon: '월', dayTue: '화', dayWed: '수', dayThu: '목', dayFri: '금', daySat: '토',
+    // ── 홈 위젯 ──
+    hwToday: '오늘! ', hwSonTag: '손없는날🌟', hwHwangdoTag: '황도🧿', hwHapTag: '육합✨', hwConflictTag: '충(冲)⚠️',
+    hwSonMonth: '월 손없는날', hwSonNone: '손없는날 없음', hwTodayLabel2: '오늘',
+    // ── 알고리즘 노트 ──
+    algoNote: '이 앱은 <strong>사주/별자리/음력(손없는날/황도)</strong> 기반으로 길일을 추천합니다.<br>생년월일이 다르면 결과가 다르게 나오도록 설계되었으며,<br>약물은 <strong>날짜 제거 필터</strong>로 작동합니다.',
+    // ── 약물 결과 텍스트 ──
+    medResultStopApplied: '선택 → <strong>{date}</strong> 이후 {end}까지 범위에서 추천',
+    medResultNoStop: '중단 필요 약물 없음 · 오늘+3일 ~ 오늘+45일 범위에서 추천'
   },
   en: {
     tapToBegin: 'tap to begin',
@@ -4482,7 +4613,123 @@ var TEXTS = {
     premiumLockShare: '🔒 TOP 1 Day · Premium Only',
     premiumCalLock: 'TOP 1 Day',
     premiumCalDesc: 'Premium Only',
-    premiumLoadingProduct: 'Loading product info. Please try again shortly.'
+    premiumLoadingProduct: 'Loading product info. Please try again shortly.',
+    surgTypeLabel: 'Surgery / Procedure Type',
+    surgEye: 'Eye Surgery', surgNose: 'Nose Surgery', surgFiller: 'Botox · Filler',
+    surgLipo: 'Liposuction', surgContour: 'Contouring', surgLaser: 'Skin Laser', surgHair: 'Hair Transplant',
+    medLabel: 'Current Medications / Supplements',
+    medStopTitle: '⛔ Must Stop Before Surgery', medStopBadge: 'Date Removal Filter',
+    medAspirin: 'Aspirin / Anticoagulants', medAspirinSub: 'Bleeding risk · Stop 7 days before',
+    medVitE: 'Vitamin E / High-dose Omega-3', medVitESub: 'Bruising risk · Stop 7 days before',
+    medHerbal: 'Herbal Medicine / Ginseng', medHerbalSub: 'Mixed ingredients · Stop 7 days before',
+    medDiet: 'Diet Supplements / Unknown Ingredients', medDietSub: 'Unknown content · Stop 7 days before',
+    medHormone: 'Hormones / Contraceptives', medHormoneSub: 'Thrombosis check needed · 10 days buffer',
+    medIsotret: 'Isotretinoin (Accutane)', medIsotretSub: 'Longer gap may be needed for laser',
+    medWarnNotice: '⚠️ This app is not a diagnosis. Hospital instructions take priority. However, medication withdrawal periods are actually filtered from recommended dates.',
+    medSafeTitle: '✅ Usually Continued', medSafeBadge: 'No Date Blocking',
+    medBP: 'Blood Pressure Meds', medBPSub: 'Usually continued · Confirm with doctor',
+    medDiabetes: 'Diabetes Meds / Insulin', medDiabetesSub: 'May need adjustment · Follow hospital instructions',
+    medThyroid: 'Thyroid Hormone / Synthroid', medThyroidSub: 'Usually continued · Fasting/timing per doctor',
+    medConsultTitle: '🩺 Consultation Required', medConsultBadge: 'Lower Auto-Recommendation Confidence',
+    medImmuno: 'Immunosuppressants / RA Meds', medImmunoSub: 'Varies by surgery type · Individual consultation needed',
+    medSteroid: 'Long-term Steroids', medSteroidSub: 'May need pre-surgery adjustment',
+    medPsych: 'Psychiatric / Sleep Meds', medPsychSub: 'Check interaction with anesthesia',
+    medNeuro: 'Anti-seizure / Neurological Meds', medNeuroSub: 'Do not stop arbitrarily · Verify plan before surgery',
+    medOther: 'Other Prescriptions', medOtherSub: 'Hard for app to auto-assess · Consult doctor',
+    medConsultNotice: '🩺 These are not date-blocking drugs, but ones where <strong>doctor consultation takes priority</strong> over app recommendations.',
+    bizTypeLabel: 'Business Type',
+    bizFood: 'Restaurant · Café', bizRetail: 'Retail · Clothing', bizService: 'Office · Service',
+    bizBeauty: 'Medical · Beauty', bizFactory: 'Construction · Manufacturing', bizIT: 'IT · Online',
+    bizPeriodLabel: 'Preferred Opening Period', bizHwangdo: 'Include Hwangdo bonus score',
+    bizInfo: '🏪 Based on Son-eobsneun-nal + Hwangdo + Saju conflict avoidance + Zodiac.',
+    moveTypeLabel: 'Moving Type',
+    moveHome: 'Home Move', moveOffice: 'Office Move', moveNew: 'New Construction', moveRent: 'Lease · Rental',
+    movePeriodLabel: 'Preferred Moving Period',
+    moveInfo: '🏠 Son-eobsneun-nal is prioritized, Saju conflict days are avoided.',
+    travelTypeLabel: 'Travel Type',
+    travelOverseas: 'International', travelDomestic: 'Domestic', travelHoney: 'Honeymoon', travelFamily: 'Family Trip',
+    travelPeriodLabel: 'Preferred Departure Period',
+    travelInfo: '✈️ Based on zodiac traits + moon cycle + departure day of week.',
+    loveTypeLabel: 'Type',
+    loveWedding: 'Wedding Date', loveProposal: 'Engagement · Proposal', loveMeeting: 'First Meeting', loveDate: 'Blind Date',
+    lovePartnerYear: "Partner's Birth Year (Optional)", lovePeriodLabel: 'Preferred Period', loveHwangdo: 'Include Hwangdo bonus score',
+    loveInfo: '💍 Based on weekends + Son-eobsneun-nal + Zodiac + Partner zodiac harmony.',
+    investTypeLabel: 'Investment Type',
+    investKR: 'Korean Stocks', investUS: 'US Stocks', investCoin: 'Crypto', investRE: 'Real Estate',
+    investPeriodLabel: 'Preferred Investment Period',
+    investInfo: '📈 Based on waxing moon + Hwangdo + Jupiter day + Zodiac financial luck.',
+    investWarn: '⚠️ For <strong>reference only</strong>. Not responsible for investment outcomes. Not financial advice.',
+    birthTypeLabel: 'Birth Type',
+    birthCS: 'C-Section', birthCSsub: 'Date Selection', birthPost: 'Postpartum Care', birthPostSub: 'Start Date',
+    birthNatural: 'Natural Birth', birthNaturalSub: 'Reference', birthNaming: '100th Day · 1st Birthday', birthNamingSub: 'Event Date',
+    birthPeriodLabel: 'Expected Birth Month Range',
+    birthInfo: '🍼 Based on Son-eobsneun-nal + Saju harmony (六合) + Moon cycle.',
+    birthWarn: '⚠️ Birth recommendations are for <strong>reference only</strong>. Always follow your doctor\'s instructions.',
+    startMonth: 'Start Month', endMonth: 'End Month', partnerYearPH: "Partner's birth year",
+    bestBadge: 'Best', totalScore: 'Total Score',
+    detailCore: 'Recommendation Criteria', detailZodiac: 'Zodiac Applied', detailLunar: 'Lunar · Son-eobsneun · Hwangdo',
+    detailGanji: 'Birth Ganji Reference', detailMeds: 'Medication Applied', detailConsult: 'Consultation Priority Meds',
+    btnCalSave: '📅 Save to Calendar', btnShareCard: '🌸 Save Gilil Card', btnShare: '💬 Share', btnCopy: '🔗 Copy',
+    calModalTitle: '📅 Save to Calendar', calModalSub: 'Select a date to save', calModalClose: 'Close',
+    medsWarnDefault: 'Schedule adjusted due to selected medications.',
+    consultWarnDefault: 'Medications requiring doctor consultation detected.',
+    catSurgeryLabel: 'Cosmetic · Procedure', catBusinessLabel: 'Business Opening', catMovingLabel: 'Moving',
+    catTravelLabel: 'Travel', catLoveLabel: 'Wedding · Meeting', catInvestLabel: 'Investment', catBirthLabel: 'Birth',
+    catStockKR: 'Korean Stock Investment', catStockUS: 'US Stock Investment',
+    resultGreetSuffix: 'born', resultGreetInput: 'input', resultGreetApprox: 'lunar approx. included',
+    resultTitle: 'Found <span>3 best {cat} days</span><br />for you',
+    bannerSurgery: 'Med filter → Conflict removal → Zodiac/Son-eobsneun/Moon/Hwangdo personalization',
+    bannerBusiness: 'Son-eobsneun priority + Hwangdo + Saju conflict avoidance + Zodiac',
+    bannerMoving: 'Son-eobsneun priority + Strong Saju conflict avoidance + Zodiac',
+    bannerTravel: 'Zodiac traits + Moon flow + Saju harmony + Departure day',
+    bannerLove: 'Weekend preference + Son-eobsneun + Hwangdo + Zodiac + Compatibility',
+    bannerInvest: 'Waxing moon + Hwangdo + Jupiter day + Zodiac finance + Saju harmony',
+    bannerBirth: 'Waxing moon priority + Son-eobsneun + Saju harmony + Hwangdo assist',
+    unitMonth: '/', unitDay: '', unitDayOfWeek: '', unitYear: '', unitScore: 'pts',
+    lunarPrefix: 'Lunar', badgeSon: 'Son-eobsneun', badgeHwangdo: 'Hwangdo',
+    detailSonText: 'Son-eobsneun-nal based on lunar day<br>Hwangdo 12-god Jianchu sub-score',
+    detailGanjiText: 'Conflict(冲) strong avoidance · Sanghyung(三刑) penalty · Harmony(六合) bonus',
+    medResultApplied: 'Medication withdrawal applied<br>Safe date ~ Safe date+35 days range',
+    medResultNone: 'No stop meds selected<br>Today+3~45 days range',
+    consultResultText: 'Lower auto-recommendation confidence · No arbitrary judgment',
+    consultResultNone: 'No consultation-priority meds selected',
+    consultConfirm: 'Confirm date after doctor consultation recommended',
+    consultNoneMed: 'No consultation-priority meds selected',
+    shareTitle: 'Auspicious Day Recommendation', shareHeader: '🌙 Gilil App Results',
+    shareConsultWarn: '※ Consultation-priority meds detected: Confirm with hospital',
+    shareBasis: 'Based on: Saju · Zodiac · Son-eobsneun · Moon cycle · Med filter',
+    toastCalcFirst: 'Please calculate your auspicious days first', toastCopied: 'Copied! Paste to share', toastCopiedShort: 'Copied!',
+    shareCardTitle: 'My TOP 3 Auspicious Days', shareCardGen: 'Generating card...',
+    shareCardFail: 'Image save failed · Sharing as text', shareCardDone: 'Card saved 🌸',
+    shareCardCaptureFail: 'Capture failed · Please try again',
+    shareCardScoreSuffix: 'Score', shareCardAppName: 'Gilil App',
+    calFileSaved: 'Calendar file saved', calIcsDesc: 'Gilil app recommended date',
+    errBirthRequired: 'Please enter your date of birth 🗓️',
+    errYearRange: 'Year must be between 1900-2100',
+    errMonthRange: 'Month must be between 1-12',
+    errDayRange: 'Day must be between 1-31',
+    errInvalidDate: 'This date does not exist. Please check again 🙏',
+    errLunarDayRange: 'Lunar date must be between 1-30',
+    errNotEnoughDates: 'Could not find enough recommended dates. Please widen the range.',
+    errCalcFailed: 'An error occurred during calculation.',
+    signCapricorn: 'Capricorn ♑', signAquarius: 'Aquarius ♒', signPisces: 'Pisces ♓',
+    signAries: 'Aries ♈', signTaurus: 'Taurus ♉', signGemini: 'Gemini ♊',
+    signCancer: 'Cancer ♋', signLeo: 'Leo ♌', signVirgo: 'Virgo ♍',
+    signLibra: 'Libra ♎', signScorpio: 'Scorpio ♏', signSagittarius: 'Sagittarius ♐',
+    noteCapricorn: 'Careful and methodical', noteAquarius: 'Open to change',
+    notePisces: 'Empathetic and intuitive', noteAries: 'Strong drive and action',
+    noteTaurus: 'Values stability and aesthetics', noteGemini: 'Adaptable and mobile',
+    noteCancer: 'Values emotional stability and home', noteLeo: 'Confident and charismatic',
+    noteVirgo: 'Precise and organized', noteLibra: 'Balanced and harmonious',
+    noteScorpio: 'Focused and decisive', noteSagittarius: 'Adventurous and expansive',
+    moonNew: 'New Moon', moonWaxCrescent: 'Waxing Crescent', moonFirstQ: 'First Quarter', moonWaxGibbous: 'Waxing Gibbous',
+    moonFull: 'Full Moon', moonWanGibbous: 'Waning Gibbous', moonLastQ: 'Last Quarter', moonWanCrescent: 'Waning Crescent',
+    daySun: 'Sun', dayMon: 'Mon', dayTue: 'Tue', dayWed: 'Wed', dayThu: 'Thu', dayFri: 'Fri', daySat: 'Sat',
+    hwToday: 'Today! ', hwSonTag: 'Son-eobsneun🌟', hwHwangdoTag: 'Hwangdo🧿', hwHapTag: 'Harmony✨', hwConflictTag: 'Conflict⚠️',
+    hwSonMonth: ' Son-eobsneun Days', hwSonNone: 'No Son-eobsneun days', hwTodayLabel2: 'Today',
+    algoNote: 'This app recommends auspicious days based on <strong>Saju/Zodiac/Lunar (Son-eobsneun/Hwangdo)</strong>.<br>Results vary by date of birth.<br>Medications act as <strong>date removal filters</strong>.',
+    medResultStopApplied: 'Selected → Recommend from <strong>{date}</strong> to {end}',
+    medResultNoStop: 'No stop-meds selected · Today+3 to Today+45 days range'
   },
   ja: {
     tapToBegin: 'タップして始める',
@@ -4543,7 +4790,123 @@ var TEXTS = {
     premiumLockShare: '🔒 TOP 1 吉日 · プレミアム専用',
     premiumCalLock: 'TOP 1 吉日',
     premiumCalDesc: 'プレミアム専用',
-    premiumLoadingProduct: '商品情報を読み込み中です。しばらくしてからお試しください。'
+    premiumLoadingProduct: '商品情報を読み込み中です。しばらくしてからお試しください。',
+    surgTypeLabel: '手術 / 施術の種類',
+    surgEye: '目の手術', surgNose: '鼻の手術', surgFiller: 'ボトックス · フィラー',
+    surgLipo: '脂肪吸引', surgContour: '輪郭手術', surgLaser: 'スキンレーザー', surgHair: '植毛',
+    medLabel: '服用中の薬 / サプリメント',
+    medStopTitle: '⛔ 手術前に中止が必要', medStopBadge: '日程除外フィルター',
+    medAspirin: 'アスピリン / 抗凝固薬', medAspirinSub: '出血リスク · 7日前に中止',
+    medVitE: 'ビタミンE / 高用量オメガ3', medVitESub: 'あざ·出血リスク · 7日前に中止',
+    medHerbal: '漢方薬 / 紅参 / 健康飲料', medHerbalSub: '成分多様 · 7日前に中止',
+    medDiet: 'ダイエットサプリ / 成分不明', medDietSub: '成分不明 · 7日前に中止',
+    medHormone: 'ホルモン剤 / ピル', medHormoneSub: '血栓確認必要 · 10日前に反映',
+    medIsotret: 'イソトレチノイン系', medIsotretSub: 'レーザーはより長い間隔が必要な場合あり',
+    medWarnNotice: '⚠️ このアプリは診断ではありません。実際の手術日は病院の指示が優先です。選択した薬の中止期間は推奨日に反映されます。',
+    medSafeTitle: '✅ 通常継続可能', medSafeBadge: '日程ブロックなし',
+    medBP: '血圧薬', medBPSub: '通常継続 · 担当医に確認',
+    medDiabetes: '糖尿病薬 / インスリン', medDiabetesSub: '調整が必要な場合あり · 病院指示優先',
+    medThyroid: '甲状腺ホルモン剤', medThyroidSub: '通常継続 · 空腹/服用時間は病院指示優先',
+    medConsultTitle: '🩺 必ず相談が必要', medConsultBadge: '自動推奨の信頼度低下',
+    medImmuno: '免疫抑制剤 / リウマチ薬', medImmunoSub: '手術種類·疾患状態により異なる · 個別相談必要',
+    medSteroid: 'ステロイド長期服用', medSteroidSub: '用量/期間により手術前調整が必要な場合あり',
+    medPsych: '精神科薬 / 睡眠薬', medPsychSub: '麻酔·鎮静薬との相互作用確認必要',
+    medNeuro: '抗てんかん薬 / 神経科薬', medNeuroSub: '任意中止禁止 · 手術前の服用計画確認必要',
+    medOther: 'その他の処方薬', medOtherSub: 'アプリでの自動判定が難しい薬 · 病院相談推奨',
+    medConsultNotice: '🩺 上記は日程を完全にブロックする薬ではなく、<strong>アプリ推奨より担当医の相談が優先</strong>される薬です。',
+    bizTypeLabel: '業種',
+    bizFood: '飲食店 · カフェ', bizRetail: '小売 · 衣料', bizService: 'オフィス · サービス',
+    bizBeauty: '医療 · 美容', bizFactory: '建設 · 製造', bizIT: 'IT · オンライン',
+    bizPeriodLabel: '希望開業時期', bizHwangdo: '黄道ボーナス点数を反映',
+    bizInfo: '🏪 孫のいない日 + 黄道 + 四柱衝突回避 + 星座で推奨します。',
+    moveTypeLabel: '引越しタイプ',
+    moveHome: '一般引越し', moveOffice: 'オフィス引越し', moveNew: '新築入居', moveRent: '賃貸',
+    movePeriodLabel: '希望引越し時期',
+    moveInfo: '🏠 孫のいない日を最優先し、四柱衝突日を回避します。',
+    travelTypeLabel: '旅行タイプ',
+    travelOverseas: '海外旅行', travelDomestic: '国内旅行', travelHoney: 'ハネムーン', travelFamily: '家族旅行',
+    travelPeriodLabel: '出発希望時期',
+    travelInfo: '✈️ 星座性向 + 月の周期 + 出発曜日で推奨します。',
+    loveTypeLabel: 'タイプ',
+    loveWedding: '結婚式の日', loveProposal: '婚約 · プロポーズ', loveMeeting: '初めてのお見合い', loveDate: 'お見合い · デート',
+    lovePartnerYear: '相手の出生年（任意）', lovePeriodLabel: '希望期間', loveHwangdo: '黄道ボーナス点数を反映',
+    loveInfo: '💍 週末 + 孫のいない日 + 星座 + 相手の干支の調和で推奨します。',
+    investTypeLabel: '投資タイプ',
+    investKR: '韓国株', investUS: '米国株', investCoin: '暗号通貨', investRE: '不動産',
+    investPeriodLabel: '希望投資時期',
+    investInfo: '📈 月の満ち + 黄道 + 木星曜日 + 星座の金運で推奨します。',
+    investWarn: '⚠️ 易学ベースの<strong>参考用</strong>です。投資損益の責任を負いません。',
+    birthTypeLabel: '出産タイプ',
+    birthCS: '帝王切開', birthCSsub: '日程選択', birthPost: '産後ケア', birthPostSub: '開始日',
+    birthNatural: '自然分娩', birthNaturalSub: '参考用', birthNaming: '百日 · 初誕生日', birthNamingSub: 'イベント日',
+    birthPeriodLabel: '出産予定月の範囲',
+    birthInfo: '🍼 孫のいない日 + 四柱合(六合) + 月の周期で推奨します。',
+    birthWarn: '⚠️ 出産推奨は四柱·月周期ベースの<strong>参考用</strong>です。必ず担当医の指示に従ってください。',
+    startMonth: '開始月', endMonth: '終了月', partnerYearPH: '相手の出生年',
+    bestBadge: '最適', totalScore: '総合スコア',
+    detailCore: '推奨基準', detailZodiac: '星座反映', detailLunar: '旧暦 · 孫のいない日 · 黄道',
+    detailGanji: '出生干支参考', detailMeds: '薬物反映', detailConsult: '相談優先薬物',
+    btnCalSave: '📅 カレンダーに保存', btnShareCard: '🌸 吉日カード保存', btnShare: '💬 共有', btnCopy: '🔗 コピー',
+    calModalTitle: '📅 カレンダーに保存', calModalSub: '保存する日付を選択', calModalClose: '閉じる',
+    medsWarnDefault: '選択した薬により日程が調整されました。',
+    consultWarnDefault: '医師の相談が必要な薬があります。',
+    catSurgeryLabel: '整形 · 施術', catBusinessLabel: '開業', catMovingLabel: '引越し',
+    catTravelLabel: '旅行', catLoveLabel: '結婚 · お見合い', catInvestLabel: '投資', catBirthLabel: '出産',
+    catStockKR: '韓国株投資', catStockUS: '米国株投資',
+    resultGreetSuffix: '年生', resultGreetInput: '入力', resultGreetApprox: '旧暦近似含む',
+    resultTitle: '最適な<span>{cat}吉日</span>3日を<br />見つけました',
+    bannerSurgery: '薬フィルター → 衝·三刑除去 → 星座/孫のいない日/月/黄道パーソナライズ',
+    bannerBusiness: '孫のいない日最優先 + 黄道 + 四柱衝突回避 + 星座',
+    bannerMoving: '孫のいない日最優先 + 四柱衝突強回避 + 星座反映',
+    bannerTravel: '星座性向 + 月の流れ + 四柱合反映 + 出発曜日',
+    bannerLove: '週末選好 + 孫のいない日 + 黄道 + 星座 + 相性補正',
+    bannerInvest: '月の満ち + 黄道 + 木星曜日 + 星座金運 + 四柱六合反映',
+    bannerBirth: '月の満ち最優先 + 孫のいない日 + 四柱六合 + 黄道補助',
+    unitMonth: '月', unitDay: '日', unitDayOfWeek: '曜日', unitYear: '年', unitScore: '点',
+    lunarPrefix: '旧暦', badgeSon: '孫のいない日', badgeHwangdo: '黄道',
+    detailSonText: '孫のいない日 旧暦日基準反映<br>黄道 建除12神ベース補助点数',
+    detailGanjiText: '衝(冲) 強回避 · 三刑(三刑) 減点 · 六合(六合) 加点',
+    medResultApplied: '薬中止期間反映<br>安全日 ~ 安全日+35日範囲',
+    medResultNone: '中止薬未選択<br>今日+3~45日範囲',
+    consultResultText: '自動推奨の信頼度低下 · 任意判断禁止',
+    consultResultNone: '相談優先薬未選択',
+    consultConfirm: '担当医相談後の日程確定推奨',
+    consultNoneMed: '相談優先薬選択なし',
+    shareTitle: '吉日推奨', shareHeader: '🌙 吉日アプリ推奨結果',
+    shareConsultWarn: '※ 相談優先薬あり: 病院確認優先',
+    shareBasis: '基準: 四柱 · 星座 · 孫のいない日 · 月周期 · 薬フィルター',
+    toastCalcFirst: '先に吉日を計算してください', toastCopied: 'コピーしました！', toastCopiedShort: 'コピー完了',
+    shareCardTitle: '私の吉日 TOP 3', shareCardGen: 'カード生成中...',
+    shareCardFail: '画像保存失敗 · テキストで共有', shareCardDone: 'カード保存完了 🌸',
+    shareCardCaptureFail: 'キャプチャ失敗 · もう一度お試しください',
+    shareCardScoreSuffix: 'スコア', shareCardAppName: '吉日アプリ',
+    calFileSaved: 'カレンダーファイル保存完了', calIcsDesc: '吉日アプリ推奨日程',
+    errBirthRequired: '生年月日を入力してください 🗓️',
+    errYearRange: '年は1900~2100の間で入力してください',
+    errMonthRange: '月は1~12の間で入力してください',
+    errDayRange: '日は1~31の間で入力してください',
+    errInvalidDate: '存在しない日付です。もう一度確認してください 🙏',
+    errLunarDayRange: '旧暦の日付は1~30の間で入力してください',
+    errNotEnoughDates: '十分な推奨日が見つかりませんでした。期間を広げてください。',
+    errCalcFailed: '計算中にエラーが発生しました。',
+    signCapricorn: 'やぎ座 ♑', signAquarius: 'みずがめ座 ♒', signPisces: 'うお座 ♓',
+    signAries: 'おひつじ座 ♈', signTaurus: 'おうし座 ♉', signGemini: 'ふたご座 ♊',
+    signCancer: 'かに座 ♋', signLeo: 'しし座 ♌', signVirgo: 'おとめ座 ♍',
+    signLibra: 'てんびん座 ♎', signScorpio: 'さそり座 ♏', signSagittarius: 'いて座 ♐',
+    noteCapricorn: '慎重で計画的', noteAquarius: '変化に開かれた性格',
+    notePisces: '感受性と共感力', noteAries: '推進力と行動力が強い',
+    noteTaurus: '安定と美感を重視', noteGemini: '機動性と適応力が高い',
+    noteCancer: '情緒的安定と家庭を重視', noteLeo: '存在感と自信が強い',
+    noteVirgo: '精緻で管理能力が高い', noteLibra: 'バランスと美的調和',
+    noteScorpio: '集中力と決断力が強い', noteSagittarius: '拡張性と冒険心が強い',
+    moonNew: '新月直後', moonWaxCrescent: '三日月', moonFirstQ: '上弦', moonWaxGibbous: '満ちゆく月',
+    moonFull: '満月', moonWanGibbous: '欠けゆく月', moonLastQ: '下弦', moonWanCrescent: '晦日前',
+    daySun: '日', dayMon: '月', dayTue: '火', dayWed: '水', dayThu: '木', dayFri: '金', daySat: '土',
+    hwToday: '今日！', hwSonTag: '孫のいない日🌟', hwHwangdoTag: '黄道🧿', hwHapTag: '六合✨', hwConflictTag: '衝(冲)⚠️',
+    hwSonMonth: '月の孫のいない日', hwSonNone: '孫のいない日なし', hwTodayLabel2: '今日',
+    algoNote: 'このアプリは<strong>四柱推命/星座/旧暦(孫のいない日/黄道)</strong>で吉日を推奨します。<br>生年月日により結果が異なります。<br>薬は<strong>日程除外フィルター</strong>として機能します。',
+    medResultStopApplied: '選択 → <strong>{date}</strong>以降{end}までの範囲で推奨',
+    medResultNoStop: '中止必要薬なし · 今日+3日 ~ 今日+45日範囲で推奨'
   },
   zh: {
     tapToBegin: '点击开始',
@@ -4604,7 +4967,123 @@ var TEXTS = {
     premiumLockShare: '🔒 TOP 1 吉日 · 高级专享',
     premiumCalLock: 'TOP 1 吉日',
     premiumCalDesc: '高级专享',
-    premiumLoadingProduct: '正在加载商品信息，请稍后重试。'
+    premiumLoadingProduct: '正在加载商品信息，请稍后重试。',
+    surgTypeLabel: '手术 / 医美类型',
+    surgEye: '眼部手术', surgNose: '鼻部手术', surgFiller: '玻尿酸 · 肉毒素',
+    surgLipo: '吸脂', surgContour: '轮廓手术', surgLaser: '皮肤激光', surgHair: '植发',
+    medLabel: '正在服用的药物 / 保健品',
+    medStopTitle: '⛔ 术前需停用', medStopBadge: '日期排除过滤',
+    medAspirin: '阿司匹林 / 抗凝药', medAspirinSub: '出血风险 · 提前7天停用',
+    medVitE: '维生素E / 高剂量鱼油', medVitESub: '淤青风险 · 提前7天停用',
+    medHerbal: '中药 / 红参 / 保健汁', medHerbalSub: '成分复杂 · 提前7天停用',
+    medDiet: '减肥药 / 成分不明保健品', medDietSub: '成分不明 · 提前7天停用',
+    medHormone: '激素药 / 避孕药', medHormoneSub: '需确认血栓风险 · 提前10天',
+    medIsotret: '异维A酸类', medIsotretSub: '激光需要更长间隔',
+    medWarnNotice: '⚠️ 本应用不是诊断工具。实际手术日以医院指示为准。所选药物的停药期会在推荐日期中过滤。',
+    medSafeTitle: '✅ 通常可继续服用', medSafeBadge: '不阻止日期',
+    medBP: '降压药', medBPSub: '通常继续 · 需医生确认',
+    medDiabetes: '降糖药 / 胰岛素', medDiabetesSub: '可能需要调整 · 遵医嘱',
+    medThyroid: '甲状腺激素药', medThyroidSub: '通常继续 · 空腹/服药时间遵医嘱',
+    medConsultTitle: '🩺 必须咨询医生', medConsultBadge: '降低自动推荐可信度',
+    medImmuno: '免疫抑制剂 / 类风湿药', medImmunoSub: '因手术类型和病情而异 · 需个别咨询',
+    medSteroid: '长期使用类固醇', medSteroidSub: '可能需术前调整用量',
+    medPsych: '精神科药 / 安眠药', medPsychSub: '需确认与麻醉药的相互作用',
+    medNeuro: '抗癫痫药 / 神经科药', medNeuroSub: '禁止擅自停药 · 需术前确认用药计划',
+    medOther: '其他处方药', medOtherSub: '应用难以自动判断 · 建议咨询医生',
+    medConsultNotice: '🩺 以上药物不会完全阻止日期，而是<strong>医生咨询优先于应用推荐</strong>。',
+    bizTypeLabel: '行业类型',
+    bizFood: '餐饮 · 咖啡', bizRetail: '零售 · 服装', bizService: '办公 · 服务',
+    bizBeauty: '医疗 · 美容', bizFactory: '建筑 · 制造', bizIT: 'IT · 在线',
+    bizPeriodLabel: '期望开业时间', bizHwangdo: '包含黄道加分',
+    bizInfo: '🏪 基于孙无日 + 黄道 + 四柱冲突回避 + 星座推荐。',
+    moveTypeLabel: '搬家类型',
+    moveHome: '普通搬家', moveOffice: '办公室搬迁', moveNew: '新房入住', moveRent: '租赁',
+    movePeriodLabel: '期望搬家时间',
+    moveInfo: '🏠 孙无日最优先，回避四柱冲突日。',
+    travelTypeLabel: '旅行类型',
+    travelOverseas: '海外旅行', travelDomestic: '国内旅行', travelHoney: '蜜月旅行', travelFamily: '家庭旅行',
+    travelPeriodLabel: '出发期望时间',
+    travelInfo: '✈️ 基于星座性格 + 月亮周期 + 出发日推荐。',
+    loveTypeLabel: '类型',
+    loveWedding: '婚礼日期', loveProposal: '订婚 · 求婚', loveMeeting: '初次见面', loveDate: '相亲',
+    lovePartnerYear: '对方出生年份（可选）', lovePeriodLabel: '期望时间', loveHwangdo: '包含黄道加分',
+    loveInfo: '💍 基于周末 + 孙无日 + 星座 + 属相和谐推荐。',
+    investTypeLabel: '投资类型',
+    investKR: '韩国股票', investUS: '美国股票', investCoin: '加密货币', investRE: '房地产',
+    investPeriodLabel: '期望投资时间',
+    investInfo: '📈 基于月盈 + 黄道 + 木星日 + 星座财运推荐。',
+    investWarn: '⚠️ 仅供<strong>参考</strong>。不对投资损益负责，非财务建议。',
+    birthTypeLabel: '分娩类型',
+    birthCS: '剖腹产', birthCSsub: '日期选择', birthPost: '产后护理', birthPostSub: '开始日',
+    birthNatural: '自然分娩', birthNaturalSub: '参考', birthNaming: '百天·周岁', birthNamingSub: '活动日',
+    birthPeriodLabel: '预产月范围',
+    birthInfo: '🍼 基于孙无日 + 四柱合(六合) + 月亮周期推荐。',
+    birthWarn: '⚠️ 分娩推荐仅供<strong>参考</strong>。请务必遵医嘱。',
+    startMonth: '开始月', endMonth: '结束月', partnerYearPH: '对方出生年份',
+    bestBadge: '最佳', totalScore: '综合得分',
+    detailCore: '推荐标准', detailZodiac: '星座反映', detailLunar: '农历 · 孙无日 · 黄道',
+    detailGanji: '出生干支参考', detailMeds: '药物反映', detailConsult: '咨询优先药物',
+    btnCalSave: '📅 保存到日历', btnShareCard: '🌸 保存吉日卡', btnShare: '💬 分享', btnCopy: '🔗 复制',
+    calModalTitle: '📅 保存到日历', calModalSub: '选择要保存的日期', calModalClose: '关闭',
+    medsWarnDefault: '因所选药物，日程已调整。',
+    consultWarnDefault: '有需要医生咨询的药物。',
+    catSurgeryLabel: '整形 · 医美', catBusinessLabel: '开业', catMovingLabel: '搬家',
+    catTravelLabel: '旅行', catLoveLabel: '婚姻 · 相亲', catInvestLabel: '投资', catBirthLabel: '分娩',
+    catStockKR: '韩国股票投资', catStockUS: '美国股票投资',
+    resultGreetSuffix: '年生', resultGreetInput: '输入', resultGreetApprox: '含农历近似',
+    resultTitle: '找到了<span>3个最佳{cat}吉日</span>',
+    bannerSurgery: '药物过滤 → 冲·三刑排除 → 星座/孙无日/月亮/黄道个性化',
+    bannerBusiness: '孙无日最优先 + 黄道 + 四柱冲突回避 + 星座',
+    bannerMoving: '孙无日最优先 + 四柱冲突强回避 + 星座反映',
+    bannerTravel: '星座性格 + 月亮流动 + 四柱合反映 + 出发日',
+    bannerLove: '周末偏好 + 孙无日 + 黄道 + 星座 + 相性修正',
+    bannerInvest: '月盈 + 黄道 + 木星日 + 星座财运 + 四柱六合反映',
+    bannerBirth: '月盈最优先 + 孙无日 + 四柱六合 + 黄道辅助',
+    unitMonth: '月', unitDay: '日', unitDayOfWeek: '', unitYear: '年', unitScore: '分',
+    lunarPrefix: '农历', badgeSon: '孙无日', badgeHwangdo: '黄道',
+    detailSonText: '孙无日按农历日基准反映<br>黄道建除12神辅助评分',
+    detailGanjiText: '冲(冲) 强回避 · 三刑(三刑) 减分 · 六合(六合) 加分',
+    medResultApplied: '药物停用期反映<br>安全日 ~ 安全日+35天范围',
+    medResultNone: '未选择停药<br>今天+3~45天范围',
+    consultResultText: '降低自动推荐可信度 · 禁止任意判断',
+    consultResultNone: '未选择咨询优先药物',
+    consultConfirm: '建议医生咨询后确定日期',
+    consultNoneMed: '未选择咨询优先药物',
+    shareTitle: '吉日推荐', shareHeader: '🌙 吉日应用推荐结果',
+    shareConsultWarn: '※ 有咨询优先药物：以医院确认为准',
+    shareBasis: '基准：四柱 · 星座 · 孙无日 · 月亮周期 · 药物过滤',
+    toastCalcFirst: '请先计算吉日', toastCopied: '已复制！', toastCopiedShort: '已复制',
+    shareCardTitle: '我的吉日 TOP 3', shareCardGen: '生成卡片中...',
+    shareCardFail: '图片保存失败 · 以文字分享', shareCardDone: '卡片保存完成 🌸',
+    shareCardCaptureFail: '截图失败 · 请重试',
+    shareCardScoreSuffix: '得分', shareCardAppName: '吉日应用',
+    calFileSaved: '日历文件已保存', calIcsDesc: '吉日应用推荐日程',
+    errBirthRequired: '请输入出生日期 🗓️',
+    errYearRange: '年份请输入1900~2100之间',
+    errMonthRange: '月份请输入1~12之间',
+    errDayRange: '日期请输入1~31之间',
+    errInvalidDate: '该日期不存在，请重新确认 🙏',
+    errLunarDayRange: '农历日期请输入1~30之间',
+    errNotEnoughDates: '未找到足够的推荐日期，请扩大范围。',
+    errCalcFailed: '计算过程中发生错误。',
+    signCapricorn: '摩羯座 ♑', signAquarius: '水瓶座 ♒', signPisces: '双鱼座 ♓',
+    signAries: '白羊座 ♈', signTaurus: '金牛座 ♉', signGemini: '双子座 ♊',
+    signCancer: '巨蟹座 ♋', signLeo: '狮子座 ♌', signVirgo: '处女座 ♍',
+    signLibra: '天秤座 ♎', signScorpio: '天蝎座 ♏', signSagittarius: '射手座 ♐',
+    noteCapricorn: '谨慎有计划', noteAquarius: '开放接受变化',
+    notePisces: '感性与共情', noteAries: '行动力强',
+    noteTaurus: '重视稳定与美感', noteGemini: '适应力强',
+    noteCancer: '重视情感与家庭', noteLeo: '自信有魅力',
+    noteVirgo: '精确有条理', noteLibra: '追求平衡与和谐',
+    noteScorpio: '专注果断', noteSagittarius: '冒险精神强',
+    moonNew: '新月后', moonWaxCrescent: '蛾眉月', moonFirstQ: '上弦月', moonWaxGibbous: '盈凸月',
+    moonFull: '满月', moonWanGibbous: '亏凸月', moonLastQ: '下弦月', moonWanCrescent: '残月',
+    daySun: '日', dayMon: '一', dayTue: '二', dayWed: '三', dayThu: '四', dayFri: '五', daySat: '六',
+    hwToday: '今天！', hwSonTag: '孙无日🌟', hwHwangdoTag: '黄道🧿', hwHapTag: '六合✨', hwConflictTag: '冲⚠️',
+    hwSonMonth: '月孙无日', hwSonNone: '无孙无日', hwTodayLabel2: '今天',
+    algoNote: '本应用基于<strong>四柱/星座/农历(孙无日/黄道)</strong>推荐吉日。<br>出生日期不同结果不同。<br>药物作为<strong>日期排除过滤器</strong>。',
+    medResultStopApplied: '已选择 → 从<strong>{date}</strong>到{end}范围推荐',
+    medResultNoStop: '未选择停药 · 今天+3~45天范围推荐'
   },
   vi: {
     tapToBegin: 'Chạm để bắt đầu',
@@ -4665,7 +5144,123 @@ var TEXTS = {
     premiumLockShare: '🔒 TOP 1 Ngày Lành · Chỉ Premium',
     premiumCalLock: 'TOP 1 Ngày Lành',
     premiumCalDesc: 'Chỉ Premium',
-    premiumLoadingProduct: 'Đang tải thông tin sản phẩm. Vui lòng thử lại sau.'
+    premiumLoadingProduct: 'Đang tải thông tin sản phẩm. Vui lòng thử lại sau.',
+    surgTypeLabel: 'Loại phẫu thuật / thủ thuật',
+    surgEye: 'Phẫu thuật mắt', surgNose: 'Phẫu thuật mũi', surgFiller: 'Botox · Filler',
+    surgLipo: 'Hút mỡ', surgContour: 'Phẫu thuật đường viền', surgLaser: 'Laser da', surgHair: 'Cấy tóc',
+    medLabel: 'Thuốc / Thực phẩm chức năng đang dùng',
+    medStopTitle: '⛔ Cần ngừng trước phẫu thuật', medStopBadge: 'Bộ lọc loại bỏ ngày',
+    medAspirin: 'Aspirin / Thuốc chống đông', medAspirinSub: 'Nguy cơ chảy máu · Ngừng 7 ngày trước',
+    medVitE: 'Vitamin E / Omega-3 liều cao', medVitESub: 'Nguy cơ bầm tím · Ngừng 7 ngày trước',
+    medHerbal: 'Thuốc đông y / Nhân sâm', medHerbalSub: 'Thành phần đa dạng · Ngừng 7 ngày trước',
+    medDiet: 'Thực phẩm giảm cân / Không rõ thành phần', medDietSub: 'Thành phần không rõ · Ngừng 7 ngày trước',
+    medHormone: 'Thuốc nội tiết / Thuốc tránh thai', medHormoneSub: 'Cần kiểm tra huyết khối · 10 ngày trước',
+    medIsotret: 'Isotretinoin', medIsotretSub: 'Laser có thể cần khoảng cách dài hơn',
+    medWarnNotice: '⚠️ Ứng dụng này không phải chẩn đoán. Chỉ dẫn bệnh viện được ưu tiên. Thời gian ngừng thuốc được lọc trong ngày đề xuất.',
+    medSafeTitle: '✅ Thường tiếp tục dùng', medSafeBadge: 'Không chặn ngày',
+    medBP: 'Thuốc huyết áp', medBPSub: 'Thường tiếp tục · Xác nhận với bác sĩ',
+    medDiabetes: 'Thuốc tiểu đường / Insulin', medDiabetesSub: 'Có thể cần điều chỉnh · Theo chỉ dẫn bệnh viện',
+    medThyroid: 'Thuốc tuyến giáp', medThyroidSub: 'Thường tiếp tục · Nhịn ăn/giờ uống theo bác sĩ',
+    medConsultTitle: '🩺 Bắt buộc tư vấn', medConsultBadge: 'Giảm độ tin cậy tự động',
+    medImmuno: 'Thuốc ức chế miễn dịch / Viêm khớp', medImmunoSub: 'Tùy loại phẫu thuật · Cần tư vấn riêng',
+    medSteroid: 'Dùng steroid dài hạn', medSteroidSub: 'Có thể cần điều chỉnh trước phẫu thuật',
+    medPsych: 'Thuốc tâm thần / An thần', medPsychSub: 'Cần kiểm tra tương tác với gây mê',
+    medNeuro: 'Thuốc chống co giật / Thần kinh', medNeuroSub: 'Không tự ý ngừng · Xác nhận kế hoạch trước phẫu thuật',
+    medOther: 'Thuốc kê đơn khác', medOtherSub: 'Ứng dụng khó đánh giá tự động · Nên tư vấn bác sĩ',
+    medConsultNotice: '🩺 Các thuốc trên không chặn hoàn toàn ngày, mà <strong>ưu tiên tư vấn bác sĩ</strong> hơn đề xuất ứng dụng.',
+    bizTypeLabel: 'Loại hình kinh doanh',
+    bizFood: 'Nhà hàng · Café', bizRetail: 'Bán lẻ · Thời trang', bizService: 'Văn phòng · Dịch vụ',
+    bizBeauty: 'Y tế · Thẩm mỹ', bizFactory: 'Xây dựng · Sản xuất', bizIT: 'IT · Trực tuyến',
+    bizPeriodLabel: 'Thời gian khai trương mong muốn', bizHwangdo: 'Áp dụng điểm thưởng Hoàng đạo',
+    bizInfo: '🏪 Dựa trên Ngày Tốt + Hoàng đạo + Tránh xung đột Tứ trụ + Cung hoàng đạo.',
+    moveTypeLabel: 'Loại chuyển nhà',
+    moveHome: 'Chuyển nhà thường', moveOffice: 'Chuyển văn phòng', moveNew: 'Nhập trạch', moveRent: 'Thuê nhà',
+    movePeriodLabel: 'Thời gian chuyển nhà mong muốn',
+    moveInfo: '🏠 Ưu tiên Ngày Tốt nhất, tránh ngày xung đột Tứ trụ.',
+    travelTypeLabel: 'Loại du lịch',
+    travelOverseas: 'Quốc tế', travelDomestic: 'Trong nước', travelHoney: 'Tuần trăng mật', travelFamily: 'Du lịch gia đình',
+    travelPeriodLabel: 'Thời gian khởi hành mong muốn',
+    travelInfo: '✈️ Dựa trên tính cách cung + Chu kỳ trăng + Ngày khởi hành.',
+    loveTypeLabel: 'Loại',
+    loveWedding: 'Ngày cưới', loveProposal: 'Đính hôn · Cầu hôn', loveMeeting: 'Gặp mặt đầu', loveDate: 'Xem mặt',
+    lovePartnerYear: 'Năm sinh đối phương (tùy chọn)', lovePeriodLabel: 'Thời gian mong muốn', loveHwangdo: 'Áp dụng điểm thưởng Hoàng đạo',
+    loveInfo: '💍 Dựa trên cuối tuần + Ngày Tốt + Cung hoàng đạo + Hòa hợp tuổi.',
+    investTypeLabel: 'Loại đầu tư',
+    investKR: 'Cổ phiếu Hàn Quốc', investUS: 'Cổ phiếu Mỹ', investCoin: 'Tiền điện tử', investRE: 'Bất động sản',
+    investPeriodLabel: 'Thời gian đầu tư mong muốn',
+    investInfo: '📈 Dựa trên trăng tròn + Hoàng đạo + Ngày Mộc tinh + Vận tài chính.',
+    investWarn: '⚠️ Chỉ mang tính <strong>tham khảo</strong>. Không chịu trách nhiệm về lợi nhuận đầu tư.',
+    birthTypeLabel: 'Loại sinh',
+    birthCS: 'Sinh mổ', birthCSsub: 'Chọn ngày', birthPost: 'Chăm sóc sau sinh', birthPostSub: 'Ngày bắt đầu',
+    birthNatural: 'Sinh thường', birthNaturalSub: 'Tham khảo', birthNaming: 'Thôi nôi · Đầy năm', birthNamingSub: 'Ngày sự kiện',
+    birthPeriodLabel: 'Phạm vi tháng dự sinh',
+    birthInfo: '🍼 Dựa trên Ngày Tốt + Tứ trụ hợp (六合) + Chu kỳ trăng.',
+    birthWarn: '⚠️ Đề xuất sinh chỉ mang tính <strong>tham khảo</strong>. Hãy luôn tuân theo chỉ dẫn bác sĩ.',
+    startMonth: 'Tháng bắt đầu', endMonth: 'Tháng kết thúc', partnerYearPH: 'Năm sinh đối phương',
+    bestBadge: 'Tốt nhất', totalScore: 'Điểm tổng',
+    detailCore: 'Tiêu chí đề xuất', detailZodiac: 'Cung hoàng đạo', detailLunar: 'Âm lịch · Ngày Tốt · Hoàng đạo',
+    detailGanji: 'Can chi sinh', detailMeds: 'Thuốc phản ánh', detailConsult: 'Thuốc ưu tiên tư vấn',
+    btnCalSave: '📅 Lưu vào lịch', btnShareCard: '🌸 Lưu thẻ Ngày Lành', btnShare: '💬 Chia sẻ', btnCopy: '🔗 Sao chép',
+    calModalTitle: '📅 Lưu vào lịch', calModalSub: 'Chọn ngày để lưu', calModalClose: 'Đóng',
+    medsWarnDefault: 'Lịch trình đã được điều chỉnh do thuốc đã chọn.',
+    consultWarnDefault: 'Có thuốc cần tư vấn bác sĩ.',
+    catSurgeryLabel: 'Thẩm mỹ · Thủ thuật', catBusinessLabel: 'Khai trương', catMovingLabel: 'Chuyển nhà',
+    catTravelLabel: 'Du lịch', catLoveLabel: 'Kết hôn · Gặp mặt', catInvestLabel: 'Đầu tư', catBirthLabel: 'Sinh nở',
+    catStockKR: 'Đầu tư cổ phiếu HQ', catStockUS: 'Đầu tư cổ phiếu Mỹ',
+    resultGreetSuffix: 'sinh', resultGreetInput: 'nhập', resultGreetApprox: 'bao gồm xấp xỉ âm lịch',
+    resultTitle: 'Đã tìm thấy <span>3 ngày {cat} tốt nhất</span>',
+    bannerSurgery: 'Lọc thuốc → Loại xung/tam hình → Cung/Ngày Tốt/Trăng/Hoàng đạo cá nhân hóa',
+    bannerBusiness: 'Ngày Tốt ưu tiên + Hoàng đạo + Tránh xung Tứ trụ + Cung',
+    bannerMoving: 'Ngày Tốt ưu tiên + Tránh xung mạnh + Cung phản ánh',
+    bannerTravel: 'Tính cách cung + Dòng trăng + Tứ trụ hợp + Ngày khởi hành',
+    bannerLove: 'Cuối tuần + Ngày Tốt + Hoàng đạo + Cung + Tương hợp',
+    bannerInvest: 'Trăng tròn + Hoàng đạo + Ngày Mộc tinh + Vận tài chính + Lục hợp',
+    bannerBirth: 'Trăng tròn ưu tiên + Ngày Tốt + Lục hợp + Hoàng đạo hỗ trợ',
+    unitMonth: '/', unitDay: '', unitDayOfWeek: '', unitYear: '', unitScore: 'đ',
+    lunarPrefix: 'Âm lịch', badgeSon: 'Ngày Tốt', badgeHwangdo: 'Hoàng đạo',
+    detailSonText: 'Ngày Tốt theo ngày âm lịch<br>Hoàng đạo 12 thần phụ trợ',
+    detailGanjiText: 'Xung(冲) tránh mạnh · Tam hình(三刑) trừ điểm · Lục hợp(六合) cộng điểm',
+    medResultApplied: 'Phản ánh thời gian ngừng thuốc<br>Ngày an toàn ~ +35 ngày',
+    medResultNone: 'Chưa chọn thuốc ngừng<br>Hôm nay+3~45 ngày',
+    consultResultText: 'Giảm độ tin cậy tự động · Không phán đoán tùy ý',
+    consultResultNone: 'Chưa chọn thuốc ưu tiên tư vấn',
+    consultConfirm: 'Nên xác nhận ngày sau khi tư vấn bác sĩ',
+    consultNoneMed: 'Chưa chọn thuốc ưu tiên tư vấn',
+    shareTitle: 'Đề xuất Ngày Lành', shareHeader: '🌙 Kết quả ứng dụng Ngày Lành',
+    shareConsultWarn: '※ Có thuốc ưu tiên tư vấn: Xác nhận với bệnh viện',
+    shareBasis: 'Tiêu chí: Tứ trụ · Cung · Ngày Tốt · Chu kỳ trăng · Lọc thuốc',
+    toastCalcFirst: 'Vui lòng tính ngày lành trước', toastCopied: 'Đã sao chép!', toastCopiedShort: 'Đã sao chép',
+    shareCardTitle: 'TOP 3 Ngày Lành của tôi', shareCardGen: 'Đang tạo thẻ...',
+    shareCardFail: 'Lưu ảnh thất bại · Chia sẻ bằng văn bản', shareCardDone: 'Đã lưu thẻ 🌸',
+    shareCardCaptureFail: 'Chụp thất bại · Vui lòng thử lại',
+    shareCardScoreSuffix: 'Điểm', shareCardAppName: 'Ứng dụng Ngày Lành',
+    calFileSaved: 'Đã lưu tệp lịch', calIcsDesc: 'Lịch đề xuất Ngày Lành',
+    errBirthRequired: 'Vui lòng nhập ngày sinh 🗓️',
+    errYearRange: 'Năm phải từ 1900 đến 2100',
+    errMonthRange: 'Tháng phải từ 1 đến 12',
+    errDayRange: 'Ngày phải từ 1 đến 31',
+    errInvalidDate: 'Ngày này không tồn tại. Vui lòng kiểm tra lại 🙏',
+    errLunarDayRange: 'Ngày âm lịch phải từ 1 đến 30',
+    errNotEnoughDates: 'Không tìm đủ ngày đề xuất. Vui lòng mở rộng phạm vi.',
+    errCalcFailed: 'Đã xảy ra lỗi trong quá trình tính toán.',
+    signCapricorn: 'Ma Kết ♑', signAquarius: 'Bảo Bình ♒', signPisces: 'Song Ngư ♓',
+    signAries: 'Bạch Dương ♈', signTaurus: 'Kim Ngưu ♉', signGemini: 'Song Tử ♊',
+    signCancer: 'Cự Giải ♋', signLeo: 'Sư Tử ♌', signVirgo: 'Xử Nữ ♍',
+    signLibra: 'Thiên Bình ♎', signScorpio: 'Bọ Cạp ♏', signSagittarius: 'Nhân Mã ♐',
+    noteCapricorn: 'Cẩn thận có kế hoạch', noteAquarius: 'Cởi mở với thay đổi',
+    notePisces: 'Nhạy cảm và đồng cảm', noteAries: 'Hành động mạnh mẽ',
+    noteTaurus: 'Coi trọng ổn định và thẩm mỹ', noteGemini: 'Thích nghi tốt',
+    noteCancer: 'Coi trọng gia đình', noteLeo: 'Tự tin và thu hút',
+    noteVirgo: 'Tỉ mỉ và có tổ chức', noteLibra: 'Cân bằng và hài hòa',
+    noteScorpio: 'Tập trung và quyết đoán', noteSagittarius: 'Phiêu lưu và mở rộng',
+    moonNew: 'Trăng mới', moonWaxCrescent: 'Trăng lưỡi liềm', moonFirstQ: 'Trăng bán nguyệt đầu', moonWaxGibbous: 'Trăng khuyết lồi',
+    moonFull: 'Trăng tròn', moonWanGibbous: 'Trăng tàn lồi', moonLastQ: 'Trăng bán nguyệt cuối', moonWanCrescent: 'Trăng tàn',
+    daySun: 'CN', dayMon: 'T2', dayTue: 'T3', dayWed: 'T4', dayThu: 'T5', dayFri: 'T6', daySat: 'T7',
+    hwToday: 'Hôm nay! ', hwSonTag: 'Ngày Tốt🌟', hwHwangdoTag: 'Hoàng đạo🧿', hwHapTag: 'Lục hợp✨', hwConflictTag: 'Xung⚠️',
+    hwSonMonth: ' Ngày Tốt tháng', hwSonNone: 'Không có Ngày Tốt', hwTodayLabel2: 'Hôm nay',
+    algoNote: 'Ứng dụng đề xuất ngày lành dựa trên <strong>Tứ trụ/Cung/Âm lịch</strong>.<br>Kết quả khác nhau theo ngày sinh.<br>Thuốc hoạt động như <strong>bộ lọc loại bỏ ngày</strong>.',
+    medResultStopApplied: 'Đã chọn → Đề xuất từ <strong>{date}</strong> đến {end}',
+    medResultNoStop: 'Chưa chọn thuốc ngừng · Hôm nay+3~45 ngày'
   }
 };
 
