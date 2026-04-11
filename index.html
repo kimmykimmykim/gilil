@@ -1593,6 +1593,127 @@ body {
   background-position: center top !important;
   background-repeat: no-repeat !important;
 }
+
+/* ── 프리미엄 잠금 시스템 ── */
+.date-card.premium-locked {
+  position: relative;
+  overflow: hidden;
+}
+.premium-lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,245,250,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: inherit;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.premium-lock-overlay:active {
+  background: rgba(255,240,248,0.92);
+}
+.premium-lock-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 2px 6px rgba(232,0,106,0.2));
+}
+.premium-lock-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #C0005A;
+  margin-bottom: 4px;
+}
+.premium-lock-desc {
+  font-size: 12px;
+  color: rgba(40,5,25,0.6);
+  text-align: center;
+  line-height: 1.5;
+}
+.premium-lock-btn {
+  margin-top: 12px;
+  padding: 10px 28px;
+  background: linear-gradient(135deg, #E8006A, #FF4DA6);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  box-shadow: 0 4px 16px rgba(232,0,106,0.3);
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.premium-lock-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(232,0,106,0.3);
+}
+
+/* 프리미엄 구매 배너 (결과 페이지 하단) */
+.premium-banner {
+  margin: 16px 20px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(232,0,106,0.06), rgba(255,77,166,0.08));
+  border: 1.5px solid rgba(232,0,106,0.2);
+  border-radius: 16px;
+  text-align: center;
+}
+.premium-banner-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #C0005A;
+  margin-bottom: 4px;
+}
+.premium-banner-desc {
+  font-size: 12px;
+  color: rgba(40,5,25,0.6);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.premium-banner-price {
+  font-size: 11px;
+  color: rgba(40,5,25,0.45);
+  margin-bottom: 10px;
+}
+.premium-banner-buy {
+  display: inline-block;
+  padding: 12px 36px;
+  background: linear-gradient(135deg, #E8006A, #FF4DA6);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  box-shadow: 0 4px 16px rgba(232,0,106,0.3);
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.premium-banner-buy:active {
+  transform: scale(0.97);
+}
+.premium-banner.hidden { display: none; }
+
+/* 프리미엄 잠금 해제 완료 배지 */
+.premium-unlocked-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #2A9D60;
+  background: rgba(42,157,96,0.08);
+  border: 1px solid rgba(42,157,96,0.2);
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-left: 8px;
+}
 </style>
 </head>
 <body>
@@ -2014,6 +2135,13 @@ body {
   <div class="dates-label" data-i18n="top3Label">추천 길일 TOP 3</div>
 
   <div class="date-card best" id="card0">
+    <!-- 프리미엄 잠금 오버레이 -->
+    <div class="premium-lock-overlay" id="premium-lock-overlay" onclick="purchasePremium()" style="display:none;">
+      <div class="premium-lock-icon">🔒</div>
+      <div class="premium-lock-title">프리미엄 기능입니다</div>
+      <div class="premium-lock-desc">최고 길일 TOP 1을 확인하려면<br/>프리미엄을 구매하세요</div>
+      <button class="premium-lock-btn" type="button">₩1,900 잠금해제</button>
+    </div>
     <div class="best-badge">최적</div>
     <div class="date-top">
       <div class="date-num" id="date0">-</div>
@@ -2070,6 +2198,14 @@ body {
     <div class="detail-row"><div class="d-icon">🧿</div><div><div class="d-key">출생 간지 참고</div><div class="d-val" id="d-ganji">-</div></div></div>
     <div class="detail-row" id="d-meds-row"><div class="d-icon">💊</div><div><div class="d-key">약물 반영</div><div class="d-val" id="d-meds">-</div></div></div>
     <div class="detail-row" id="d-consult-row"><div class="d-icon">🩺</div><div><div class="d-key">상담 우선 약물</div><div class="d-val" id="d-consult">-</div></div></div>
+  </div>
+
+  <!-- 프리미엄 구매 배너 -->
+  <div class="premium-banner" id="premium-banner" style="display:none;">
+    <div class="premium-banner-title">🔓 TOP 1 길일을 확인하세요</div>
+    <div class="premium-banner-desc">모든 카테고리의 최고 길일(100점) TOP 1을<br/>1회 구매로 영구 잠금해제합니다</div>
+    <div class="premium-banner-price">₩1,900 · 1회 구매 · 영구 이용</div>
+    <button class="premium-banner-buy" onclick="purchasePremium()" type="button">프리미엄 잠금해제</button>
   </div>
 
   <div class="result-cta">
@@ -2186,6 +2322,172 @@ var top3Results = [];
 var calType = 'solar';
 var currentCat = 'surgery';
 var latestAnalysis = null;
+
+// ════════════════════════════════════════════════════
+// 프리미엄 (인앱결제) 시스템
+// ════════════════════════════════════════════════════
+var PREMIUM_KEY = 'gilil_premium';
+var PREMIUM_PRODUCT_ID = 'gilil_premium';
+
+function isPremium() {
+  return localStorage.getItem(PREMIUM_KEY) === 'true';
+}
+
+function setPremiumState(val) {
+  try { localStorage.setItem(PREMIUM_KEY, val ? 'true' : 'false'); } catch(e) {}
+}
+
+// Google Play Billing — Capacitor 브릿지
+function initBilling() {
+  // CdvPurchase (cordova-plugin-purchase v13+) 사용
+  if (typeof CdvPurchase !== 'undefined') {
+    var store = CdvPurchase.store;
+    store.register([{
+      id: PREMIUM_PRODUCT_ID,
+      type: CdvPurchase.ProductType.NON_CONSUMABLE,
+      platform: CdvPurchase.Platform.GOOGLE_PLAY
+    }]);
+
+    store.when()
+      .approved(function(transaction) {
+        transaction.verify();
+      })
+      .verified(function(receipt) {
+        receipt.finish();
+        setPremiumState(true);
+        applyPremiumUI();
+        showToast('프리미엄 잠금해제 완료!');
+      });
+
+    // 기존 구매 복원 확인
+    store.restorePurchases();
+
+    store.initialize([CdvPurchase.Platform.GOOGLE_PLAY])
+      .then(function() {
+        // 이미 구매한 상태 확인
+        var product = store.get(PREMIUM_PRODUCT_ID);
+        if (product && product.owned) {
+          setPremiumState(true);
+          applyPremiumUI();
+        }
+      });
+    return;
+  }
+
+  // Capacitor 네이티브 플러그인 fallback
+  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.InAppPurchase) {
+    var iap = window.Capacitor.Plugins.InAppPurchase;
+    iap.restorePurchases().then(function(result) {
+      if (result && result.purchases) {
+        result.purchases.forEach(function(p) {
+          if (p.productId === PREMIUM_PRODUCT_ID && p.purchaseState === 1) {
+            setPremiumState(true);
+            applyPremiumUI();
+          }
+        });
+      }
+    }).catch(function() {});
+    return;
+  }
+
+  // 웹 환경 — localStorage만으로 상태 유지
+  if (isPremium()) applyPremiumUI();
+}
+
+function purchasePremium() {
+  if (isPremium()) {
+    showToast('이미 프리미엄 사용자입니다');
+    return;
+  }
+
+  // CdvPurchase (cordova-plugin-purchase v13+)
+  if (typeof CdvPurchase !== 'undefined') {
+    var product = CdvPurchase.store.get(PREMIUM_PRODUCT_ID);
+    if (product) {
+      var offer = product.getOffer();
+      if (offer) {
+        offer.order()
+          .then(function() { /* approved 이벤트에서 처리 */ })
+          .catch(function(err) {
+            showToast('결제에 실패했습니다: ' + (err.message || '다시 시도해주세요'));
+          });
+        return;
+      }
+    }
+    showToast('상품 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+    return;
+  }
+
+  // Capacitor 네이티브 플러그인 fallback
+  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.InAppPurchase) {
+    window.Capacitor.Plugins.InAppPurchase.purchase({ productId: PREMIUM_PRODUCT_ID })
+      .then(function(result) {
+        if (result && result.transactionId) {
+          setPremiumState(true);
+          applyPremiumUI();
+          showToast('프리미엄 잠금해제 완료!');
+        }
+      })
+      .catch(function(err) {
+        showToast('결제에 실패했습니다. 다시 시도해주세요.');
+      });
+    return;
+  }
+
+  // 웹 환경 — Google Play 결제 불가 안내
+  showToast('Google Play 결제는 앱에서만 가능합니다');
+}
+
+function restorePurchase() {
+  if (typeof CdvPurchase !== 'undefined') {
+    CdvPurchase.store.restorePurchases();
+    showToast('구매 복원 중...');
+    return;
+  }
+  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.InAppPurchase) {
+    window.Capacitor.Plugins.InAppPurchase.restorePurchases()
+      .then(function(result) {
+        var found = false;
+        if (result && result.purchases) {
+          result.purchases.forEach(function(p) {
+            if (p.productId === PREMIUM_PRODUCT_ID && p.purchaseState === 1) {
+              setPremiumState(true);
+              found = true;
+            }
+          });
+        }
+        if (found) {
+          applyPremiumUI();
+          showToast('프리미엄 복원 완료!');
+        } else {
+          showToast('복원할 구매 내역이 없습니다');
+        }
+      })
+      .catch(function() {
+        showToast('복원에 실패했습니다');
+      });
+    return;
+  }
+  showToast('Google Play 결제 복원은 앱에서만 가능합니다');
+}
+
+function applyPremiumUI() {
+  var lockOverlay = document.getElementById('premium-lock-overlay');
+  var banner = document.getElementById('premium-banner');
+  var card0 = document.getElementById('card0');
+
+  if (isPremium()) {
+    // 잠금 해제
+    if (lockOverlay) lockOverlay.style.display = 'none';
+    if (banner) banner.style.display = 'none';
+    if (card0) card0.classList.remove('premium-locked');
+  } else {
+    // 잠금 표시
+    if (lockOverlay) lockOverlay.style.display = 'flex';
+    if (banner) banner.style.display = 'block';
+    if (card0) card0.classList.add('premium-locked');
+  }
+}
 
 // ────────────────────────────────────────────────
 // 한국 공휴일 (2026~2027)
@@ -3255,13 +3557,25 @@ function renderResults() {
     var d = String(r.date.getDate()).padStart(2,'0');
     var dateStr = y + m + d;
     var title = r.month + '월 ' + r.day + '일 ' + catLabel + ' 길일';
-    calButtons +=
-      '<button class="cal-btn" type="button" onclick="saveToCalendar(\'' + dateStr + '\',\'' + title + '\')">' +
-      '<span class="cal-icon">' + medals[idx] + '</span>' +
-      '<div><strong>' + r.month + '월 ' + r.day + '일 (' + r.dayName + ')</strong> · ' + r.score + '점</div>' +
-      '</button>';
+    // TOP 1 무료 사용자 잠금
+    if (idx === 0 && !isPremium()) {
+      calButtons +=
+        '<button class="cal-btn" type="button" onclick="purchasePremium()" style="opacity:0.5;position:relative;">' +
+        '<span class="cal-icon">🔒</span>' +
+        '<div><strong>TOP 1 길일</strong> · 프리미엄 전용</div>' +
+        '</button>';
+    } else {
+      calButtons +=
+        '<button class="cal-btn" type="button" onclick="saveToCalendar(\'' + dateStr + '\',\'' + title + '\')">' +
+        '<span class="cal-icon">' + medals[idx] + '</span>' +
+        '<div><strong>' + r.month + '월 ' + r.day + '일 (' + r.dayName + ')</strong> · ' + r.score + '점</div>' +
+        '</button>';
+    }
   });
   document.getElementById('cal-buttons').innerHTML = calButtons;
+
+  // 프리미엄 잠금 상태 적용
+  applyPremiumUI();
 }
 
 // ────────────────────────────────────────────────
@@ -3493,7 +3807,11 @@ function shareKakao() {
   var medals = ['🥇','🥈','🥉'];
   var text = '🌙 길일 앱 추천 결과\n\n';
   top3Results.forEach(function(r, i) {
-    text += medals[i] + ' ' + r.month + '월 ' + r.day + '일 (' + r.dayName + ') · ' + r.score + '점\n';
+    if (i === 0 && !isPremium()) {
+      text += '🔒 TOP 1 길일 · 프리미엄 전용\n';
+    } else {
+      text += medals[i] + ' ' + r.month + '월 ' + r.day + '일 (' + r.dayName + ') · ' + r.score + '점\n';
+    }
   });
   if (currentCat === 'surgery' && latestAnalysis.consultMeds.length) {
     text += '\n※ 상담 우선 약물 있음: 병원 확인 우선';
@@ -3511,6 +3829,9 @@ function shareKakao() {
 function copyLink() {
   if (!top3Results.length) { showToast('먼저 길일을 계산해주세요'); return; }
   var text = '길일 추천\n' + top3Results.map(function(r, idx) {
+    if (idx === 0 && !isPremium()) {
+      return '🔒 TOP 1 길일 · 프리미엄 전용';
+    }
     return ['🥇','🥈','🥉'][idx] + ' ' + r.month + '월 ' + r.day + '일 ' + r.score + '점';
   }).join('\n');
   copyToClipboard(text);
@@ -3628,31 +3949,40 @@ function generateShareCard() {
     var subEl   = document.getElementById('card-d' + i + '-sub');
     var scoreEl = document.getElementById('card-d' + i + '-score');
     if (!mainEl) return;
-    mainEl.textContent = r.month + '월 ' + r.day + '일 (' + r.dayName + ')';
 
-    // 음력 + 손없는날/황도
-    var lunarLine = '음력 ' + r.lunar.month + '/' + r.lunar.day +
-      (r.isSon ? ' · 손없는날' : '') +
-      (r.isHwangdo ? ' · 황도' : '');
+    // TOP 1 무료 사용자 잠금 처리 (공유 카드)
+    if (i === 0 && !isPremium()) {
+      mainEl.textContent = '🔒 프리미엄 전용';
+      subEl.innerHTML = '최고 길일 TOP 1을 확인하려면<br/>프리미엄을 구매하세요';
+      scoreEl.textContent = '—';
+    } else {
+      mainEl.textContent = r.month + '월 ' + r.day + '일 (' + r.dayName + ')';
 
-    // 왜 좋은 날인지 — good 태그에서 핵심 2~3개 추출
-    var reasons = r.tags
-      .filter(function(t){ return t.good; })
-      .map(function(t){ return t.text.replace(/^[^\s]+\s/, ''); }) // 이모지 제거
-      .slice(0, 3)
-      .join(' + ');
+      // 음력 + 손없는날/황도
+      var lunarLine = '음력 ' + r.lunar.month + '/' + r.lunar.day +
+        (r.isSon ? ' · 손없는날' : '') +
+        (r.isHwangdo ? ' · 황도' : '');
 
-    subEl.innerHTML =
-      lunarLine +
-      (reasons ? '<br><span style="font-size:9px;color:rgba(192,80,10,0.65);">' + reasons + '</span>' : '');
+      // 왜 좋은 날인지 — good 태그에서 핵심 2~3개 추출
+      var reasons = r.tags
+        .filter(function(t){ return t.good; })
+        .map(function(t){ return t.text.replace(/^[^\s]+\s/, ''); }) // 이모지 제거
+        .slice(0, 3)
+        .join(' + ');
 
-    scoreEl.textContent = r.score + '점';
+      subEl.innerHTML =
+        lunarLine +
+        (reasons ? '<br><span style="font-size:9px;color:rgba(192,80,10,0.65);">' + reasons + '</span>' : '');
+
+      scoreEl.textContent = r.score + '점';
+    }
   });
 
-  // 태그 (1등 기준)
+  // 태그 (1등 기준 — 프리미엄 아니면 2등 기준)
   var tagsEl = document.getElementById('card-tags');
   tagsEl.innerHTML = '';
-  var goodTags = top3Results[0].tags.filter(function(t){ return t.good; }).slice(0,3);
+  var tagSource = isPremium() ? top3Results[0] : top3Results[1];
+  var goodTags = tagSource.tags.filter(function(t){ return t.good; }).slice(0,3);
   goodTags.forEach(function(t) {
     var span = document.createElement('span');
     span.style.cssText = 'font-size:9px;background:rgba(232,0,106,0.08);color:#C0005A;padding:3px 8px;border-radius:10px;border:1px solid rgba(232,0,106,0.18);white-space:nowrap;';
@@ -3970,6 +4300,9 @@ document.addEventListener('DOMContentLoaded', function() {
   setupYearInputLimit('partner-year', 4);
   applyTheme(currentCat);
   checkDisclaimer();
+
+  // ── 프리미엄 결제 초기화 ──
+  initBilling();
 
   // ── 사주 localStorage 로드 ──
   loadBirth();
