@@ -2138,9 +2138,9 @@ body {
     <!-- 프리미엄 잠금 오버레이 -->
     <div class="premium-lock-overlay" id="premium-lock-overlay" onclick="purchasePremium()" style="display:none;">
       <div class="premium-lock-icon">🔒</div>
-      <div class="premium-lock-title">프리미엄 기능입니다</div>
-      <div class="premium-lock-desc">최고 길일 TOP 1을 확인하려면<br/>프리미엄을 구매하세요</div>
-      <button class="premium-lock-btn" type="button">₩1,900 잠금해제</button>
+      <div class="premium-lock-title" data-i18n="premiumTitle">프리미엄 기능입니다</div>
+      <div class="premium-lock-desc" data-i18n="premiumDesc">최고 길일 TOP 1을 확인하려면<br/>프리미엄을 구매하세요</div>
+      <button class="premium-lock-btn" type="button" data-i18n="premiumUnlock">₩1,900 잠금해제</button>
     </div>
     <div class="best-badge">최적</div>
     <div class="date-top">
@@ -2202,10 +2202,10 @@ body {
 
   <!-- 프리미엄 구매 배너 -->
   <div class="premium-banner" id="premium-banner" style="display:none;">
-    <div class="premium-banner-title">🔓 TOP 1 길일을 확인하세요</div>
-    <div class="premium-banner-desc">모든 카테고리의 최고 길일(100점) TOP 1을<br/>1회 구매로 영구 잠금해제합니다</div>
-    <div class="premium-banner-price">₩1,900 · 1회 구매 · 영구 이용</div>
-    <button class="premium-banner-buy" onclick="purchasePremium()" type="button">프리미엄 잠금해제</button>
+    <div class="premium-banner-title" data-i18n="premiumBannerTitle">🔓 TOP 1 길일을 확인하세요</div>
+    <div class="premium-banner-desc" data-i18n="premiumBannerDesc">모든 카테고리의 최고 길일(100점) TOP 1을<br/>1회 구매로 영구 잠금해제합니다</div>
+    <div class="premium-banner-price" data-i18n="premiumBannerPrice">₩1,900 · 1회 구매 · 영구 이용</div>
+    <button class="premium-banner-buy" onclick="purchasePremium()" type="button" data-i18n="premiumBannerBtn">프리미엄 잠금해제</button>
   </div>
 
   <div class="result-cta">
@@ -2356,11 +2356,8 @@ function initBilling() {
         receipt.finish();
         setPremiumState(true);
         applyPremiumUI();
-        showToast('프리미엄 잠금해제 완료!');
+        showToast(t('premiumDone'));
       });
-
-    // 기존 구매 복원 확인
-    store.restorePurchases();
 
     store.initialize([CdvPurchase.Platform.GOOGLE_PLAY])
       .then(function() {
@@ -2370,6 +2367,8 @@ function initBilling() {
           setPremiumState(true);
           applyPremiumUI();
         }
+        // 초기화 후 기존 구매 복원
+        store.restorePurchases();
       });
     return;
   }
@@ -2396,7 +2395,7 @@ function initBilling() {
 
 function purchasePremium() {
   if (isPremium()) {
-    showToast('이미 프리미엄 사용자입니다');
+    showToast(t('premiumAlready'));
     return;
   }
 
@@ -2409,12 +2408,12 @@ function purchasePremium() {
         offer.order()
           .then(function() { /* approved 이벤트에서 처리 */ })
           .catch(function(err) {
-            showToast('결제에 실패했습니다: ' + (err.message || '다시 시도해주세요'));
+            showToast(t('premiumFail'));
           });
         return;
       }
     }
-    showToast('상품 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+    showToast(t('premiumLoadingProduct'));
     return;
   }
 
@@ -2425,23 +2424,23 @@ function purchasePremium() {
         if (result && result.transactionId) {
           setPremiumState(true);
           applyPremiumUI();
-          showToast('프리미엄 잠금해제 완료!');
+          showToast(t('premiumDone'));
         }
       })
       .catch(function(err) {
-        showToast('결제에 실패했습니다. 다시 시도해주세요.');
+        showToast(t('premiumFail'));
       });
     return;
   }
 
   // 웹 환경 — Google Play 결제 불가 안내
-  showToast('Google Play 결제는 앱에서만 가능합니다');
+  showToast(t('premiumAppOnly'));
 }
 
 function restorePurchase() {
   if (typeof CdvPurchase !== 'undefined') {
     CdvPurchase.store.restorePurchases();
-    showToast('구매 복원 중...');
+    showToast(t('premiumRestoring'));
     return;
   }
   if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.InAppPurchase) {
@@ -2458,17 +2457,17 @@ function restorePurchase() {
         }
         if (found) {
           applyPremiumUI();
-          showToast('프리미엄 복원 완료!');
+          showToast(t('premiumRestored'));
         } else {
-          showToast('복원할 구매 내역이 없습니다');
+          showToast(t('premiumNoRestore'));
         }
       })
       .catch(function() {
-        showToast('복원에 실패했습니다');
+        showToast(t('premiumRestoreFail'));
       });
     return;
   }
-  showToast('Google Play 결제 복원은 앱에서만 가능합니다');
+  showToast(t('premiumRestoreAppOnly'));
 }
 
 function applyPremiumUI() {
@@ -2556,18 +2555,18 @@ var CAT_WEIGHTS = {
 // 별자리 (trait 범위 5~10 — 개인마다 다름)
 // ────────────────────────────────────────────────
 var WESTERN_SIGNS = [
-  { sign:'염소자리 ♑', traits:{surgery:9, business:6, moving:6, travel:5, love:5, invest:8}, note:'신중하고 계획적인 성향' },
-  { sign:'물병자리 ♒', traits:{surgery:6, business:8, moving:5, travel:9, love:4, invest:7}, note:'변화에 열린 성향' },
-  { sign:'물고기자리 ♓',traits:{surgery:5, business:4, moving:5, travel:7, love:9, invest:5}, note:'감수성과 공감 능력' },
-  { sign:'양자리 ♈',   traits:{surgery:7, business:8, moving:6, travel:8, love:6, invest:8}, note:'추진력과 행동력이 강함' },
-  { sign:'황소자리 ♉', traits:{surgery:9, business:7, moving:7, travel:4, love:8, invest:9}, note:'안정과 미감을 중시' },
-  { sign:'쌍둥이자리 ♊',traits:{surgery:6,business:7, moving:5, travel:9, love:6, invest:6}, note:'이동성과 적응력이 좋음' },
-  { sign:'게자리 ♋',   traits:{surgery:5, business:4, moving:8, travel:5, love:9, invest:4}, note:'정서적 안정과 가정을 중시' },
-  { sign:'사자자리 ♌', traits:{surgery:7, business:9, moving:5, travel:8, love:7, invest:8}, note:'존재감과 자신감이 강함' },
-  { sign:'처녀자리 ♍', traits:{surgery:9, business:7, moving:8, travel:4, love:5, invest:7}, note:'정교함과 관리 능력이 좋음' },
-  { sign:'천칭자리 ♎', traits:{surgery:10,business:6, moving:6, travel:5, love:10, invest:6},note:'균형감과 미적 조화' },
-  { sign:'전갈자리 ♏', traits:{surgery:7, business:5, moving:4, travel:5, love:8, invest:9}, note:'집중력과 결단력이 강함' },
-  { sign:'사수자리 ♐', traits:{surgery:6, business:7, moving:6, travel:10,love:6, invest:7}, note:'확장성과 모험심이 강함' }
+  { sign:'염소자리 ♑', traits:{surgery:9, business:6, moving:6, travel:5, love:5, invest:8, birth:6}, note:'신중하고 계획적인 성향' },
+  { sign:'물병자리 ♒', traits:{surgery:6, business:8, moving:5, travel:9, love:4, invest:7, birth:5}, note:'변화에 열린 성향' },
+  { sign:'물고기자리 ♓',traits:{surgery:5, business:4, moving:5, travel:7, love:9, invest:5, birth:8}, note:'감수성과 공감 능력' },
+  { sign:'양자리 ♈',   traits:{surgery:7, business:8, moving:6, travel:8, love:6, invest:8, birth:6}, note:'추진력과 행동력이 강함' },
+  { sign:'황소자리 ♉', traits:{surgery:9, business:7, moving:7, travel:4, love:8, invest:9, birth:7}, note:'안정과 미감을 중시' },
+  { sign:'쌍둥이자리 ♊',traits:{surgery:6,business:7, moving:5, travel:9, love:6, invest:6, birth:5}, note:'이동성과 적응력이 좋음' },
+  { sign:'게자리 ♋',   traits:{surgery:5, business:4, moving:8, travel:5, love:9, invest:4, birth:9}, note:'정서적 안정과 가정을 중시' },
+  { sign:'사자자리 ♌', traits:{surgery:7, business:9, moving:5, travel:8, love:7, invest:8, birth:6}, note:'존재감과 자신감이 강함' },
+  { sign:'처녀자리 ♍', traits:{surgery:9, business:7, moving:8, travel:4, love:5, invest:7, birth:7}, note:'정교함과 관리 능력이 좋음' },
+  { sign:'천칭자리 ♎', traits:{surgery:10,business:6, moving:6, travel:5, love:10, invest:6, birth:6},note:'균형감과 미적 조화' },
+  { sign:'전갈자리 ♏', traits:{surgery:7, business:5, moving:4, travel:5, love:8, invest:9, birth:7}, note:'집중력과 결단력이 강함' },
+  { sign:'사수자리 ♐', traits:{surgery:6, business:7, moving:6, travel:10,love:6, invest:7, birth:5}, note:'확장성과 모험심이 강함' }
 ];
 
 // ────────────────────────────────────────────────
@@ -2622,7 +2621,7 @@ var LUNAR_MONTHS = {
 };
 
 var JIANCHU_NAMES = ['건','제','만','평','정','집','파','위','성','수','개','폐'];
-var HWANGDO_JIANCHU = [0,1,2,3,4,8,10];
+var HWANGDO_JIANCHU = [0,2,3,4,5,8,10]; // 建滿平定執成開
 
 // ────────────────────────────────────────────────
 // 유틸
@@ -2767,7 +2766,7 @@ function getMonthZhi(d) {
 function getDayZhi(d) {
   var base = new Date(2000,0,1);
   var diff = Math.floor((d - base) / 86400000);
-  return ((diff % 12) + 12) % 12;
+  return ((diff + 4) % 12 + 12) % 12; // 2000-01-01 = 甲辰日, 辰=4
 }
 
 function getJianchuIndex(d) {
@@ -2805,7 +2804,7 @@ function getDayGanji(date) {
   var diff = Math.floor((date - base) / 86400000);
   var gan = ['갑','을','병','정','무','기','경','신','임','계'];
   var ji  = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
-  return gan[((diff%10)+10)%10] + ji[((diff%12)+12)%12] + '일';
+  return gan[((diff%10)+10)%10] + ji[((diff+4)%12+12)%12] + '일'; // 辰=4 offset
 }
 
 // ────────────────────────────────────────────────
@@ -2840,11 +2839,11 @@ function getBirthZhi(year) {
 function isConflictDay(date, birthYear) {
   var bz = getBirthZhi(birthYear);
   var dz = getDayZhi(date);
-  return Math.abs(bz - dz) === 6 || Math.abs(bz - dz) === (12 - 6);
+  return Math.abs(bz - dz) === 6;
 }
 
 // 삼형: 자-묘, 인-사-신, 축-술-미
-var SANGHYUNG = [[0,3],[2,5,8],[1,10,6]];
+var SANGHYUNG = [[0,3],[2,5,8],[1,7,10]];
 function isSanghyungDay(date, birthYear) {
   var bz = getBirthZhi(birthYear);
   var dz = getDayZhi(date);
@@ -3152,7 +3151,7 @@ function scoreDate(date, context) {
 
   // 손없는날 (수술은 위 STAGE1에서 처리)
   if (son && cat !== 'surgery') {
-    var sonMult = { business:1, moving:1, travel:0.6, love:1, invest:0.5 };
+    var sonMult = { business:1, moving:1, travel:0.6, love:1, invest:0.5, birth:1 };
     score += w.son * (sonMult[cat] || 0.5);
     reasons.push('손없는날');
     tags.push({ text:'🌟 손없는날', good:true });
@@ -3163,7 +3162,8 @@ function scoreDate(date, context) {
     cat === 'moving' ||
     cat === 'invest' ||
     cat === 'business' ||
-    cat === 'love'
+    cat === 'love' ||
+    cat === 'birth'
   );
   if (hwangdo && useHwangdo && w.hwangdo > 0) {
     score += w.hwangdo;
@@ -3410,7 +3410,7 @@ function calculateGilil() {
     if (top3.length < 3) throw new Error('추천 날짜를 충분히 찾지 못했습니다. 기간을 넓혀주세요.');
 
     // 바 시각화: 1등 = 100%, 나머지 상대 비율 (차이가 보이도록)
-    var maxRaw = top3[0].rawScore;
+    var maxRaw = Math.max(top3[0].rawScore, 1); // NaN/음수 방어
     top3Results = top3.map(function(item) {
       var barWidth = Math.max(40, Math.round((item.rawScore / maxRaw) * 100));
       item.score = barWidth;
@@ -3479,6 +3479,18 @@ function renderResults() {
 
   for (var i = 0; i < 3; i++) {
     var r = top3Results[i];
+
+    // TOP 1 무료 사용자: DOM 데이터도 숨김 (보안)
+    if (i === 0 && !isPremium()) {
+      document.getElementById('date0').textContent = '??월 ??일';
+      document.getElementById('day0').textContent = '???요일';
+      document.getElementById('lunar0').innerHTML = '🔒 ' + t('premiumCalDesc');
+      document.getElementById('score0').textContent = '??점';
+      document.getElementById('bar0').style.width = '100%';
+      document.getElementById('tags0').innerHTML = '';
+      continue;
+    }
+
     document.getElementById('date' + i).textContent = r.month + '월 ' + r.day + '일';
     document.getElementById('day' + i).textContent = r.dayName + '요일';
 
@@ -3562,7 +3574,7 @@ function renderResults() {
       calButtons +=
         '<button class="cal-btn" type="button" onclick="purchasePremium()" style="opacity:0.5;position:relative;">' +
         '<span class="cal-icon">🔒</span>' +
-        '<div><strong>TOP 1 길일</strong> · 프리미엄 전용</div>' +
+        '<div><strong>' + t('premiumCalLock') + '</strong> · ' + t('premiumCalDesc') + '</div>' +
         '</button>';
     } else {
       calButtons +=
@@ -3793,7 +3805,12 @@ function getBirthDate() {
   if (y < 1900 || y > 2100) throw new Error('연도는 1900~2100 사이로 입력해주세요');
   if (m < 1 || m > 12) throw new Error('월은 1~12 사이로 입력해주세요');
   if (d < 1 || d > 31) throw new Error('일은 1~31 사이로 입력해주세요');
-  if (!isValidDate(y, m, d)) throw new Error('존재하지 않는 날짜예요. 다시 확인해주세요 🙏');
+  if (calType === 'solar') {
+    if (!isValidDate(y, m, d)) throw new Error('존재하지 않는 날짜예요. 다시 확인해주세요 🙏');
+  } else {
+    // 음력은 최대 30일
+    if (d > 30) throw new Error('음력 날짜는 1~30일 사이로 입력해주세요');
+  }
   if (calType === 'solar') return { originalType:'양력', date:new Date(y, m-1, d), approx:false };
   if (calType === 'lunar') return { originalType:'음력', date:lunarToSolar(y, m, d, false), approx:(!LUNAR_NEW_YEAR[y]||!LUNAR_MONTHS[y]) };
   return { originalType:'음력 윤달', date:lunarToSolar(y, m, d, true), approx:(!LUNAR_NEW_YEAR[y]||!LUNAR_MONTHS[y]) };
@@ -3808,7 +3825,7 @@ function shareKakao() {
   var text = '🌙 길일 앱 추천 결과\n\n';
   top3Results.forEach(function(r, i) {
     if (i === 0 && !isPremium()) {
-      text += '🔒 TOP 1 길일 · 프리미엄 전용\n';
+      text += t('premiumLockShare') + '\n';
     } else {
       text += medals[i] + ' ' + r.month + '월 ' + r.day + '일 (' + r.dayName + ') · ' + r.score + '점\n';
     }
@@ -3830,7 +3847,7 @@ function copyLink() {
   if (!top3Results.length) { showToast('먼저 길일을 계산해주세요'); return; }
   var text = '길일 추천\n' + top3Results.map(function(r, idx) {
     if (idx === 0 && !isPremium()) {
-      return '🔒 TOP 1 길일 · 프리미엄 전용';
+      return t('premiumLockShare');
     }
     return ['🥇','🥈','🥉'][idx] + ' ' + r.month + '월 ' + r.day + '일 ' + r.score + '점';
   }).join('\n');
@@ -3952,8 +3969,8 @@ function generateShareCard() {
 
     // TOP 1 무료 사용자 잠금 처리 (공유 카드)
     if (i === 0 && !isPremium()) {
-      mainEl.textContent = '🔒 프리미엄 전용';
-      subEl.innerHTML = '최고 길일 TOP 1을 확인하려면<br/>프리미엄을 구매하세요';
+      mainEl.textContent = '🔒 ' + t('premiumCalDesc');
+      subEl.innerHTML = t('premiumDesc');
       scoreEl.textContent = '—';
     } else {
       mainEl.textContent = r.month + '월 ' + r.day + '일 (' + r.dayName + ')';
@@ -4199,7 +4216,12 @@ function personalDayScore(date, birthYear, birthMonth, birthDay) {
   var sanghyung = isSanghyungDay(date, birthYear);
   var hap       = isHapDay(date, birthYear);
   var signObj   = getWesternSign(birthMonth, birthDay);
-  var zodiacVal = signObj ? (signObj.traits['surgery'] || 6) : 6;
+  // 홈 위젯용: 전체 카테고리 평균 트레잇 사용
+  var zodiacVal = 6;
+  if (signObj && signObj.traits) {
+    var vals = Object.values(signObj.traits);
+    zodiacVal = Math.round(vals.reduce(function(a,b){return a+b;},0) / vals.length);
+  }
 
   var score = 20;
   if (son)      score += 22;
@@ -4379,7 +4401,27 @@ var TEXTS = {
     findBtn: '길일 찾기 →',
     smallNote: '사주·별자리·음력(solarlunar) 기반 길일 추천 · 참고용으로 활용하세요.',
     bannerTitle: '이번 추천 로직',
-    top3Label: '추천 길일 TOP 3'
+    top3Label: '추천 길일 TOP 3',
+    premiumTitle: '프리미엄 기능입니다',
+    premiumDesc: '최고 길일 TOP 1을 확인하려면<br/>프리미엄을 구매하세요',
+    premiumUnlock: '₩1,900 잠금해제',
+    premiumBannerTitle: '🔓 TOP 1 길일을 확인하세요',
+    premiumBannerDesc: '모든 카테고리의 최고 길일(100점) TOP 1을<br/>1회 구매로 영구 잠금해제합니다',
+    premiumBannerPrice: '₩1,900 · 1회 구매 · 영구 이용',
+    premiumBannerBtn: '프리미엄 잠금해제',
+    premiumAlready: '이미 프리미엄 사용자입니다',
+    premiumDone: '프리미엄 잠금해제 완료!',
+    premiumFail: '결제에 실패했습니다. 다시 시도해주세요.',
+    premiumAppOnly: 'Google Play 결제는 앱에서만 가능합니다',
+    premiumRestoring: '구매 복원 중...',
+    premiumRestored: '프리미엄 복원 완료!',
+    premiumNoRestore: '복원할 구매 내역이 없습니다',
+    premiumRestoreFail: '복원에 실패했습니다',
+    premiumRestoreAppOnly: 'Google Play 결제 복원은 앱에서만 가능합니다',
+    premiumLockShare: '🔒 TOP 1 길일 · 프리미엄 전용',
+    premiumCalLock: 'TOP 1 길일',
+    premiumCalDesc: '프리미엄 전용',
+    premiumLoadingProduct: '상품 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.'
   },
   en: {
     tapToBegin: 'tap to begin',
@@ -4420,7 +4462,27 @@ var TEXTS = {
     findBtn: 'Find Lucky Days →',
     smallNote: 'Recommendations based on Four Pillars, Zodiac & Lunar calendar · For reference only.',
     bannerTitle: 'Recommendation Logic',
-    top3Label: 'TOP 3 Auspicious Days'
+    top3Label: 'TOP 3 Auspicious Days',
+    premiumTitle: 'Premium Feature',
+    premiumDesc: 'Unlock TOP 1 best auspicious day<br/>with Premium',
+    premiumUnlock: '₩1,900 Unlock',
+    premiumBannerTitle: '🔓 See the #1 Best Day',
+    premiumBannerDesc: 'Unlock TOP 1 auspicious day across all categories<br/>with a one-time purchase',
+    premiumBannerPrice: '₩1,900 · One-time · Lifetime access',
+    premiumBannerBtn: 'Unlock Premium',
+    premiumAlready: 'You are already a Premium user',
+    premiumDone: 'Premium unlocked!',
+    premiumFail: 'Payment failed. Please try again.',
+    premiumAppOnly: 'Google Play payment is only available in the app',
+    premiumRestoring: 'Restoring purchase...',
+    premiumRestored: 'Premium restored!',
+    premiumNoRestore: 'No purchase to restore',
+    premiumRestoreFail: 'Restore failed',
+    premiumRestoreAppOnly: 'Restore is only available in the app',
+    premiumLockShare: '🔒 TOP 1 Day · Premium Only',
+    premiumCalLock: 'TOP 1 Day',
+    premiumCalDesc: 'Premium Only',
+    premiumLoadingProduct: 'Loading product info. Please try again shortly.'
   },
   ja: {
     tapToBegin: 'タップして始める',
@@ -4461,7 +4523,27 @@ var TEXTS = {
     findBtn: '吉日を探す →',
     smallNote: '四柱推命・星座・旧暦に基づく吉日推薦 · 参考用にご利用ください。',
     bannerTitle: '推薦ロジック',
-    top3Label: '吉日 TOP 3'
+    top3Label: '吉日 TOP 3',
+    premiumTitle: 'プレミアム機能',
+    premiumDesc: '最高の吉日 TOP 1を確認するには<br/>プレミアムをご購入ください',
+    premiumUnlock: '₩1,900 ロック解除',
+    premiumBannerTitle: '🔓 TOP 1 吉日を確認',
+    premiumBannerDesc: '全カテゴリの最高吉日(100点) TOP 1を<br/>1回の購入で永久ロック解除',
+    premiumBannerPrice: '₩1,900 · 1回購入 · 永久利用',
+    premiumBannerBtn: 'プレミアム ロック解除',
+    premiumAlready: 'すでにプレミアムユーザーです',
+    premiumDone: 'プレミアム ロック解除完了！',
+    premiumFail: '決済に失敗しました。もう一度お試しください。',
+    premiumAppOnly: 'Google Play決済はアプリでのみ利用可能です',
+    premiumRestoring: '購入復元中...',
+    premiumRestored: 'プレミアム復元完了！',
+    premiumNoRestore: '復元する購入履歴がありません',
+    premiumRestoreFail: '復元に失敗しました',
+    premiumRestoreAppOnly: '復元はアプリでのみ利用可能です',
+    premiumLockShare: '🔒 TOP 1 吉日 · プレミアム専用',
+    premiumCalLock: 'TOP 1 吉日',
+    premiumCalDesc: 'プレミアム専用',
+    premiumLoadingProduct: '商品情報を読み込み中です。しばらくしてからお試しください。'
   },
   zh: {
     tapToBegin: '点击开始',
@@ -4502,7 +4584,27 @@ var TEXTS = {
     findBtn: '查找吉日 →',
     smallNote: '基于四柱八字、星座、农历的吉日推荐 · 仅供参考。',
     bannerTitle: '推荐逻辑',
-    top3Label: '吉日 TOP 3'
+    top3Label: '吉日 TOP 3',
+    premiumTitle: '高级功能',
+    premiumDesc: '查看最佳吉日 TOP 1<br/>请购买高级版',
+    premiumUnlock: '₩1,900 解锁',
+    premiumBannerTitle: '🔓 查看 TOP 1 吉日',
+    premiumBannerDesc: '一次购买，永久解锁所有类别<br/>最佳吉日(100分) TOP 1',
+    premiumBannerPrice: '₩1,900 · 一次购买 · 永久使用',
+    premiumBannerBtn: '解锁高级版',
+    premiumAlready: '您已是高级用户',
+    premiumDone: '高级版解锁成功！',
+    premiumFail: '支付失败，请重试。',
+    premiumAppOnly: 'Google Play支付仅在应用内可用',
+    premiumRestoring: '正在恢复购买...',
+    premiumRestored: '高级版恢复成功！',
+    premiumNoRestore: '没有可恢复的购买记录',
+    premiumRestoreFail: '恢复失败',
+    premiumRestoreAppOnly: '恢复仅在应用内可用',
+    premiumLockShare: '🔒 TOP 1 吉日 · 高级专享',
+    premiumCalLock: 'TOP 1 吉日',
+    premiumCalDesc: '高级专享',
+    premiumLoadingProduct: '正在加载商品信息，请稍后重试。'
   },
   vi: {
     tapToBegin: 'Chạm để bắt đầu',
@@ -4543,7 +4645,27 @@ var TEXTS = {
     findBtn: 'Tìm ngày lành →',
     smallNote: 'Đề xuất ngày lành theo tử vi, hoàng đạo & âm lịch · Chỉ mang tính tham khảo.',
     bannerTitle: 'Logic đề xuất',
-    top3Label: 'TOP 3 Ngày Lành'
+    top3Label: 'TOP 3 Ngày Lành',
+    premiumTitle: 'Tính năng Premium',
+    premiumDesc: 'Mở khóa ngày lành TOP 1<br/>bằng Premium',
+    premiumUnlock: '₩1,900 Mở khóa',
+    premiumBannerTitle: '🔓 Xem ngày lành TOP 1',
+    premiumBannerDesc: 'Mở khóa ngày lành tốt nhất (100 điểm) TOP 1<br/>tất cả danh mục với một lần mua',
+    premiumBannerPrice: '₩1,900 · Mua một lần · Sử dụng vĩnh viễn',
+    premiumBannerBtn: 'Mở khóa Premium',
+    premiumAlready: 'Bạn đã là người dùng Premium',
+    premiumDone: 'Đã mở khóa Premium!',
+    premiumFail: 'Thanh toán thất bại. Vui lòng thử lại.',
+    premiumAppOnly: 'Thanh toán Google Play chỉ khả dụng trong ứng dụng',
+    premiumRestoring: 'Đang khôi phục giao dịch...',
+    premiumRestored: 'Đã khôi phục Premium!',
+    premiumNoRestore: 'Không có giao dịch để khôi phục',
+    premiumRestoreFail: 'Khôi phục thất bại',
+    premiumRestoreAppOnly: 'Khôi phục chỉ khả dụng trong ứng dụng',
+    premiumLockShare: '🔒 TOP 1 Ngày Lành · Chỉ Premium',
+    premiumCalLock: 'TOP 1 Ngày Lành',
+    premiumCalDesc: 'Chỉ Premium',
+    premiumLoadingProduct: 'Đang tải thông tin sản phẩm. Vui lòng thử lại sau.'
   }
 };
 
