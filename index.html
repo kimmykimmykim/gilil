@@ -1752,7 +1752,7 @@ body {
   <div class="disclaimer-wrap">
     <div class="disclaimer-logo">
       <span style="font-size:42px;font-weight:300;background:linear-gradient(160deg,#FF4DA6,#E8006A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">吉</span>
-      <p style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:3px;margin-top:4px;">길  일 · Auspicious Day</p>
+      <p style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:3px;margin-top:4px;" data-i18n="brandTagline">길  일 · Auspicious Day</p>
     </div>
     <div class="disclaimer-box">
       <div class="disclaimer-title" data-i18n="disclaimerTitle">서비스 이용 전 안내</div>
@@ -1805,7 +1805,7 @@ body {
   <div class="intro-wrap initially-hidden" id="intro-wrap">
     <div class="intro-title-group">
       <div class="intro-symbol">吉</div>
-      <div class="intro-title">길  일</div>
+      <div class="intro-title" data-i18n="brandLogo">길  일</div>
     </div>
     <div class="intro-line"></div>
     <div class="intro-sub">Auspicious Day</div>
@@ -1904,9 +1904,9 @@ body {
 
     <div class="sec-label" data-i18n="birthDateLabel">생년월일</div>
     <div class="birth-row">
-      <input type="number" class="input-field birth-field year" id="birthyear" placeholder="연도" value="1990" min="1900" max="2100" inputmode="numeric" />
-      <input type="number" class="input-field birth-field month" id="birthmonth" placeholder="월" value="5" min="1" max="12" inputmode="numeric" />
-      <input type="number" class="input-field birth-field day" id="birthday" placeholder="일" value="15" min="1" max="31" inputmode="numeric" />
+      <input type="number" class="input-field birth-field year" id="birthyear" data-i18n-placeholder="phYear" placeholder="연도" value="1990" min="1900" max="2100" inputmode="numeric" />
+      <input type="number" class="input-field birth-field month" id="birthmonth" data-i18n-placeholder="phMonth" placeholder="월" value="5" min="1" max="12" inputmode="numeric" />
+      <input type="number" class="input-field birth-field day" id="birthday" data-i18n-placeholder="phDay" placeholder="일" value="15" min="1" max="31" inputmode="numeric" />
     </div>
 
     <div class="sec-label" data-i18n="genderLabel">성별</div>
@@ -2016,8 +2016,8 @@ body {
       </div>
       <div class="sec-label" data-i18n="bizPeriodLabel">희망 개업 기간</div>
       <div class="birth-row">
-        <input type="number" class="input-field" id="business-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
-        <input type="number" class="input-field" id="business-end-month" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="business-start-month" data-i18n-placeholder="startMonth" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="business-end-month" data-i18n-placeholder="endMonth" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
       </div>
       <label class="checkbox-wrap"><input type="checkbox" id="business-hwangdo" checked /> <span data-i18n="bizHwangdo">황도 보조점수 반영</span></label>
       <div class="info-banner" data-i18n="bizInfo">🏪 손없는날 + 황도 + 사주 충돌 회피 + 별자리를 기반으로 추천합니다.</div>
@@ -2033,8 +2033,8 @@ body {
       </div>
       <div class="sec-label" data-i18n="movePeriodLabel">희망 이사 기간</div>
       <div class="birth-row">
-        <input type="number" class="input-field" id="moving-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
-        <input type="number" class="input-field" id="moving-end-month" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="moving-start-month" data-i18n-placeholder="startMonth" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="moving-end-month" data-i18n-placeholder="endMonth" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
       </div>
       <div class="info-banner" data-i18n="moveInfo">🏠 손없는날을 가장 강하게 반영하고, 사주 충돌일을 회피합니다.</div>
     </div>
@@ -2049,8 +2049,8 @@ body {
       </div>
       <div class="sec-label" data-i18n="travelPeriodLabel">출발 희망 기간</div>
       <div class="birth-row">
-        <input type="number" class="input-field" id="travel-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
-        <input type="number" class="input-field" id="travel-end-month" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="travel-start-month" data-i18n-placeholder="startMonth" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="travel-end-month" data-i18n-placeholder="endMonth" placeholder="종료 월" value="6" min="1" max="12" inputmode="numeric" />
       </div>
       <div class="info-banner" data-i18n="travelInfo">✈️ 별자리 성향 + 달 주기 + 출발 요일을 기반으로 추천합니다.</div>
     </div>
@@ -2064,11 +2064,11 @@ body {
         <button class="option-btn" data-option="date" onclick="selectOption(this)" type="button"><span class="emoji">☕</span><span data-i18n="loveDate">맞선 · 소개팅</span></button>
       </div>
       <div class="sec-label" data-i18n="lovePartnerYear">상대방 출생 연도 (선택)</div>
-      <input type="number" class="input-field" id="partner-year" placeholder="상대방 출생 연도" inputmode="numeric" />
+      <input type="number" class="input-field" id="partner-year" data-i18n-placeholder="partnerYearPH" placeholder="상대방 출생 연도" inputmode="numeric" />
       <div class="sec-label" data-i18n="lovePeriodLabel">희망 기간</div>
       <div class="birth-row">
-        <input type="number" class="input-field" id="love-start-month" placeholder="시작 월" value="5" min="1" max="12" inputmode="numeric" />
-        <input type="number" class="input-field" id="love-end-month" placeholder="종료 월" value="10" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="love-start-month" data-i18n-placeholder="startMonth" placeholder="시작 월" value="5" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="love-end-month" data-i18n-placeholder="endMonth" placeholder="종료 월" value="10" min="1" max="12" inputmode="numeric" />
       </div>
       <label class="checkbox-wrap"><input type="checkbox" id="love-hwangdo" checked /> <span data-i18n="loveHwangdo">황도 보조점수 반영</span></label>
       <div class="info-banner" data-i18n="loveInfo">💍 주말 선호 + 손없는날 + 별자리 + 상대 띠 조화를 기반으로 추천합니다.</div>
@@ -2084,8 +2084,8 @@ body {
       </div>
       <div class="sec-label" data-i18n="investPeriodLabel">희망 투자 기간</div>
       <div class="birth-row">
-        <input type="number" class="input-field" id="invest-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
-        <input type="number" class="input-field" id="invest-end-month" placeholder="종료 월" value="12" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="invest-start-month" data-i18n-placeholder="startMonth" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="invest-end-month" data-i18n-placeholder="endMonth" placeholder="종료 월" value="12" min="1" max="12" inputmode="numeric" />
       </div>
       <div class="info-banner" data-i18n="investInfo">📈 달 차오름 + 황도길일 + 목성 요일 + 별자리 금전운을 기반으로 추천합니다.</div>
       <div class="warn-notice" style="margin-top:12px;" data-i18n="investWarn">⚠️ 역학 기반 <strong>참고용</strong>입니다. 실제 투자 손익에 대한 책임을 지지 않으며, 재무 조언이 아닙니다.</div>
@@ -2101,8 +2101,8 @@ body {
       </div>
       <div class="sec-label" data-i18n="birthPeriodLabel">출산 예정월 범위</div>
       <div class="birth-row">
-        <input type="number" class="input-field" id="birth-start-month" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
-        <input type="number" class="input-field" id="birth-end-month" placeholder="종료 월" value="3" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="birth-start-month" data-i18n-placeholder="startMonth" placeholder="시작 월" value="1" min="1" max="12" inputmode="numeric" />
+        <input type="number" class="input-field" id="birth-end-month" data-i18n-placeholder="endMonth" placeholder="종료 월" value="3" min="1" max="12" inputmode="numeric" />
       </div>
       <div class="info-banner" data-i18n="birthInfo">🍼 손없는날 + 사주 합(六合) + 달 주기를 기반으로 추천합니다.</div>
       <div class="warn-notice" style="margin-top:12px;" data-i18n="birthWarn">⚠️ 이 앱의 출산 추천은 사주·달 주기 기반 <strong>참고용</strong>입니다. 실제 출산 일정은 반드시 담당 의료진의 지시를 따르세요.</div>
@@ -2118,15 +2118,15 @@ body {
 <div class="screen" id="s3">
   <div class="result-header">
     <button class="back-btn" style="background:rgba(245,239,224,0.08);color:var(--paper);margin-bottom:16px;" onclick="goTo('s2')" type="button">←</button>
-    <div class="result-greeting" id="result-greeting">결과 분석 중...</div>
-    <div class="result-name" id="result-title">최적의 길일 <span>3일</span>을<br />찾았습니다</div>
+    <div class="result-greeting" id="result-greeting" data-i18n="resultGreetDefault">결과 분석 중...</div>
+    <div class="result-name" id="result-title" data-i18n="resultTitleDefault">최적의 길일 <span>3일</span>을<br />찾았습니다</div>
   </div>
 
   <div class="score-banner">
     <div class="moon-circle"></div>
     <div>
       <div class="banner-title" data-i18n="bannerTitle">이번 추천 로직</div>
-      <div class="banner-val" id="moon-banner">계산 중...</div>
+      <div class="banner-val" id="moon-banner" data-i18n="bannerDefault">계산 중...</div>
     </div>
   </div>
 
@@ -2235,11 +2235,11 @@ body {
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
       <span style="font-size:28px;font-weight:300;background:linear-gradient(160deg,#FF4DA6,#E8006A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">吉</span>
       <div>
-        <p style="font-size:13px;font-weight:600;color:#2A1A1A;letter-spacing:4px;margin:0;">길  일</p>
+        <p style="font-size:13px;font-weight:600;color:#2A1A1A;letter-spacing:4px;margin:0;" data-i18n="brandLogo">길  일</p>
         <p style="font-size:9px;color:rgba(180,100,30,0.55);letter-spacing:2px;font-style:italic;margin:0;">Auspicious Day</p>
       </div>
       <div style="margin-left:auto;text-align:right;">
-        <p style="font-size:9px;color:rgba(42,26,26,0.40);margin:0;" id="card-catname">성형 · 시술</p>
+        <p style="font-size:9px;color:rgba(42,26,26,0.40);margin:0;" id="card-catname" data-i18n="catSurgeryLabel">성형 · 시술</p>
         <p style="font-size:9px;color:rgba(42,26,26,0.35);margin:0;" id="card-birthinfo">-</p>
       </div>
     </div>
@@ -4451,6 +4451,11 @@ var TEXTS = {
     birthWarn: '⚠️ 이 앱의 출산 추천은 사주·달 주기 기반 <strong>참고용</strong>입니다. 실제 출산 일정은 반드시 담당 의료진의 지시를 따르세요.',
     // ── 공통 ──
     startMonth: '시작 월', endMonth: '종료 월', partnerYearPH: '상대방 출생 연도',
+    phYear: '연도', phMonth: '월', phDay: '일',
+    brandLogo: '길  일', brandTagline: '길  일 · Auspicious Day',
+    resultGreetDefault: '결과 분석 중...',
+    resultTitleDefault: '최적의 <span>길일</span>을<br />찾아드립니다',
+    bannerDefault: '계산 중...',
     // ── 결과 페이지 ──
     bestBadge: '최적', totalScore: '종합 점수',
     detailCore: '추천 기준', detailZodiac: '별자리 반영', detailLunar: '음력 · 손없는날 · 황도',
@@ -4723,6 +4728,11 @@ var TEXTS = {
     birthInfo: '🍼 Based on Son-eobsneun-nal + Saju harmony (六合) + Moon cycle.',
     birthWarn: '⚠️ Birth recommendations are for <strong>reference only</strong>. Always follow your doctor\'s instructions.',
     startMonth: 'Start Month', endMonth: 'End Month', partnerYearPH: "Partner's birth year",
+    phYear: 'Year', phMonth: 'Month', phDay: 'Day',
+    brandLogo: 'GILIL', brandTagline: 'GILIL · Auspicious Day',
+    resultGreetDefault: 'Analyzing results...',
+    resultTitleDefault: 'Finding <span>your best days</span><br />for you',
+    bannerDefault: 'Calculating...',
     bestBadge: 'Best', totalScore: 'Total Score',
     detailCore: 'Recommendation Criteria', detailZodiac: 'Zodiac Applied', detailLunar: 'Lunar · Son-eobsneun · Hwangdo',
     detailGanji: 'Birth Ganji Reference', detailMeds: 'Medication Applied', detailConsult: 'Consultation Priority Meds',
@@ -4970,6 +4980,11 @@ var TEXTS = {
     birthInfo: '🍼 孫のいない日 + 四柱合(六合) + 月の周期で推奨します。',
     birthWarn: '⚠️ 出産推奨は四柱·月周期ベースの<strong>参考用</strong>です。必ず担当医の指示に従ってください。',
     startMonth: '開始月', endMonth: '終了月', partnerYearPH: '相手の出生年',
+    phYear: '年', phMonth: '月', phDay: '日',
+    brandLogo: '吉日', brandTagline: '吉日 · Auspicious Day',
+    resultGreetDefault: '結果分析中...',
+    resultTitleDefault: '<span>最適な吉日</span>を<br />お探しします',
+    bannerDefault: '計算中...',
     bestBadge: '最適', totalScore: '総合スコア',
     detailCore: '推奨基準', detailZodiac: '星座反映', detailLunar: '旧暦 · 孫のいない日 · 黄道',
     detailGanji: '出生干支参考', detailMeds: '薬物反映', detailConsult: '相談優先薬物',
@@ -5217,6 +5232,11 @@ var TEXTS = {
     birthInfo: '🍼 基于孙无日 + 四柱合(六合) + 月亮周期推荐。',
     birthWarn: '⚠️ 分娩推荐仅供<strong>参考</strong>。请务必遵医嘱。',
     startMonth: '开始月', endMonth: '结束月', partnerYearPH: '对方出生年份',
+    phYear: '年份', phMonth: '月', phDay: '日',
+    brandLogo: '吉日', brandTagline: '吉日 · Auspicious Day',
+    resultGreetDefault: '正在分析结果...',
+    resultTitleDefault: '正在查找<span>最佳吉日</span>',
+    bannerDefault: '计算中...',
     bestBadge: '最佳', totalScore: '综合得分',
     detailCore: '推荐标准', detailZodiac: '星座反映', detailLunar: '农历 · 孙无日 · 黄道',
     detailGanji: '出生干支参考', detailMeds: '药物反映', detailConsult: '咨询优先药物',
@@ -5464,6 +5484,11 @@ var TEXTS = {
     birthInfo: '🍼 Dựa trên Ngày Tốt + Tứ trụ hợp (六合) + Chu kỳ trăng.',
     birthWarn: '⚠️ Đề xuất sinh chỉ mang tính <strong>tham khảo</strong>. Hãy luôn tuân theo chỉ dẫn bác sĩ.',
     startMonth: 'Tháng bắt đầu', endMonth: 'Tháng kết thúc', partnerYearPH: 'Năm sinh đối phương',
+    phYear: 'Năm', phMonth: 'Tháng', phDay: 'Ngày',
+    brandLogo: 'GILIL', brandTagline: 'GILIL · Ngày Lành',
+    resultGreetDefault: 'Đang phân tích...',
+    resultTitleDefault: 'Đang tìm <span>ngày lành nhất</span>',
+    bannerDefault: 'Đang tính...',
     bestBadge: 'Tốt nhất', totalScore: 'Điểm tổng',
     detailCore: 'Tiêu chí đề xuất', detailZodiac: 'Cung hoàng đạo', detailLunar: 'Âm lịch · Ngày Tốt · Hoàng đạo',
     detailGanji: 'Can chi sinh', detailMeds: 'Thuốc phản ánh', detailConsult: 'Thuốc ưu tiên tư vấn',
@@ -5624,8 +5649,34 @@ function applyI18n(lang) {
       el.textContent = val;
     }
   });
+  // data-i18n-placeholder 속성 가진 입력 요소 placeholder 업데이트
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-placeholder');
+    el.setAttribute('placeholder', t(key));
+  });
   // <html lang> 속성 업데이트
   document.documentElement.lang = lang;
+
+  // 동적 렌더 영역 재갱신: 결과 페이지가 이미 계산돼 있으면 다시 그리기
+  try {
+    if (typeof latestAnalysis !== 'undefined' && latestAnalysis && typeof renderResults === 'function') {
+      renderResults();
+    }
+  } catch (e) {}
+  // 홈 위젯 재렌더 (solarlunar 준비된 경우)
+  try {
+    if (typeof solarlunar !== 'undefined' && solarlunar.solar2lunar) {
+      if (typeof renderHomeWidgets === 'function') renderHomeWidgets();
+      if (typeof BIRTH_KEY !== 'undefined' && typeof renderPersonalWidgets === 'function') {
+        var raw = localStorage.getItem(BIRTH_KEY);
+        if (raw) {
+          var bd = JSON.parse(raw);
+          var by = parseInt(bd.y, 10), bm = parseInt(bd.m, 10), bdd = parseInt(bd.d, 10);
+          if (by && bm && bdd) renderPersonalWidgets(by, bm, bdd);
+        }
+      }
+    }
+  } catch (e) {}
 }
 
 function detectLanguage() {
