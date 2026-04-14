@@ -2219,7 +2219,7 @@ body {
   <div class="date-check-section">
     <div class="date-check-desc" data-i18n="checkDateDesc">이미 날짜를 정하셨나요? 원하는 날짜를 입력하면 해당 날짜의 길일 점수를 확인할 수 있습니다. <span class="premium-tag">프리미엄 기능</span></div>
     <div class="date-check-row">
-      <input type="date" class="input-field date-check-input" id="date-check-input" />
+      <input type="date" class="input-field date-check-input" id="date-check-input" placeholder="연도-월-일" data-i18n-placeholder="datePlaceholder" />
       <button class="date-check-btn" onclick="checkDateScore()" type="button" data-i18n="checkDateBtn">점수 확인하기</button>
     </div>
     <div class="date-check-result" id="date-check-result"></div>
@@ -4824,6 +4824,7 @@ var TEXTS = {
     // ── 날짜 점수 조회 (프리미엄) ──
     checkDateDesc: '이미 날짜를 정하셨나요? 원하는 날짜를 입력하면 해당 날짜의 길일 점수를 확인할 수 있습니다. <span class="premium-tag">프리미엄 기능</span>',
     checkDateBtn: '점수 확인하기',
+    datePlaceholder: '연도-월-일',
     errDateRequired: '날짜를 선택해주세요.',
     checkDatePremiumRequired: '프리미엄 기능입니다. 프리미엄으로 업그레이드하시면 원하는 날짜의 점수를 확인할 수 있습니다.',
     errDateScoringFailed: '점수 계산에 실패했습니다.'
@@ -5082,6 +5083,7 @@ var TEXTS = {
     // ── Date score check (premium) ──
     checkDateDesc: 'Already have a date in mind? Enter it to check that day\'s auspicious score. <span class="premium-tag">Premium Feature</span>',
     checkDateBtn: 'Check Score',
+    datePlaceholder: 'YYYY-MM-DD',
     errDateRequired: 'Please select a date.',
     checkDatePremiumRequired: 'This is a premium feature. Upgrade to premium to check the score of any date you want.',
     errDateScoringFailed: 'Failed to calculate the score.'
@@ -5340,6 +5342,7 @@ var TEXTS = {
     // ── 日付スコア照会 (プレミアム) ──
     checkDateDesc: 'すでに日付を決めていますか？希望の日付を入力すると、その日の吉日スコアを確認できます。<span class="premium-tag">プレミアム機能</span>',
     checkDateBtn: 'スコアを確認',
+    datePlaceholder: '年-月-日',
     errDateRequired: '日付を選択してください。',
     checkDatePremiumRequired: 'プレミアム機能です。プレミアムにアップグレードすると、希望の日付のスコアを確認できます。',
     errDateScoringFailed: 'スコアの計算に失敗しました。'
@@ -5598,6 +5601,7 @@ var TEXTS = {
     // ── 日期分数查询 (高级) ──
     checkDateDesc: '已经定好日期了吗？输入心仪的日期即可查看该日的吉日分数。<span class="premium-tag">高级功能</span>',
     checkDateBtn: '查看分数',
+    datePlaceholder: '年-月-日',
     errDateRequired: '请选择日期。',
     checkDatePremiumRequired: '此为高级功能。升级至高级版后即可查看任何日期的分数。',
     errDateScoringFailed: '分数计算失败。'
@@ -5856,6 +5860,7 @@ var TEXTS = {
     // ── Kiểm tra điểm ngày (Cao cấp) ──
     checkDateDesc: 'Bạn đã chọn được ngày rồi? Nhập ngày mong muốn để xem điểm ngày tốt của ngày đó. <span class="premium-tag">Tính năng cao cấp</span>',
     checkDateBtn: 'Xem điểm',
+    datePlaceholder: 'Năm-Tháng-Ngày',
     errDateRequired: 'Vui lòng chọn ngày.',
     checkDatePremiumRequired: 'Đây là tính năng cao cấp. Nâng cấp lên bản cao cấp để xem điểm của ngày bất kỳ bạn muốn.',
     errDateScoringFailed: 'Không thể tính điểm.'
@@ -5918,26 +5923,13 @@ function applyI18n(lang) {
 function detectLanguage() {
   var saved = localStorage.getItem('gilil_lang');
   if (saved && TEXTS[saved]) { applyI18n(saved); return; }
-  // 브라우저 언어 힌트로 우선 적용
   var nav = (navigator.language || navigator.userLanguage || 'ko').toLowerCase();
   var navLang = 'ko';
   if (nav.startsWith('ja')) navLang = 'ja';
   else if (nav.startsWith('zh')) navLang = 'zh';
   else if (nav.startsWith('vi')) navLang = 'vi';
   else if (nav.startsWith('en')) navLang = 'en';
-  // IP 기반 감지 (ipapi.co 무료 API)
-  fetch('https://ipapi.co/json/')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var cc = (data.country_code || '').toUpperCase();
-      var lang = 'ko';
-      if (cc === 'JP') lang = 'ja';
-      else if (cc === 'CN' || cc === 'TW' || cc === 'HK' || cc === 'SG') lang = 'zh';
-      else if (cc === 'VN') lang = 'vi';
-      else if (cc !== 'KR') lang = navLang !== 'ko' ? navLang : 'en';
-      applyI18n(lang);
-    })
-    .catch(function() { applyI18n(navLang); });
+  applyI18n(navLang);
 }
 
 // 페이지 로드 시 언어 감지 실행
