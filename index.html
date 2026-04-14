@@ -3511,6 +3511,8 @@ function calculateGilil() {
       birthType: birth.originalType,
       birthApprox: birth.approx,
       birthYear: birthYear,
+      birthMonth: birthMonth,
+      birthDay: birthDay,
       ganji: ganji,
       signObj: signObj,
       meds: meds,
@@ -5901,6 +5903,10 @@ function applyI18n(lang) {
   // 동적 렌더 영역 재갱신: 결과 페이지가 이미 계산돼 있으면 다시 그리기
   try {
     if (typeof latestAnalysis !== 'undefined' && latestAnalysis && typeof renderResults === 'function') {
+      // 별자리/노트는 계산 시점 언어로 굳어져 있으므로 현재 언어로 재계산
+      if (typeof getWesternSign === 'function' && latestAnalysis.birthMonth && latestAnalysis.birthDay) {
+        latestAnalysis.signObj = getWesternSign(latestAnalysis.birthMonth, latestAnalysis.birthDay) || latestAnalysis.signObj;
+      }
       renderResults();
     }
   } catch (e) {}
