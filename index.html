@@ -544,13 +544,13 @@ body {
 
 /* s2 배경 — 카테고리별 */
 /* s2 카테고리 테마 배경 — 라이트 핑크 베이스 */
-#s2.theme-surgery::before  { background: radial-gradient(ellipse at 55% 0%, rgba(232,0,106,0.12)  0%, transparent 60%); }
-#s2.theme-business::before { background: radial-gradient(ellipse at 55% 0%, rgba(201,140,60,0.12)  0%, transparent 60%); }
-#s2.theme-moving::before   { background: radial-gradient(ellipse at 55% 0%, rgba(192,112,58,0.12)  0%, transparent 60%); }
-#s2.theme-travel::before   { background: radial-gradient(ellipse at 55% 0%, rgba(42,157,143,0.12)  0%, transparent 60%); }
-#s2.theme-love::before     { background: radial-gradient(ellipse at 55% 0%, rgba(192,80,144,0.12)  0%, transparent 60%); }
-#s2.theme-invest::before   { background: radial-gradient(ellipse at 55% 0%, rgba(45,122,79,0.12)   0%, transparent 60%); }
-#s2.theme-birth::before    { background: radial-gradient(ellipse at 55% 0%, rgba(232,130,50,0.12) 0%, transparent 60%); }
+#s2.theme-surgery::before  { background: radial-gradient(ellipse at 55% 0%, rgba(232,0,106,0.20)  0%, transparent 60%); }
+#s2.theme-business::before { background: radial-gradient(ellipse at 55% 0%, rgba(201,140,60,0.20)  0%, transparent 60%); }
+#s2.theme-moving::before   { background: radial-gradient(ellipse at 55% 0%, rgba(192,112,58,0.20)  0%, transparent 60%); }
+#s2.theme-travel::before   { background: radial-gradient(ellipse at 55% 0%, rgba(42,157,143,0.20)  0%, transparent 60%); }
+#s2.theme-love::before     { background: radial-gradient(ellipse at 55% 0%, rgba(192,80,144,0.20)  0%, transparent 60%); }
+#s2.theme-invest::before   { background: radial-gradient(ellipse at 55% 0%, rgba(45,122,79,0.20)   0%, transparent 60%); }
+#s2.theme-birth::before    { background: radial-gradient(ellipse at 55% 0%, rgba(232,130,50,0.20) 0%, transparent 60%); }
 
 /* s3 결과 배경 */
 #s3.theme-surgery::before  { background: radial-gradient(ellipse at 50% 0%, rgba(232,0,106,0.08)   0%, transparent 65%); }
@@ -1714,6 +1714,112 @@ body {
   border-radius: 12px;
   margin-left: 8px;
 }
+
+/* 날짜 점수 조회 섹션 (프리미엄) */
+.date-check-section {
+  margin: 20px 24px 18px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(232,0,106,0.20);
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(232,0,106,0.06);
+}
+.date-check-desc {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+.date-check-desc .premium-tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #C0005A;
+  background: rgba(232,0,106,0.09);
+  border: 1px solid rgba(232,0,106,0.30);
+  border-radius: 10px;
+  vertical-align: middle;
+}
+.date-check-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.date-check-input {
+  flex: 1;
+  min-width: 0;
+}
+.date-check-btn {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #E8006A 0%, #FF4DA6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(232,0,106,0.25);
+  letter-spacing: 0.3px;
+}
+.date-check-btn:active { transform: translateY(1px); }
+.date-check-result {
+  margin-top: 14px;
+  display: none;
+}
+.date-check-result.show { display: block; }
+.date-check-result .dcr-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.date-check-result .dcr-date {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.date-check-result .dcr-score {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #E8006A;
+}
+.date-check-result .dcr-bar {
+  height: 6px;
+  background: rgba(232,0,106,0.10);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.date-check-result .dcr-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #E8006A 0%, #FF4DA6 100%);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.date-check-result .dcr-lunar {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.date-check-result .dcr-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.date-check-result .dcr-reasons {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-dim);
+  padding-top: 8px;
+  border-top: 1px dashed rgba(232,0,106,0.18);
+}
 </style>
 </head>
 <body>
@@ -1803,6 +1909,7 @@ body {
     <span id="tap-begin-text">tap to begin</span>
   </div>
   <div class="intro-wrap initially-hidden" id="intro-wrap">
+    <button class="back-btn" style="background:rgba(245,239,224,0.08);color:var(--paper);margin-bottom:16px;align-self:flex-start;" onclick="goTo('s-splash')" type="button">←</button>
     <div class="intro-title-group">
       <div class="intro-symbol">吉</div>
       <div class="intro-title" data-i18n="brandLogo">길  일</div>
@@ -2107,6 +2214,15 @@ body {
       <div class="info-banner" data-i18n="birthInfo">🍼 손없는날 + 사주 합(六合) + 달 주기를 기반으로 추천합니다.</div>
       <div class="warn-notice" style="margin-top:12px;" data-i18n="birthWarn">⚠️ 이 앱의 출산 추천은 사주·달 주기 기반 <strong>참고용</strong>입니다. 실제 출산 일정은 반드시 담당 의료진의 지시를 따르세요.</div>
     </div>
+  </div>
+
+  <div class="date-check-section">
+    <div class="date-check-desc">이미 날짜를 정하셨나요? 원하는 날짜를 입력하면 해당 날짜의 길일 점수를 확인할 수 있습니다. <span class="premium-tag">프리미엄 기능</span></div>
+    <div class="date-check-row">
+      <input type="date" class="input-field date-check-input" id="date-check-input" />
+      <button class="date-check-btn" onclick="checkDateScore()" type="button">점수 확인하기</button>
+    </div>
+    <div class="date-check-result" id="date-check-result"></div>
   </div>
 
   <div class="cta-wrap" style="padding:0 24px;">
@@ -3419,6 +3535,96 @@ function calculateGilil() {
 }
 
 // ────────────────────────────────────────────────
+// 날짜 점수 조회 (프리미엄)
+// ────────────────────────────────────────────────
+function checkDateScore() {
+  var resultBox = document.getElementById('date-check-result');
+  var input = document.getElementById('date-check-input');
+  if (!input || !input.value) {
+    showToastError('날짜를 선택해주세요.');
+    return;
+  }
+
+  if (!isPremium()) {
+    showToastError('프리미엄 기능입니다. 프리미엄으로 업그레이드하시면 원하는 날짜의 점수를 확인할 수 있습니다.');
+    return;
+  }
+
+  try {
+    var parts = input.value.split('-');
+    var date = new Date(parseInt(parts[0],10), parseInt(parts[1],10)-1, parseInt(parts[2],10));
+    date.setHours(0,0,0,0);
+
+    var birth = getBirthDate();
+    var birthYear  = birth.date.getFullYear();
+    var birthMonth = birth.date.getMonth() + 1;
+    var birthDay   = birth.date.getDate();
+    var signObj    = getWesternSign(birthMonth, birthDay) || WESTERN_SIGNS[0];
+    var personalSeed = getPersonalSeed(birthYear, birthMonth, birthDay);
+
+    var selectedSurgery = getSelectedSurgeryType();
+    var selectedOption  = getSelectedOption('form-' + currentCat);
+    var meds        = getSelectedMeds();
+    var stopMeds    = meds.filter(function(m) { return m.rule.group === 'stop'; });
+    var continueMeds= meds.filter(function(m) { return m.rule.group === 'continue'; });
+    var consultMeds = meds.filter(function(m) { return m.rule.group === 'consult'; });
+
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    var earliestSafeDate = getEarliestSafeDate(currentCat, selectedSurgery, meds, today);
+    var surgeryWindow    = getSurgeryWindow(today, earliestSafeDate, stopMeds);
+
+    var partnerYear = currentCat === 'love'
+      ? parseInt((document.getElementById('partner-year') || {}).value, 10) || null
+      : null;
+
+    var context = {
+      category: currentCat,
+      birthYear: birthYear,
+      birthMonth: birthMonth,
+      birthDay: birthDay,
+      signObj: signObj,
+      selectedSurgery: selectedSurgery,
+      selectedOption: selectedOption,
+      partnerYear: partnerYear,
+      stopMeds: stopMeds,
+      continueMeds: continueMeds,
+      consultMeds: consultMeds,
+      earliestSafeDate: earliestSafeDate,
+      surgeryWindow: surgeryWindow,
+      personalSeed: personalSeed
+    };
+
+    var scored = scoreDate(date, context);
+
+    var dayNames = [t('daySun'),t('dayMon'),t('dayTue'),t('dayWed'),t('dayThu'),t('dayFri'),t('daySat')];
+    var lunarText = t('lunarPrefix') + ' ' + scored.lunar.year + t('unitYear') + ' ' + scored.lunar.month + t('unitMonth') + ' ' + scored.lunar.day + t('unitDay') + ' · ' + scored.dayGanji;
+    if (scored.lunar.term) lunarText += ' · 🌿 ' + scored.lunar.term;
+    if (scored.isSon) lunarText += ' <span class="inline-badge badge-son">' + t('badgeSon') + '</span>';
+
+    var tagHTML = '';
+    (scored.tags || []).forEach(function(tag) {
+      tagHTML += '<div class="score-tag ' + (tag.good ? 'good' : 'warn') + '">' + tag.text + '</div>';
+    });
+
+    var barWidth = Math.max(0, Math.min(100, Math.round(scored.score)));
+
+    resultBox.innerHTML =
+      '<div class="dcr-head">' +
+        '<div class="dcr-date">' + formatDate(date) + ' ' + dayNames[date.getDay()] + t('unitDayOfWeek') + '</div>' +
+        '<div class="dcr-score">' + barWidth + t('unitScore') + '</div>' +
+      '</div>' +
+      '<div class="dcr-bar"><div class="dcr-bar-fill" style="width:' + barWidth + '%"></div></div>' +
+      '<div class="dcr-lunar">' + lunarText + '</div>' +
+      (tagHTML ? '<div class="dcr-tags">' + tagHTML + '</div>' : '') +
+      (scored.reasons && scored.reasons.length ? '<div class="dcr-reasons">' + scored.reasons.join(' · ') + '</div>' : '');
+    resultBox.classList.add('show');
+  } catch (err) {
+    showToastError(err.message || '점수 계산에 실패했습니다.');
+  }
+}
+
+// ────────────────────────────────────────────────
 // 결과 렌더링
 // ────────────────────────────────────────────────
 function renderResults() {
@@ -3653,8 +3859,8 @@ function applyTheme(cat) {
 
 function goTo(id) {
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-  var t = document.getElementById(id);
-  if (t) t.classList.add('active');
+  var targetScreen = document.getElementById(id);
+  if (targetScreen) targetScreen.classList.add('active');
   window.scrollTo(0,0);
 
   // 카테고리 테마 적용
