@@ -2217,10 +2217,10 @@ body {
   </div>
 
   <div class="date-check-section">
-    <div class="date-check-desc">이미 날짜를 정하셨나요? 원하는 날짜를 입력하면 해당 날짜의 길일 점수를 확인할 수 있습니다. <span class="premium-tag">프리미엄 기능</span></div>
+    <div class="date-check-desc" data-i18n="checkDateDesc">이미 날짜를 정하셨나요? 원하는 날짜를 입력하면 해당 날짜의 길일 점수를 확인할 수 있습니다. <span class="premium-tag">프리미엄 기능</span></div>
     <div class="date-check-row">
       <input type="date" class="input-field date-check-input" id="date-check-input" />
-      <button class="date-check-btn" onclick="checkDateScore()" type="button">점수 확인하기</button>
+      <button class="date-check-btn" onclick="checkDateScore()" type="button" data-i18n="checkDateBtn">점수 확인하기</button>
     </div>
     <div class="date-check-result" id="date-check-result"></div>
   </div>
@@ -3541,12 +3541,12 @@ function checkDateScore() {
   var resultBox = document.getElementById('date-check-result');
   var input = document.getElementById('date-check-input');
   if (!input || !input.value) {
-    showToastError('날짜를 선택해주세요.');
+    showToastError(t('errDateRequired'));
     return;
   }
 
   if (!isPremium()) {
-    showToastError('프리미엄 기능입니다. 프리미엄으로 업그레이드하시면 원하는 날짜의 점수를 확인할 수 있습니다.');
+    showToastError(t('checkDatePremiumRequired'));
     return;
   }
 
@@ -3620,7 +3620,7 @@ function checkDateScore() {
       (scored.reasons && scored.reasons.length ? '<div class="dcr-reasons">' + scored.reasons.join(' · ') + '</div>' : '');
     resultBox.classList.add('show');
   } catch (err) {
-    showToastError(err.message || '점수 계산에 실패했습니다.');
+    showToastError(err.message || t('errDateScoringFailed'));
   }
 }
 
@@ -4820,7 +4820,13 @@ var TEXTS = {
     // ── Hwangdo suffix ──
     hwangdoDaySuffix: '일',
     // ── Libra check ──
-    signLibraKey: '천칭'
+    signLibraKey: '천칭',
+    // ── 날짜 점수 조회 (프리미엄) ──
+    checkDateDesc: '이미 날짜를 정하셨나요? 원하는 날짜를 입력하면 해당 날짜의 길일 점수를 확인할 수 있습니다. <span class="premium-tag">프리미엄 기능</span>',
+    checkDateBtn: '점수 확인하기',
+    errDateRequired: '날짜를 선택해주세요.',
+    checkDatePremiumRequired: '프리미엄 기능입니다. 프리미엄으로 업그레이드하시면 원하는 날짜의 점수를 확인할 수 있습니다.',
+    errDateScoringFailed: '점수 계산에 실패했습니다.'
   },
   en: {
     tapToBegin: 'tap to begin',
@@ -5072,7 +5078,13 @@ var TEXTS = {
     lunarNotice: 'Lunar conversion via solarlunar.js · 1900–2100 supported',
     zodiacStrongDay: ' strong day',
     hwangdoDaySuffix: ' day',
-    signLibraKey: 'Libra'
+    signLibraKey: 'Libra',
+    // ── Date score check (premium) ──
+    checkDateDesc: 'Already have a date in mind? Enter it to check that day\'s auspicious score. <span class="premium-tag">Premium Feature</span>',
+    checkDateBtn: 'Check Score',
+    errDateRequired: 'Please select a date.',
+    checkDatePremiumRequired: 'This is a premium feature. Upgrade to premium to check the score of any date you want.',
+    errDateScoringFailed: 'Failed to calculate the score.'
   },
   ja: {
     tapToBegin: 'タップして始める',
@@ -5324,7 +5336,13 @@ var TEXTS = {
     lunarNotice: 'solarlunar.js基盤の旧暦変換 · 1900〜2100年対応',
     zodiacStrongDay: ' 強み日',
     hwangdoDaySuffix: '日',
-    signLibraKey: '天秤'
+    signLibraKey: '天秤',
+    // ── 日付スコア照会 (プレミアム) ──
+    checkDateDesc: 'すでに日付を決めていますか？希望の日付を入力すると、その日の吉日スコアを確認できます。<span class="premium-tag">プレミアム機能</span>',
+    checkDateBtn: 'スコアを確認',
+    errDateRequired: '日付を選択してください。',
+    checkDatePremiumRequired: 'プレミアム機能です。プレミアムにアップグレードすると、希望の日付のスコアを確認できます。',
+    errDateScoringFailed: 'スコアの計算に失敗しました。'
   },
   zh: {
     tapToBegin: '点击开始',
@@ -5576,7 +5594,13 @@ var TEXTS = {
     lunarNotice: 'solarlunar.js 阴历转换 · 支持1900~2100年',
     zodiacStrongDay: ' 强势日',
     hwangdoDaySuffix: '日',
-    signLibraKey: '天秤'
+    signLibraKey: '天秤',
+    // ── 日期分数查询 (高级) ──
+    checkDateDesc: '已经定好日期了吗？输入心仪的日期即可查看该日的吉日分数。<span class="premium-tag">高级功能</span>',
+    checkDateBtn: '查看分数',
+    errDateRequired: '请选择日期。',
+    checkDatePremiumRequired: '此为高级功能。升级至高级版后即可查看任何日期的分数。',
+    errDateScoringFailed: '分数计算失败。'
   },
   vi: {
     tapToBegin: 'Chạm để bắt đầu',
@@ -5828,7 +5852,13 @@ var TEXTS = {
     lunarNotice: 'Chuyển đổi âm lịch qua solarlunar.js · Hỗ trợ 1900–2100',
     zodiacStrongDay: ' ngày mạnh',
     hwangdoDaySuffix: '',
-    signLibraKey: 'Libra'
+    signLibraKey: 'Libra',
+    // ── Kiểm tra điểm ngày (Cao cấp) ──
+    checkDateDesc: 'Bạn đã chọn được ngày rồi? Nhập ngày mong muốn để xem điểm ngày tốt của ngày đó. <span class="premium-tag">Tính năng cao cấp</span>',
+    checkDateBtn: 'Xem điểm',
+    errDateRequired: 'Vui lòng chọn ngày.',
+    checkDatePremiumRequired: 'Đây là tính năng cao cấp. Nâng cấp lên bản cao cấp để xem điểm của ngày bất kỳ bạn muốn.',
+    errDateScoringFailed: 'Không thể tính điểm.'
   }
 };
 
