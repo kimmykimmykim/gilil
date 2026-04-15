@@ -873,6 +873,12 @@ body {
   transition: background 0.4s ease;
 }
 
+/* s2 / s3 에 stacking context 명시 생성 —
+   #s2-bg / #s3-bg 의 z-index:-1 이 부모 배경 뒤로 밀리는 버그 회피 */
+#s2.active, #s3.active {
+  isolation: isolate;
+}
+
 /* ── s2 / s3 민화 블러 배경 (content 뒤 z-index:-1 레이어) ── */
 #s2-bg, #s3-bg {
   position: absolute;
