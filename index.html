@@ -123,6 +123,13 @@ body {
   gap: 8px;
 }
 .hw-row .hw-card { flex: 1; min-width: 0; }
+.hw-row.compact { margin: 10px 0 14px; gap: 6px; }
+.hw-row.compact .hw-card { padding: 10px 12px; border-radius: 14px; }
+.hw-row.compact .hw-label { font-size: 8px; letter-spacing: 1.5px; margin-bottom: 4px; }
+.hw-row.compact .hw-score-num { font-size: 26px; }
+.hw-row.compact .hw-score-max { font-size: 10px; }
+.hw-row.compact .hw-score-bar { margin-top: 4px; height: 2px; }
+.hw-row.compact .hw-score-tag { font-size: 10px; margin-top: 3px; }
 .hw-score-wrap {
   display: flex;
   align-items: baseline;
@@ -1951,24 +1958,6 @@ body {
     <div class="intro-line"></div>
     <div class="intro-sub">Auspicious Day</div>
     <div id="home-widgets">
-      <!-- 개인 사주 기반 카드 (생년월일 저장 시에만 표시) -->
-      <div class="hw-row" id="hw-personal-row" style="display:none;">
-        <div class="hw-card">
-          <div class="hw-label" data-i18n="hwTodayLabel">✨ 오늘의 길일지수</div>
-          <div class="hw-score-wrap">
-            <div class="hw-score-num" id="hw-today-score">--</div>
-            <div class="hw-score-max">/ 100</div>
-          </div>
-          <div class="hw-score-bar"><div class="hw-score-bar-fill" id="hw-today-bar" style="width:0%"></div></div>
-          <div class="hw-score-tag" id="hw-today-tag"></div>
-        </div>
-        <div class="hw-card">
-          <div class="hw-label" data-i18n="hwWeekBest">🏆 이번주 베스트</div>
-          <div class="hw-best-date" id="hw-best-date">--</div>
-          <div class="hw-best-score" id="hw-best-score"></div>
-          <div class="hw-best-sub" id="hw-best-sub"></div>
-        </div>
-      </div>
       <!-- 손없는날 배너 -->
       <div class="hw-card">
         <div class="hw-son-header">
@@ -2057,8 +2046,27 @@ body {
       <button class="gender-btn" onclick="selectGender(this)" type="button" data-i18n="genderMale">남성 ♂</button>
     </div>
 
+    <!-- 개인 사주 위젯 (생년월일 입력 시 자동 표시) -->
+    <div class="hw-row compact" id="hw-personal-row" style="display:none;">
+      <div class="hw-card">
+        <div class="hw-label" data-i18n="hwTodayLabel">✨ 오늘의 길일지수</div>
+        <div class="hw-score-wrap">
+          <div class="hw-score-num" id="hw-today-score">--</div>
+          <div class="hw-score-max">/ 100</div>
+        </div>
+        <div class="hw-score-bar"><div class="hw-score-bar-fill" id="hw-today-bar" style="width:0%"></div></div>
+        <div class="hw-score-tag" id="hw-today-tag"></div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-label" data-i18n="hwWeekBest">🏆 이번주 베스트</div>
+        <div class="hw-best-date" id="hw-best-date">--</div>
+        <div class="hw-best-score" id="hw-best-score"></div>
+        <div class="hw-best-sub" id="hw-best-sub"></div>
+      </div>
+    </div>
+
     <div class="algo-note" data-i18n="algoNote">
-      이 앱은 <strong>사주/별자리/음력(손없는날/황도)</strong> 기반으로 길일을 추천합니다.<br>생년월일이 다르면 결과가 다르게 나오도록 설계되었으며,<br>약물은 <strong>날짜 제거 필터</strong>로 작동합니다.
+      <strong>사주/별자리/음력</strong>, <strong>손없는날/황도</strong> 기반으로 길일을 추천합니다.<br>약물은 <strong>날짜 제거 필터</strong>로 작용합니다. (약물 반감기)
     </div>
 
     <div class="sub-form show" id="form-surgery">
@@ -3938,6 +3946,16 @@ function goTo(id) {
       if (form === currentCat) el.classList.add('show');
       else el.classList.remove('show');
     });
+    // 생년월일 유효 시 개인 위젯 자동 렌더
+    try {
+      var by = parseInt(document.getElementById('birthyear').value, 10);
+      var bm = parseInt(document.getElementById('birthmonth').value, 10);
+      var bdd = parseInt(document.getElementById('birthday').value, 10);
+      if (by >= 1900 && bm >= 1 && bm <= 12 && bdd >= 1 && bdd <= 31 &&
+          typeof renderPersonalWidgets === 'function') {
+        renderPersonalWidgets(by, bm, bdd);
+      }
+    } catch(e) {}
   }
 }
 
@@ -3957,6 +3975,16 @@ function selectCalType(type) {
 function selectGender(el) {
   el.closest('.gender-row').querySelectorAll('.gender-btn').forEach(function(b) { b.classList.remove('selected'); });
   el.classList.add('selected');
+  // 생년월일 유효 시 개인 위젯 재렌더
+  try {
+    var by = parseInt(document.getElementById('birthyear').value, 10);
+    var bm = parseInt(document.getElementById('birthmonth').value, 10);
+    var bdd = parseInt(document.getElementById('birthday').value, 10);
+    if (by >= 1900 && bm >= 1 && bm <= 12 && bdd >= 1 && bdd <= 31 &&
+        typeof renderPersonalWidgets === 'function') {
+      renderPersonalWidgets(by, bm, bdd);
+    }
+  } catch(e) {}
 }
 
 // 선택된 성별 읽기 (개인 시드용)
@@ -4803,7 +4831,7 @@ var TEXTS = {
     hwToday: '오늘! ', hwSonTag: '손없는날🌟', hwHwangdoTag: '황도🧿', hwHapTag: '육합✨', hwConflictTag: '충(冲)⚠️',
     hwSonMonth: '월 손없는날', hwSonNone: '손없는날 없음', hwTodayLabel2: '오늘',
     // ── 알고리즘 노트 ──
-    algoNote: '이 앱은 <strong>사주/별자리/음력(손없는날/황도)</strong> 기반으로 길일을 추천합니다.<br>생년월일이 다르면 결과가 다르게 나오도록 설계되었으며,<br>약물은 <strong>날짜 제거 필터</strong>로 작동합니다.',
+    algoNote: '<strong>사주/별자리/음력</strong>, <strong>손없는날/황도</strong> 기반으로 길일을 추천합니다.<br>약물은 <strong>날짜 제거 필터</strong>로 작용합니다. (약물 반감기)',
     // ── 약물 결과 텍스트 ──
     medResultStopApplied: '선택 → <strong>{date}</strong> 이후 {end}까지 범위에서 추천',
     medResultNoStop: '중단 필요 약물 없음 · 오늘+3일 ~ 오늘+45일 범위에서 추천',
