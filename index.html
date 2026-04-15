@@ -224,10 +224,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  padding-top: 35vh;
 }
 #tap-begin-text {
   font-family: 'Cormorant Garamond', serif;
@@ -609,6 +608,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: calc(env(safe-area-inset-top, 24px) + 20px);
 }
 
 .header-title {
@@ -871,6 +871,17 @@ body {
   background: var(--cat-gradient, radial-gradient(ellipse at 50% 0%, rgba(201,160,80,0.08) 0%, transparent 70%));
   pointer-events: none;
   transition: background 0.4s ease;
+}
+
+/* ── s2 / s3 민화 블러 배경 (content 뒤 z-index:-1 레이어) ── */
+#s2-bg, #s3-bg {
+  position: absolute;
+  inset: 0;
+  background: url('gilil_new_cover.png') center top/cover no-repeat;
+  filter: blur(12px) saturate(0.9);
+  opacity: 0.28;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .result-header {
@@ -1608,6 +1619,7 @@ body {
   background-size: cover !important;
   background-position: center top !important;
   background-repeat: no-repeat !important;
+  filter: blur(12px) saturate(0.9);
 }
 
 /* ── 프리미엄 잠금 시스템 ── */
@@ -2010,6 +2022,7 @@ body {
 </div>
 
 <div class="screen" id="s2">
+  <div id="s2-bg"></div>
   <div class="header">
     <button class="back-btn" onclick="goTo('s1')" type="button">←</button>
     <span class="header-title" id="s2-title" data-i18n="infoInput">정보 입력</span>
@@ -2248,6 +2261,7 @@ body {
 </div>
 
 <div class="screen" id="s3">
+  <div id="s3-bg"></div>
   <div class="result-header">
     <button class="back-btn" style="background:rgba(245,239,224,0.08);color:var(--paper);margin-bottom:16px;" onclick="goTo('s2')" type="button">←</button>
     <div class="result-greeting" id="result-greeting" data-i18n="resultGreetDefault">결과 분석 중...</div>
