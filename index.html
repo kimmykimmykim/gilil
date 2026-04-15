@@ -4,6 +4,17 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>길일 吉日</title>
+
+<!-- PWA 설정 (아이콘 · manifest · 테마) -->
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#E8006F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="길일">
+
 <script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.7/lib/solarlunar.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+KR:wght@400;600;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
@@ -215,6 +226,9 @@ body {
   align-items: center;
   justify-content: flex-end;
   cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255,245,250,0.35);
   -webkit-tap-highlight-color: transparent;
   padding-bottom: 52px;
 }
@@ -1484,15 +1498,16 @@ body {
 .splash-tap-bar {
   position: relative;
   z-index: 10;
-  width: calc(100% - 48px);
-  max-width: 380px;
-  margin-bottom: 52px;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  margin-bottom: 28px;
   background: rgba(255,255,255,0.13);
   border: 1px solid rgba(255,255,255,0.30);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 50px;
-  padding: 18px 24px;
+  padding: 22px 28px;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1513,7 +1528,7 @@ body {
   color: rgba(255,255,255,0.88);
 }
 .splash-tap-bar .tap-arrow {
-  font-size: 16px;
+  font-size: 20px;
   opacity: 0.70;
   color: #fff;
 }
@@ -1906,7 +1921,7 @@ body {
   <div id="s1-glow"></div>
   <!-- 탭 투 비긴 오버레이 -->
   <div id="tap-begin-overlay" onclick="revealIntro()">
-    <span id="tap-begin-text">tap to begin</span>
+    <span id="tap-begin-text" data-i18n="tapScreen">화면을 탭하세요</span>
   </div>
   <div class="intro-wrap initially-hidden" id="intro-wrap">
     <button class="back-btn" style="background:rgba(245,239,224,0.08);color:var(--paper);margin-bottom:16px;align-self:flex-start;" onclick="goTo('s-splash')" type="button">←</button>
@@ -2657,12 +2672,12 @@ var MED_RULES = {
 var CAT_WEIGHTS = {
   //               별자리  달  손없는날  황도  요일  충돌  회복  상담감점  proximity
   surgery:  { zodiac:20, moon:10, son:8, hwangdo:6,  weekday:12, conflict:22, recovery:14, consultPenalty:8, proximity:14 },
-  business: { zodiac:16, moon:8,  son:28, hwangdo:10, weekday:12, conflict:20 },
-  moving:   { zodiac:12, moon:6,  son:34, hwangdo:8,  weekday:10, conflict:26 },
+  business: { zodiac:24, moon:8,  son:12, hwangdo:10, weekday:12, conflict:20 },
+  moving:   { zodiac:22, moon:6,  son:14, hwangdo:8,  weekday:10, conflict:26 },
   travel:   { zodiac:26, moon:16, son:8,  hwangdo:0,  weekday:18, conflict:8  },
-  love:     { zodiac:16, moon:8,  son:20, hwangdo:10, weekday:12, conflict:14, partner:20 },
-  invest:   { zodiac:22, moon:20, son:10, hwangdo:12, weekday:14, conflict:18 },
-  birth:    { zodiac:14, moon:22, son:28, hwangdo:8,  weekday:16, conflict:18 }
+  love:     { zodiac:22, moon:8,  son:14, hwangdo:10, weekday:12, conflict:14, partner:20 },
+  invest:   { zodiac:22, moon:20, son:8,  hwangdo:12, weekday:14, conflict:18 },
+  birth:    { zodiac:24, moon:22, son:12, hwangdo:8,  weekday:16, conflict:18 }
 };
 
 // ────────────────────────────────────────────────
@@ -2987,8 +3002,12 @@ function isHapDay(date, birthYear) {
 // ────────────────────────────────────────────────
 // 개인 시드 — 같은 점수일 때 사람마다 다른 순서
 // ────────────────────────────────────────────────
-function getPersonalSeed(birthYear, birthMonth, birthDay) {
-  return (birthYear * 31 + birthMonth * 7 + birthDay) % 97;
+function getPersonalSeed(birthYear, birthMonth, birthDay, category, gender) {
+  var catHash = 0;
+  var catStr = String(category || '');
+  for (var i = 0; i < catStr.length; i++) catHash = (catHash * 33 + catStr.charCodeAt(i)) % 1009;
+  var genderWeight = (gender === 'male') ? 41 : 13;
+  return (birthYear * 31 + birthMonth * 7 + birthDay + catHash * 11 + genderWeight) % 97;
 }
 
 // ────────────────────────────────────────────────
@@ -3343,8 +3362,10 @@ function scoreDate(date, context) {
   }
 
   // 개인 시드 tie-break (사람마다 동점 시 다른 날짜 우선)
+  // D-fix: date*13 % 13 = 0 버그 수정 (date*7 % 13 으로 날짜별 변동 보장)
+  // C-1: 승수 강화 (0.007 → 1.2) — gender/category seed가 실제로 순위에 반영
   var seed = context.personalSeed;
-  score += ((date.getDate() * 13 + seed) % 7) * 0.007;
+  score += ((date.getDate() * 7 + seed) % 13) * 1.2;
 
   return {
     rawScore: score,
@@ -3377,7 +3398,7 @@ function calculateGilil() {
     var birthDay   = birth.date.getDate();
     var signObj    = getWesternSign(birthMonth, birthDay) || WESTERN_SIGNS[0];
     var ganji      = getGanji(birthYear);
-    var personalSeed = getPersonalSeed(birthYear, birthMonth, birthDay);
+    var personalSeed = getPersonalSeed(birthYear, birthMonth, birthDay, currentCat, getSelectedGender());
 
     var today = new Date();
     today.setHours(0,0,0,0);
@@ -3486,15 +3507,34 @@ function calculateGilil() {
       return a.date - b.date;
     });
 
-    // 너무 붙은 날짜 제거 (5일 간격)
-    var top3 = [];
+    // C-4: 상위 10개 pool (5일 간격 제거) → pool[0] 고정 + seed-pick 2개
+    var pool = [];
     for (var j = 0; j < candidates.length; j++) {
-      if (top3.length >= 3) break;
+      if (pool.length >= 10) break;
       var cand = candidates[j];
-      var tooClose = top3.some(function(ex) {
+      var tooClose = pool.some(function(ex) {
         return Math.abs(cand.date - ex.date) / 86400000 < 5;
       });
-      if (!tooClose) top3.push(cand);
+      if (!tooClose) pool.push(cand);
+    }
+    var top3;
+    if (pool.length <= 3) {
+      top3 = pool;
+    } else {
+      top3 = [pool[0]]; // 1등 = 최고점 고정
+      var remaining = pool.slice(1);
+      var usedIdx = {};
+      for (var pi = 0; pi < 2; pi++) {
+        var start = (personalSeed + pi * 17) % remaining.length;
+        for (var pj = 0; pj < remaining.length; pj++) {
+          var k = (start + pj) % remaining.length;
+          if (!usedIdx[k]) { usedIdx[k] = true; top3.push(remaining[k]); break; }
+        }
+      }
+      top3.sort(function(a, b) {
+        if (b.rawScore !== a.rawScore) return b.rawScore - a.rawScore;
+        return a.date - b.date;
+      });
     }
 
     if (top3.length < 3) throw new Error(t('errNotEnoughDates'));
@@ -3562,7 +3602,7 @@ function checkDateScore() {
     var birthMonth = birth.date.getMonth() + 1;
     var birthDay   = birth.date.getDate();
     var signObj    = getWesternSign(birthMonth, birthDay) || WESTERN_SIGNS[0];
-    var personalSeed = getPersonalSeed(birthYear, birthMonth, birthDay);
+    var personalSeed = getPersonalSeed(birthYear, birthMonth, birthDay, currentCat, getSelectedGender());
 
     var selectedSurgery = getSelectedSurgeryType();
     var selectedOption  = getSelectedOption('form-' + currentCat);
@@ -3896,6 +3936,13 @@ function selectCalType(type) {
 function selectGender(el) {
   el.closest('.gender-row').querySelectorAll('.gender-btn').forEach(function(b) { b.classList.remove('selected'); });
   el.classList.add('selected');
+}
+
+// 선택된 성별 읽기 (개인 시드용)
+function getSelectedGender() {
+  var selected = document.querySelector('.gender-btn.selected');
+  if (!selected) return 'female';
+  return selected.getAttribute('data-i18n') === 'genderMale' ? 'male' : 'female';
 }
 
 function selectSurgery(el) {
@@ -4540,6 +4587,7 @@ document.addEventListener('DOMContentLoaded', function() {
 var TEXTS = {
   ko: {
     tapToBegin: 'tap to begin',
+    tapScreen: '화면을 탭하세요',
     disclaimerTitle: '서비스 이용 전 안내',
     disclaimerRef: '<strong>참고용 서비스</strong><br>본 앱은 사주·별자리·음력 등 동양 역학 기반의 <strong>길일 참고 정보</strong>를 제공합니다. 실제 결과를 보장하지 않습니다.',
     disclaimerMed: '<strong>의료 조언 아님</strong><br>성형·출산 카테고리의 날짜 추천은 <strong>의료적 진단이나 조언이 아닙니다.</strong> 실제 수술 일정은 반드시 담당 의료진과 협의하세요.',
@@ -4833,6 +4881,7 @@ var TEXTS = {
   },
   en: {
     tapToBegin: 'Tap to Begin',
+    tapScreen: 'Tap the screen',
     disclaimerTitle: 'Before You Start',
     disclaimerRef: '<strong>For Reference Only</strong><br>This app provides auspicious date recommendations based on Eastern astrology, Four Pillars, and the lunar calendar. Results are not guaranteed.',
     disclaimerMed: '<strong>Not Medical Advice</strong><br>Date recommendations for cosmetic/birth categories are <strong>not medical diagnoses or advice.</strong> Please consult your doctor for actual scheduling.',
@@ -5092,6 +5141,7 @@ var TEXTS = {
   },
   ja: {
     tapToBegin: 'タップして始める',
+    tapScreen: '画面をタップ',
     disclaimerTitle: 'ご利用前のご案内',
     disclaimerRef: '<strong>参考情報サービス</strong><br>このアプリは四柱推命・星座・旧暦などの東洋占術に基づく<strong>吉日参考情報</strong>を提供します。実際の結果を保証するものではありません。',
     disclaimerMed: '<strong>医療アドバイスではありません</strong><br>美容・出産カテゴリの日付推薦は<strong>医療診断や医療アドバイスではありません。</strong>実際の手術日程は必ず担当医師にご相談ください。',
@@ -5351,6 +5401,7 @@ var TEXTS = {
   },
   zh: {
     tapToBegin: '点击开始',
+    tapScreen: '点击屏幕',
     disclaimerTitle: '使用前须知',
     disclaimerRef: '<strong>仅供参考</strong><br>本应用基于四柱八字、星座、阴历等东方玄学提供<strong>吉日参考信息</strong>，不保证实际效果。',
     disclaimerMed: '<strong>非医疗建议</strong><br>整形·生育类别的日期推荐<strong>不属于医疗诊断或建议</strong>，实际手术日期请务必与主治医生协商。',
@@ -5610,6 +5661,7 @@ var TEXTS = {
   },
   vi: {
     tapToBegin: 'Chạm để bắt đầu',
+    tapScreen: 'Chạm vào màn hình',
     disclaimerTitle: 'Thông báo trước khi sử dụng',
     disclaimerRef: '<strong>Chỉ mang tính tham khảo</strong><br>Ứng dụng cung cấp thông tin ngày lành dựa trên tử vi, cung hoàng đạo và âm lịch Đông phương. Không đảm bảo kết quả thực tế.',
     disclaimerMed: '<strong>Không phải tư vấn y tế</strong><br>Đề xuất ngày cho phẫu thuật thẩm mỹ/sinh sản <strong>không phải chẩn đoán hay tư vấn y tế.</strong> Hãy tham khảo bác sĩ cho lịch thực tế.',
