@@ -224,25 +224,26 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   cursor: pointer;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background: rgba(255,245,250,0.35);
   -webkit-tap-highlight-color: transparent;
-  padding-bottom: 52px;
+  padding-top: 35vh;
 }
 #tap-begin-text {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 12px;
+  font-size: 24px;
   font-style: italic;
-  color: rgba(200,0,100,0.60);
+  font-weight: 600;
+  color: #fff;
   letter-spacing: 6px;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,0.65),
+    0 0 24px rgba(232,0,111,0.5);
   animation: tapPulse 2s ease-in-out infinite;
 }
 @keyframes tapPulse {
-  0%, 100% { opacity: 0.35; transform: translateY(0); }
-  50%       { opacity: 0.9;  transform: translateY(-5px); }
+  0%, 100% { opacity: 0.80; transform: translateY(0); }
+  50%       { opacity: 1.0;  transform: translateY(-5px); }
 }
 #tap-begin-overlay.hide {
   animation: fadeOut 0.4s ease forwards;
