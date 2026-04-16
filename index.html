@@ -3597,7 +3597,7 @@ function calculateGilil() {
 
     renderResults();
     showLoading(false);
-    goTo('s3');
+    showInterstitialThen(function() { goTo('s3'); });
   } catch (err) {
     showLoading(false);
     showToastError(err.message || t('errCalcFailed'));
@@ -6041,6 +6041,91 @@ function detectLanguage() {
 
 // 페이지 로드 시 언어 감지 실행
 detectLanguage();
+</script>
+
+<!-- AdMob 전면광고 (Capacitor) -->
+<script>
+(function() {
+  var AD_UNIT_ID = 'ca-app-pub-4229265600628089/3273305872';
+  var adReady = false;
+
+  function isCapacitor() {
+    return window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+  }
+
+  function initAdMob() {
+    if (!isCapacitor()) return;
+    var AdMob = window.Capacitor.Plugins.AdMob;
+    if (!AdMob) return;
+
+    AdMob.initialize({ initializeForTesting: false });
+    prepareInterstitial();
+
+    // 광고 닫힌 후 다음 광고 미리 로드
+    AdMob.addListener('onInterstitialAdDismissed', function() {
+      adReady = false;
+      prepareInterstitial();
+    });
+
+    AdMob.addListener('onInterstitialAdFailedToLoad', function() {
+      adReady = false;
+    });
+
+    AdMob.addListener('onInterstitialAdLoaded', function() {
+      adReady = true;
+    });
+  }
+
+  function prepareInterstitial() {
+    if (!isCapacitor()) return;
+    var AdMob = window.Capacitor.Plugins.AdMob;
+    if (!AdMob) return;
+
+    AdMob.prepareInterstitial({ adId: AD_UNIT_ID }).then(function() {
+      adReady = true;
+    }).catch(function() {
+      adReady = false;
+    });
+  }
+
+  // 전면광고 표시 후 콜백 실행
+  window.showInterstitialThen = function(callback) {
+    if (!isCapacitor() || !adReady) {
+      callback();
+      return;
+    }
+    var AdMob = window.Capacitor.Plugins.AdMob;
+    if (!AdMob) { callback(); return; }
+
+    var done = false;
+    function onDone() {
+      if (done) return;
+      done = true;
+      callback();
+    }
+
+    AdMob.addListener('onInterstitialAdDismissed', function handler() {
+      onDone();
+    });
+
+    AdMob.addListener('onInterstitialAdFailedToShow', function handler() {
+      onDone();
+    });
+
+    AdMob.showInterstitial().catch(function() {
+      onDone();
+    });
+  };
+
+  // DOM 로드 후 초기화
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(initAdMob, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initAdMob, 500);
+    });
+  }
+})();
 </script>
 </body>
 </html>
