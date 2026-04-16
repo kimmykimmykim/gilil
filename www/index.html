@@ -6117,13 +6117,35 @@ detectLanguage();
     });
   };
 
-  // DOM 로드 후 초기화
+  // Capacitor 브릿지 준비 대기 후 초기화
+  function waitForCapacitorAndInit() {
+    if (isCapacitor()) {
+      initAdMob();
+      return;
+    }
+    // 브릿지 아직 미로드 → 최대 5초간 200ms 간격으로 재확인
+    var attempts = 0;
+    var maxAttempts = 25;
+    var timer = setInterval(function() {
+      attempts++;
+      if (isCapacitor()) {
+        clearInterval(timer);
+        initAdMob();
+      } else if (attempts >= maxAttempts) {
+        clearInterval(timer);
+        // 네이티브 앱이 아닌 웹 환경 → 초기화 불필요
+      }
+    }, 200);
+  }
+
+  document.addEventListener('deviceready', function() {
+    initAdMob();
+  }, false);
+
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    setTimeout(initAdMob, 500);
+    waitForCapacitorAndInit();
   } else {
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(initAdMob, 500);
-    });
+    document.addEventListener('DOMContentLoaded', waitForCapacitorAndInit);
   }
 })();
 </script>
