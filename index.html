@@ -6048,6 +6048,7 @@ detectLanguage();
 (function() {
   var AD_UNIT_ID = 'ca-app-pub-4229265600628089/3273305872';
   var adReady = false;
+  var initialized = false;
   var TAG = '[AdMob]';
 
   function isCapacitor() {
@@ -6055,20 +6056,23 @@ detectLanguage();
   }
 
   function initAdMob() {
+    if (initialized) { console.log(TAG, 'initAdMob 이미 초기화됨 → 스킵'); return; }
     console.log(TAG, 'initAdMob 호출됨, isCapacitor:', isCapacitor());
     if (!isCapacitor()) { console.log(TAG, 'Capacitor 아님 → 초기화 중단'); return; }
     var AdMob = window.Capacitor.Plugins.AdMob;
     console.log(TAG, 'AdMob 플러그인:', AdMob ? '있음' : '없음');
-    if (!AdMob) return;
+    if (!AdMob) { console.log(TAG, 'AdMob 플러그인 없음 → 초기화 중단'); return; }
+
+    initialized = true;
+    console.log(TAG, 'AdMob.initialize() 호출 시작...');
 
     AdMob.initialize({ initializeForTesting: false }).then(function() {
       console.log(TAG, 'AdMob.initialize() 성공');
       prepareInterstitial();
     }).catch(function(err) {
-      console.error(TAG, 'AdMob.initialize() 실패:', err);
+      console.error(TAG, 'AdMob.initialize() 실패:', JSON.stringify(err));
     });
 
-    // 이벤트명: @capacitor-community/admob@8.0.0 기준 (on 접두사 없음)
     AdMob.addListener('interstitialAdDismissed', function() {
       console.log(TAG, '광고 닫힘 → 다음 광고 미리 로드');
       adReady = false;
@@ -6111,7 +6115,16 @@ detectLanguage();
 
   // 전면광고 표시 후 콜백 실행
   window.showInterstitialThen = function(callback) {
-    console.log(TAG, 'showInterstitialThen 호출, isCapacitor:', isCapacitor(), 'adReady:', adReady);
+    console.log(TAG, 'showInterstitialThen 호출, isCapacitor:', isCapacitor(), 'adReady:', adReady, 'initialized:', initialized);
+
+    // lazy init: 초기화 안 됐으면 여기서 실행 (다음 호출부터 광고 가능)
+    if (isCapacitor() && !initialized) {
+      console.log(TAG, 'lazy init 실행 → 이번엔 광고 없이 진행, 다음부터 광고 표시');
+      initAdMob();
+      callback();
+      return;
+    }
+
     if (!isCapacitor() || !adReady) {
       console.log(TAG, '광고 스킵 → 바로 콜백 실행');
       callback();
@@ -6143,32 +6156,29 @@ detectLanguage();
     });
   };
 
-  // Capacitor 브릿지 준비 대기 후 초기화
+  // Capacitor 브릿지 준비 대기 후 초기화 (최대 15초)
   function waitForCapacitorAndInit() {
-    console.log(TAG, 'waitForCapacitorAndInit 시작');
+    console.log(TAG, 'waitForCapacitorAndInit 시작, readyState:', document.readyState);
     if (isCapacitor()) {
+      console.log(TAG, '브릿지 즉시 사용 가능');
       initAdMob();
       return;
     }
+    console.log(TAG, '브릿지 대기 시작 (200ms x 75 = 최대 15초)');
     var attempts = 0;
-    var maxAttempts = 25;
+    var maxAttempts = 75;
     var timer = setInterval(function() {
       attempts++;
       if (isCapacitor()) {
-        console.log(TAG, 'Capacitor 브릿지 감지 (attempt ' + attempts + ')');
+        console.log(TAG, 'Capacitor 브릿지 감지 (attempt ' + attempts + ', ' + (attempts * 200) + 'ms)');
         clearInterval(timer);
         initAdMob();
       } else if (attempts >= maxAttempts) {
-        console.log(TAG, '브릿지 대기 타임아웃 → 웹 환경으로 판단');
+        console.log(TAG, '브릿지 대기 타임아웃 (15초) → 웹 환경으로 판단');
         clearInterval(timer);
       }
     }, 200);
   }
-
-  document.addEventListener('deviceready', function() {
-    console.log(TAG, 'deviceready 이벤트 수신');
-    initAdMob();
-  }, false);
 
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     waitForCapacitorAndInit();
